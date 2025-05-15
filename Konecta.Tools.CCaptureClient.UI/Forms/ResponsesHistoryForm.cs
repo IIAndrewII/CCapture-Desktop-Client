@@ -10,6 +10,7 @@ using Konecta.Tools.CCaptureClient.UI.ViewModels;
 using Konecta.Tools.CCaptureClient.Core.Models;
 using Konecta.Tools.CCaptureClient.Core.DbEntities;
 using System.Windows.Forms.VisualStyles;
+using Konecta.Tools.CCaptureClient.Infrastructure;
 
 namespace Konecta.Tools.CCaptureClient.UI.Forms
 {
@@ -25,12 +26,13 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             _databaseService = databaseService;
             _configuration = configuration;
             _verificationResponses = new List<VerificationResponseModel>();
-            
+
             ConfigureDataGridViewResponses();
             ConfigureTreeView();
             ConfigureFilterControls();
             AttachEventHandlers();
             //LoadVerificationResponsesAsync();
+            LoggerHelper.LogInfo("ResponsesHistoryForm initialized"); // Log form initialization
         }
 
         private void ConfigureDataGridViewResponses()
@@ -38,6 +40,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             dataGridViewResponses.AllowUserToAddRows = false;
             dataGridViewResponses.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewResponses.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            LoggerHelper.LogDebug("Configured DataGridViewResponses"); // Log configuration
         }
 
         private void ConfigureTreeView()
@@ -47,6 +50,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             VerificationStatusTree.ShowLines = true;
             VerificationStatusTree.ShowPlusMinus = true;
             VerificationStatusTree.CollapseAll();
+            LoggerHelper.LogDebug("Configured VerificationStatusTree"); // Log configuration
         }
 
         private void ConfigureFilterControls()
@@ -58,6 +62,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             // Set default date range (e.g., last 30 days)
             datePickerStart.Value = DateTime.Now.AddDays(-30);
             datePickerEnd.Value = DateTime.Now;
+            LoggerHelper.LogDebug("Configured filter controls"); // Log configuration
         }
 
         private void AttachEventHandlers()
@@ -67,6 +72,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             btnClean.Click += btnClean_Click;
             btnApplyFilters.Click += btnApplyFilters_Click;
             dataGridViewResponses.SelectionChanged += DataGridViewResponses_SelectionChanged;
+            LoggerHelper.LogDebug("Attached event handlers to controls"); // Log event handler attachment
         }
 
         private async void LoadVerificationResponsesAsync()
@@ -75,6 +81,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             {
                 statusLabel.Text = "Loading verification responses...";
                 statusLabel.ForeColor = Color.Blue;
+                LoggerHelper.LogInfo("Loading verification responses"); // Log start of loading
 
                 // Get filter parameters
                 DateTime? startDate = datePickerStart.Checked ? datePickerStart.Value : null;
@@ -112,27 +119,32 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
 
                 statusLabel.Text = $"Loaded {_verificationResponses.Count} responses.";
                 statusLabel.ForeColor = Color.Green;
+                LoggerHelper.LogInfo($"Loaded {_verificationResponses.Count} verification responses"); // Log successful load
             }
             catch (Exception ex)
             {
                 statusLabel.Text = $"Error loading responses: {ex.Message}";
                 statusLabel.ForeColor = Color.Red;
+                LoggerHelper.LogError("Failed to load verification responses", ex); // Log error
             }
         }
 
         private void btnApplyFilters_Click(object sender, EventArgs e)
         {
+            LoggerHelper.LogInfo("Applying filters"); // Log filter application
             LoadVerificationResponsesAsync();
         }
 
         private void btnExpandAll_Click(object sender, EventArgs e)
         {
             VerificationStatusTree.ExpandAll();
+            LoggerHelper.LogInfo("Expanded all TreeView nodes"); // Log expand action
         }
 
         private void btnCollapseAll_Click(object sender, EventArgs e)
         {
             VerificationStatusTree.CollapseAll();
+            LoggerHelper.LogInfo("Collapsed all TreeView nodes"); // Log collapse action
         }
 
         private void DataGridViewResponses_SelectionChanged(object sender, EventArgs e)
@@ -148,6 +160,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 {
                     try
                     {
+                        LoggerHelper.LogInfo($"Selected response with Request GUID: {requestGuid}"); // Log selection
                         var response = _verificationResponses.FirstOrDefault(r => r.RequestGuid == requestGuid);
 
                         if (response != null && !string.IsNullOrEmpty(response.ResponseJson))
@@ -159,6 +172,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                                 });
 
                             PopulateTreeView(deserializedResponse, requestGuid);
+                            LoggerHelper.LogDebug($"Populated TreeView for Request GUID: {requestGuid}"); // Log successful population
                         }
                         else
                         {
@@ -166,6 +180,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                             requestNode.ForeColor = Color.Black;
                             var errorNode = requestNode.Nodes.Add("Error: No JSON response available");
                             errorNode.ForeColor = Color.Red;
+                            LoggerHelper.LogWarning($"No JSON response available for Request GUID: {requestGuid}"); // Log warning
                         }
                     }
                     catch (Exception ex)
@@ -174,8 +189,17 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                         requestNode.ForeColor = Color.Black;
                         var errorNode = requestNode.Nodes.Add($"Error: {ex.Message}");
                         errorNode.ForeColor = Color.Red;
+                        LoggerHelper.LogError($"Failed to populate TreeView for Request GUID: {requestGuid}", ex); // Log error
                     }
                 }
+                else
+                {
+                    LoggerHelper.LogWarning("Selected row has no valid Request GUID"); // Log warning for invalid GUID
+                }
+            }
+            else
+            {
+                LoggerHelper.LogDebug("No row selected in DataGridViewResponses"); // Log no selection
             }
 
             VerificationStatusTree.CollapseAll();
@@ -196,6 +220,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             {
                 var errorNode = requestNode.Nodes.Add($"Error Message: {response.ErrorMessage}");
                 errorNode.ForeColor = Color.Red;
+                LoggerHelper.LogWarning($"Error message for Request GUID {requestGuid}: {response.ErrorMessage}"); // Log warning
             }
 
             if (response.Batch != null)
@@ -279,6 +304,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     }
                 }
             }
+            LoggerHelper.LogDebug($"Populated TreeView nodes for Request GUID: {requestGuid}"); // Log TreeView population
         }
 
         private void btnClean_Click(object sender, EventArgs e)
@@ -307,6 +333,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
 
             // Reconfigure TreeView to ensure it matches initial setup
             ConfigureTreeView();
+            LoggerHelper.LogInfo("Cleared filters and reset form"); // Log clean action
         }
     }
 }
