@@ -101,6 +101,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             statusLabel2 = new ToolStripStatusLabel();
             toolStripProgressBar1 = new ToolStripProgressBar();
             errorProvider = new ErrorProvider(components);
+            btnAssignToNewGroup = new Button();
             submitPanel.SuspendLayout();
             metadataPanel.SuspendLayout();
             tableLayout2.SuspendLayout();
@@ -169,6 +170,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             tableLayout2.Controls.Add(dataGridViewFields, 4, 7);
             tableLayout2.Controls.Add(btnSubmitDocument, 4, 9);
             tableLayout2.Controls.Add(tableLayoutPanel1, 4, 8);
+            tableLayout2.Controls.Add(btnAssignToNewGroup, 2, 9);
             tableLayout2.Dock = DockStyle.Fill;
             tableLayout2.Location = new Point(0, 0);
             tableLayout2.Name = "tableLayout2";
@@ -662,6 +664,20 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
             errorProvider.ContainerControl = this;
             // 
+            // btnAssignToNewGroup
+            // 
+            btnAssignToNewGroup.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            btnAssignToNewGroup.BackColor = Color.RoyalBlue;
+            btnAssignToNewGroup.FlatStyle = FlatStyle.Flat;
+            btnAssignToNewGroup.Font = new Font("Segoe UI", 12F);
+            btnAssignToNewGroup.ForeColor = Color.White;
+            btnAssignToNewGroup.Location = new Point(402, 478);
+            btnAssignToNewGroup.Name = "btnAssignToNewGroup";
+            btnAssignToNewGroup.Size = new Size(373, 39);
+            btnAssignToNewGroup.TabIndex = 32;
+            btnAssignToNewGroup.Text = "Assign Each Doc. To NewGroup";
+            btnAssignToNewGroup.UseVisualStyleBackColor = false;
+            // 
             // SubmitForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -697,5 +713,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
         private DataGridViewComboBoxColumn FieldName;
         private DataGridViewTextBoxColumn FieldValue;
         private DataGridViewTextBoxColumn FieldType;
+        private Button btnAssignToNewGroup;
     }
 }

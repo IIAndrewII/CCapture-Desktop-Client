@@ -162,6 +162,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             btnRemoveGroup.Click += btnRemoveGroup_Click;
             btnRemoveField.Click += btnRemoveField_Click;
             btnAddField.Click += btnAddField_Click;
+            btnAssignToNewGroup.Click += btnAssignToNewGroup_Click;
             dataGridViewGroups.SelectionChanged += dataGridViewGroups_SelectionChanged;
             dataGridViewGroups.CellValueChanged += dataGridViewGroups_CellValueChanged;
             cboBatchClassName.SelectedIndexChanged += cboBatchClassName_SelectedIndexChanged;
@@ -178,6 +179,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             btnAddField.EnabledChanged += Control_EnabledChanged;
             btnAddGroup.EnabledChanged += Control_EnabledChanged;
             btnRemoveGroup.EnabledChanged += Control_EnabledChanged;
+            btnAssignToNewGroup.EnabledChanged += Control_EnabledChanged;
             txtApiUrl.EnabledChanged += Control_EnabledChanged;
             txtSourceSystem.EnabledChanged += Control_EnabledChanged;
             txtChannel.EnabledChanged += Control_EnabledChanged;
@@ -202,7 +204,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     {
                         button.ForeColor = Color.White;
                         button.BackColor = button == btnSubmitDocument ? Color.RoyalBlue :
-                                          button == btnBrowseFile || button == btnAddGroup || button == btnAddField ? Color.Green :
+                                          button == btnBrowseFile || button == btnAddGroup || button == btnAddField || button == btnAssignToNewGroup ? Color.Green :
                                           Color.FromArgb(220, 53, 69);
                     }
                     if (control is TextBox || control is ComboBox)
@@ -235,6 +237,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             btnSubmitDocument.Enabled = hasGroups && !_isSubmitting;
             btnBrowseFile.Enabled = hasGroups && !_isSubmitting;
             btnRemoveFile.Enabled = hasGroups && hasDocuments && !_isSubmitting;
+            btnAssignToNewGroup.Enabled = hasGroups && hasDocuments && !_isSubmitting; 
             btnRemoveField.Enabled = hasGroups && hasFields && !_isSubmitting;
             btnAddField.Enabled = hasGroups && !_isSubmitting;
             btnRemoveGroup.Enabled = hasGroups && !_isSubmitting;
@@ -257,6 +260,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 btnSubmitDocument,
                 btnBrowseFile,
                 btnRemoveFile,
+                btnAssignToNewGroup,
                 btnRemoveField,
                 btnAddField,
                 btnAddGroup,
@@ -379,6 +383,79 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     UpdateControlStates();
                 }
             }
+        }
+
+        private void btnAssignToNewGroup_Click(object sender, EventArgs e)
+        {
+            var selectedGroupRow = dataGridViewGroups.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault();
+            if (selectedGroupRow == null)
+            {
+                MessageBox.Show("Please select a group first.", "No Group Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string currentGroup = selectedGroupRow.Cells["GroupName"].Value.ToString();
+            // Check if group has only one document
+            if (_groups[currentGroup].Documents.Count <= 1)
+            {
+                MessageBox.Show("Cannot move the last document in the group.", "Invalid Operation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Get selected documents in top-to-bottom order
+            var selectedDocuments = dataGridViewDocuments.SelectedRows.Cast<DataGridViewRow>()
+                .Where(row => !row.IsNewRow)
+                .OrderBy(row => row.Index) // Sort by row index to process top-to-bottom
+                .Select(row => row.Cells["FilePath"].Value?.ToString())
+                .ToList();
+
+            if (!selectedDocuments.Any())
+            {
+                MessageBox.Show("Please select at least one document to assign to new groups.", "No Documents Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Check if moving selected documents would leave group empty
+            if (_groups[currentGroup].Documents.Count == selectedDocuments.Count)
+            {
+                MessageBox.Show("Cannot move all documents from the group.", "Invalid Operation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Process each document individually
+            foreach (var docPath in selectedDocuments)
+            {
+                // Generate unique group name
+                int counter = _groups.Count + 1;
+                string newGroupName;
+                do
+                {
+                    newGroupName = $"Group {counter}";
+                    counter++;
+                } while (_groups.ContainsKey(newGroupName));
+
+                // Create new group
+                _groups.Add(newGroupName, new GroupData());
+
+                // Move single document to new group
+                var documentToMove = _groups[currentGroup].Documents
+                    .FirstOrDefault(doc => doc.FilePath == docPath);
+
+                if (documentToMove != null)
+                {
+                    _groups[newGroupName].Documents.Add(documentToMove);
+                    _groups[currentGroup].Documents.Remove(documentToMove);
+
+                    // Add new group to grid
+                    int rowIndex = dataGridViewGroups.Rows.Add(true, newGroupName);
+                    dataGridViewGroups.ClearSelection();
+                    dataGridViewGroups.Rows[rowIndex].Selected = true;
+                }
+            }
+
+            // Update grids and controls
+            UpdateDocumentAndFieldGrid();
+            UpdateControlStates();
         }
 
         private async void btnAddField_Click(object sender, EventArgs e)
