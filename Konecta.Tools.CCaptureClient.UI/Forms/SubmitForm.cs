@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Konecta.Tools.CCaptureClient.Infrastructure.Services;
-using Konecta.Tools.CCaptureacteur.Infrastructure;
+using Konecta.Tools.CCaptureClient.Infrastructure;
 
 namespace Konecta.Tools.CCaptureClient.UI.Forms
 {

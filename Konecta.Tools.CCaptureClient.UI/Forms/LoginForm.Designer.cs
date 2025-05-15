@@ -47,49 +47,55 @@
             // 
             // txtAppName
             // 
-            txtAppName.Location = new Point(120, 20);
+            txtAppName.Location = new Point(105, 15);
+            txtAppName.Margin = new Padding(3, 2, 3, 2);
             txtAppName.Name = "txtAppName";
-            txtAppName.Size = new Size(200, 27);
+            txtAppName.Size = new Size(176, 23);
             txtAppName.TabIndex = 0;
             // 
             // txtAppLogin
             // 
-            txtAppLogin.Location = new Point(120, 50);
+            txtAppLogin.Location = new Point(105, 38);
+            txtAppLogin.Margin = new Padding(3, 2, 3, 2);
             txtAppLogin.Name = "txtAppLogin";
-            txtAppLogin.Size = new Size(200, 27);
+            txtAppLogin.Size = new Size(176, 23);
             txtAppLogin.TabIndex = 1;
             // 
             // txtAppPassword
             // 
-            txtAppPassword.Location = new Point(120, 80);
+            txtAppPassword.Location = new Point(105, 60);
+            txtAppPassword.Margin = new Padding(3, 2, 3, 2);
             txtAppPassword.Name = "txtAppPassword";
-            txtAppPassword.Size = new Size(200, 27);
+            txtAppPassword.Size = new Size(176, 23);
             txtAppPassword.TabIndex = 2;
             txtAppPassword.UseSystemPasswordChar = true;
             // 
             // chkShowPassword
             // 
-            chkShowPassword.Location = new Point(120, 110);
+            chkShowPassword.Location = new Point(105, 82);
+            chkShowPassword.Margin = new Padding(3, 2, 3, 2);
             chkShowPassword.Name = "chkShowPassword";
-            chkShowPassword.Size = new Size(100, 20);
+            chkShowPassword.Size = new Size(70, 21);
             chkShowPassword.TabIndex = 3;
             chkShowPassword.Text = "Show Password";
             chkShowPassword.CheckedChanged += chkShowPassword_CheckedChanged;
             // 
             // btnGetToken
             // 
-            btnGetToken.Location = new Point(120, 190);
+            btnGetToken.Location = new Point(105, 142);
+            btnGetToken.Margin = new Padding(3, 2, 3, 2);
             btnGetToken.Name = "btnGetToken";
-            btnGetToken.Size = new Size(80, 30);
+            btnGetToken.Size = new Size(70, 22);
             btnGetToken.TabIndex = 4;
             btnGetToken.Text = "Login";
             btnGetToken.Click += btnGetToken_Click;
             // 
             // btnCancel
             // 
-            btnCancel.Location = new Point(210, 190);
+            btnCancel.Location = new Point(184, 142);
+            btnCancel.Margin = new Padding(3, 2, 3, 2);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(80, 30);
+            btnCancel.Size = new Size(70, 22);
             btnCancel.TabIndex = 5;
             btnCancel.Text = "Cancel";
             btnCancel.Click += btnCancel_Click;
@@ -97,9 +103,9 @@
             // statusLabel
             // 
             statusLabel.ForeColor = SystemColors.ControlText;
-            statusLabel.Location = new Point(10, 140);
+            statusLabel.Location = new Point(9, 105);
             statusLabel.Name = "statusLabel";
-            statusLabel.Size = new Size(300, 40);
+            statusLabel.Size = new Size(262, 30);
             statusLabel.TabIndex = 6;
             // 
             // panel
@@ -114,43 +120,45 @@
             panel.Controls.Add(lblAppName);
             panel.Controls.Add(lblAppLogin);
             panel.Controls.Add(lblAppPassword);
-            panel.Location = new Point(20, 20);
+            panel.Location = new Point(18, 15);
+            panel.Margin = new Padding(3, 2, 3, 2);
             panel.Name = "panel";
-            panel.Size = new Size(360, 260);
+            panel.Size = new Size(315, 195);
             panel.TabIndex = 0;
             // 
             // lblAppName
             // 
-            lblAppName.Location = new Point(10, 20);
+            lblAppName.Location = new Point(9, 15);
             lblAppName.Name = "lblAppName";
-            lblAppName.Size = new Size(100, 20);
+            lblAppName.Size = new Size(88, 15);
             lblAppName.TabIndex = 7;
             lblAppName.Text = "App Name:";
             // 
             // lblAppLogin
             // 
-            lblAppLogin.Location = new Point(10, 50);
+            lblAppLogin.Location = new Point(9, 38);
             lblAppLogin.Name = "lblAppLogin";
-            lblAppLogin.Size = new Size(100, 20);
+            lblAppLogin.Size = new Size(88, 15);
             lblAppLogin.TabIndex = 8;
             lblAppLogin.Text = "Appl Login:";
             // 
             // lblAppPassword
             // 
-            lblAppPassword.Location = new Point(10, 80);
+            lblAppPassword.Location = new Point(9, 60);
             lblAppPassword.Name = "lblAppPassword";
-            lblAppPassword.Size = new Size(100, 20);
+            lblAppPassword.Size = new Size(88, 15);
             lblAppPassword.TabIndex = 9;
             lblAppPassword.Text = "Password:";
             // 
             // LoginForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 245, 245);
-            ClientSize = new Size(400, 300);
+            ClientSize = new Size(350, 225);
             Controls.Add(panel);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            Margin = new Padding(3, 2, 3, 2);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "LoginForm";

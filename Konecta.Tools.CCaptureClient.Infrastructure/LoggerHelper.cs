@@ -1,7 +1,7 @@
 ﻿using NLog;
 using System;
 
-namespace Konecta.Tools.CCaptureacteur.Infrastructure
+namespace Konecta.Tools.CCaptureClient.Infrastructure
 
 {
     public static class LoggerHelper
