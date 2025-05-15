@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Konecta.Tools.CCaptureClient.Infrastructure.Services;
+using Konecta.Tools.CCaptureacteur;
 
 namespace Konecta.Tools.CCaptureClient.UI.Forms
 {
@@ -45,7 +46,8 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 Visible = false,
                 Alignment = ToolStripItemAlignment.Right // Align to the right of statusStrip2
             };
-            statusStrip2.Items.Add(_progressBar); // Add to statusStrip2
+            statusStrip2.Items.Add(_progressBar);
+            LoggerHelper.LogInfo("SubmitForm initialized"); // Log form initialization
         }
 
         public SubmitForm(IApiDatabaseService apiDatabaseService, IDatabaseService databaseService, IConfiguration configuration, MainViewModel viewModel)
@@ -62,6 +64,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             ConfigureDataGridViewColumns();
             AttachEventHandlers();
             UpdateControlStates();
+            LoggerHelper.LogInfo("SubmitForm constructor called with dependencies"); // Log constructor
             InitializeAsync();
         }
 
@@ -78,15 +81,18 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 tableLayout2.Width = (int)(tableLayout2.Width * dpiScale);
                 tableLayout2.Height = (int)(tableLayout2.Height * dpiScale);
             }
+            LoggerHelper.LogInfo("SubmitForm shown and layout adjusted"); // Log form shown
         }
 
         private async void InitializeAsync()
         {
+            LoggerHelper.LogDebug("Initializing SubmitForm asynchronously");
             await PopulateBatchClassNamesAsync();
             var appName = _configuration["AppName"];
             var appLogin = _configuration["AppLogin"];
             var appPassword = _configuration["AppPassword"];
             await loginAsync(appName, appLogin, appPassword);
+            LoggerHelper.LogInfo("SubmitForm initialization completed");
         }
 
         private void ConfigureDataGridViewGroupsColumns()
@@ -107,6 +113,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             });
             dataGridViewGroups.MultiSelect = false;
             dataGridViewGroups.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            LoggerHelper.LogDebug("Configured DataGridViewGroups columns");
         }
 
         private void ConfigureDataGridViewColumns()
@@ -149,6 +156,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
                 ReadOnly = true
             });
+            LoggerHelper.LogDebug("Configured DataGridViewDocuments and DataGridViewFields columns");
         }
 
         private void AttachEventHandlers()
@@ -191,6 +199,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             dataGridViewDocuments.EnabledChanged += Control_EnabledChanged;
             dataGridViewFields.EnabledChanged += Control_EnabledChanged;
             pickerInteractionDateTime.EnabledChanged += Control_EnabledChanged;
+            LoggerHelper.LogDebug("Attached event handlers to controls");
         }
 
         private void Control_EnabledChanged(object sender, EventArgs e)
@@ -237,7 +246,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             btnSubmitDocument.Enabled = hasGroups && !_isSubmitting;
             btnBrowseFile.Enabled = hasGroups && !_isSubmitting;
             btnRemoveFile.Enabled = hasGroups && hasDocuments && !_isSubmitting;
-            btnAssignToNewGroup.Enabled = hasGroups && hasDocuments && !_isSubmitting; 
+            btnAssignToNewGroup.Enabled = hasGroups && hasDocuments && !_isSubmitting;
             btnRemoveField.Enabled = hasGroups && hasFields && !_isSubmitting;
             btnAddField.Enabled = hasGroups && !_isSubmitting;
             btnRemoveGroup.Enabled = hasGroups && !_isSubmitting;
@@ -280,6 +289,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             {
                 Control_EnabledChanged(control, EventArgs.Empty);
             }
+            LoggerHelper.LogDebug("Updated control states");
         }
 
         private void AddNewGroup()
@@ -373,6 +383,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     string groupName = textBox.Text.Trim();
                     if (_groups.ContainsKey(groupName))
                     {
+                        LoggerHelper.LogWarning($"Attempted to add duplicate group name: {groupName}");
                         MessageBox.Show("Group name already exists!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
@@ -381,6 +392,11 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     dataGridViewGroups.ClearSelection();
                     dataGridViewGroups.Rows[rowIndex].Selected = true;
                     UpdateControlStates();
+                    LoggerHelper.LogInfo($"Added new group: {groupName}");
+                }
+                else
+                {
+                    LoggerHelper.LogDebug("Group creation cancelled or invalid group name");
                 }
             }
         }
@@ -390,6 +406,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             var selectedGroupRow = dataGridViewGroups.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault();
             if (selectedGroupRow == null)
             {
+                LoggerHelper.LogWarning("Attempted to assign to new group without selecting a group");
                 MessageBox.Show("Please select a group first.", "No Group Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -398,6 +415,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             // Check if group has only one document
             if (_groups[currentGroup].Documents.Count <= 1)
             {
+                LoggerHelper.LogWarning($"Cannot move last document from group: {currentGroup}");
                 MessageBox.Show("Cannot move the last document in the group.", "Invalid Operation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -411,6 +429,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
 
             if (!selectedDocuments.Any())
             {
+                LoggerHelper.LogWarning("No documents selected for assigning to new group");
                 MessageBox.Show("Please select at least one document to assign to new groups.", "No Documents Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -418,6 +437,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             // Check if moving selected documents would leave group empty
             if (_groups[currentGroup].Documents.Count == selectedDocuments.Count)
             {
+                LoggerHelper.LogWarning($"Cannot move all documents from group: {currentGroup}");
                 MessageBox.Show("Cannot move all documents from the group.", "Invalid Operation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -450,6 +470,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     int rowIndex = dataGridViewGroups.Rows.Add(true, newGroupName);
                     dataGridViewGroups.ClearSelection();
                     dataGridViewGroups.Rows[rowIndex].Selected = true;
+                    LoggerHelper.LogInfo($"Moved document {docPath} from {currentGroup} to new group {newGroupName}");
                 }
             }
 
@@ -463,6 +484,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             var selectedRow = dataGridViewGroups.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault();
             if (selectedRow == null)
             {
+                LoggerHelper.LogWarning("Attempted to add field without selecting a group");
                 MessageBox.Show("Please select a group first.", "No Group Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -471,6 +493,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             var fieldNameColumn = (DataGridViewComboBoxColumn)dataGridViewFields.Columns["FieldName"];
             if (fieldNameColumn.Items.Count == 0)
             {
+                LoggerHelper.LogWarning("No field names available for adding field");
                 MessageBox.Show("No field names available. Please select a batch class first.", "No Fields Available", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -480,6 +503,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 .FirstOrDefault(name => !_groups[selectedGroup].Fields.Any(f => f.FieldName == name));
             if (defaultFieldName == null)
             {
+                LoggerHelper.LogWarning("All available field names are already used");
                 MessageBox.Show("All available field names are already used.", "No Fields Available", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -501,11 +525,13 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 // Update dropdown items to remove the selected FieldName
                 UpdateFieldNameDropdown(selectedGroup);
                 UpdateControlStates();
+                LoggerHelper.LogInfo($"Added field {defaultFieldName} to group {selectedGroup}");
             }
             catch (Exception ex)
             {
                 statusLabel2.Text = $"Failed to add field: {ex.Message}";
                 statusLabel2.ForeColor = Color.Red;
+                LoggerHelper.LogError($"Failed to add field {defaultFieldName} to group {selectedGroup}", ex);
                 MessageBox.Show($"Failed to add field: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -514,16 +540,19 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
         {
             try
             {
+                LoggerHelper.LogDebug("Populating batch class names");
                 var batchClassNames = await _apiDatabaseService.GetBatchClassNamesAsync();
                 cboBatchClassName.Items.Clear();
                 cboBatchClassName.Items.AddRange(batchClassNames.ToArray());
                 if (cboBatchClassName.Items.Count > 0)
                     cboBatchClassName.SelectedIndex = 0;
+                LoggerHelper.LogInfo($"Loaded {batchClassNames.Count} batch class names");
             }
             catch (Exception ex)
             {
                 statusLabel2.Text = $"Failed to load Batch Class Names: {ex.Message}";
                 statusLabel2.ForeColor = Color.Red;
+                LoggerHelper.LogError("Failed to load batch class names", ex);
                 MessageBox.Show($"Failed to load Batch Class Names: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -534,6 +563,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             {
                 _errorProvider.SetError(cboBatchClassName, "");
                 string selectedBatchClass = cboBatchClassName.SelectedItem.ToString();
+                LoggerHelper.LogInfo($"Selected batch class: {selectedBatchClass}");
                 try
                 {
                     var pageTypes = await _apiDatabaseService.GetPageTypesAsync(selectedBatchClass);
@@ -548,11 +578,13 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     fieldNameColumn.Items.AddRange(fieldNames.ToArray());
 
                     UpdateDocumentAndFieldGrid();
+                    LoggerHelper.LogDebug($"Loaded {pageTypes.Count} page types and {fieldNames.Count} field names for batch class {selectedBatchClass}");
                 }
                 catch (Exception ex)
                 {
                     statusLabel2.Text = $"Failed to load page types or field names: {ex.Message}";
                     statusLabel2.ForeColor = Color.Red;
+                    LoggerHelper.LogError($"Failed to load page types or field names for batch class {selectedBatchClass}", ex);
                     MessageBox.Show($"Failed to load page types or field names: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -562,12 +594,23 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
         {
             UpdateDocumentAndFieldGrid();
             UpdateControlStates();
+            var selectedRow = dataGridViewGroups.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault();
+            if (selectedRow != null)
+            {
+                string selectedGroup = selectedRow.Cells["GroupName"].Value?.ToString();
+                LoggerHelper.LogDebug($"Selected group: {selectedGroup}");
+            }
         }
 
         private void dataGridViewGroups_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == dataGridViewGroups.Columns["Submit"].Index && e.RowIndex >= 0)
+            {
                 UpdateDocumentAndFieldGrid();
+                var groupName = dataGridViewGroups.Rows[e.RowIndex].Cells["GroupName"].Value?.ToString();
+                var submitValue = (bool?)dataGridViewGroups.Rows[e.RowIndex].Cells["Submit"].Value;
+                LoggerHelper.LogDebug($"Submit value changed for group {groupName} to {submitValue}");
+            }
         }
 
         private void UpdateDocumentAndFieldGrid()
@@ -603,9 +646,9 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                                     var fieldType = _apiDatabaseService.GetFieldTypeAsync(field.FieldName).Result;
                                     dataGridViewFields.Rows[rowIndex].Cells["FieldType"].Value = fieldType;
                                 }
-                                catch (Exception)
+                                catch (Exception ex)
                                 {
-                                    // Ignore errors to avoid blocking UI
+                                    LoggerHelper.LogError($"Failed to load field type for field {field.FieldName}", ex);
                                 }
                             }
                         }
@@ -613,6 +656,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
 
                     // Update dropdown items based on used FieldNames
                     UpdateFieldNameDropdown(selectedGroup);
+                    LoggerHelper.LogDebug($"Updated document and field grids for group {selectedGroup}");
                 }
             }
             UpdateControlStates();
@@ -640,6 +684,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     }
                 }
             }
+            LoggerHelper.LogDebug($"Updated field name dropdown for group {selectedGroup}");
         }
 
         private async Task loginAsync(string appName, string appLogin, string appPassword)
@@ -649,11 +694,13 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 _errorProvider.Clear();
                 statusLabel2.Text = "Logging in...";
                 statusLabel2.ForeColor = Color.Blue;
+                LoggerHelper.LogInfo("Attempting login");
 
                 if (string.IsNullOrEmpty(appName) || string.IsNullOrEmpty(appLogin) || string.IsNullOrEmpty(appPassword))
                 {
                     statusLabel2.Text = "Configuration settings are missing.";
                     statusLabel2.ForeColor = Color.Red;
+                    LoggerHelper.LogError("Login failed: Configuration settings are missing");
                     MessageBox.Show("Configuration settings are missing.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     ShowLoginForm();
                     return;
@@ -663,6 +710,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 statusLabel2.Text = "You're logged in!";
                 statusLabel2.ForeColor = Color.Green;
                 submitPanel.Visible = true;
+                LoggerHelper.LogInfo("Login successful");
             }
             catch (Exception ex)
             {
@@ -670,6 +718,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     ? "Unauthorized configuration settings."
                     : $"Login failed: {ex.Message}";
                 statusLabel2.ForeColor = Color.Red;
+                LoggerHelper.LogError("Login failed", ex);
                 MessageBox.Show(statusLabel2.Text, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 ShowLoginForm();
             }
@@ -692,11 +741,13 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     statusLabel2.ForeColor = Color.Green;
                     submitPanel.Visible = true;
                     SubmitForm_Shown(this, EventArgs.Empty);
+                    LoggerHelper.LogInfo("Login successful via login form");
                 }
                 else
                 {
                     statusLabel2.Text = "Login failed. Please try again.";
                     statusLabel2.ForeColor = Color.Red;
+                    LoggerHelper.LogWarning("Login failed via login form");
                     MessageBox.Show("Login failed. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -709,6 +760,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 _isSubmitting = true;
                 UpdateControlStates();
                 _errorProvider.Clear();
+                LoggerHelper.LogInfo("Starting document submission");
 
                 if (cboBatchClassName.SelectedIndex == -1)
                     _errorProvider.SetError(cboBatchClassName, "Please select a batch category.");
@@ -737,6 +789,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 {
                     statusLabel2.Text = "Please enter all needed data.";
                     statusLabel2.ForeColor = Color.Red;
+                    LoggerHelper.LogWarning("Document submission failed: Missing required data");
                     MessageBox.Show("Please enter all needed data.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     _progressBar.Visible = false;
                     return;
@@ -746,6 +799,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 {
                     statusLabel2.Text = "Please check at least one group to submit.";
                     statusLabel2.ForeColor = Color.Red;
+                    LoggerHelper.LogWarning("Document submission failed: No groups selected");
                     MessageBox.Show("Please check at least one group to submit.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     _progressBar.Visible = false;
                     return;
@@ -756,6 +810,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 {
                     statusLabel2.Text = $"The following groups have no documents: {string.Join(", ", emptyGroups)}";
                     statusLabel2.ForeColor = Color.Red;
+                    LoggerHelper.LogWarning($"Document submission failed: Empty groups detected: {string.Join(", ", emptyGroups)}");
                     MessageBox.Show($"The following groups have no documents: {string.Join(", ", emptyGroups)}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     _progressBar.Visible = false;
                     return;
@@ -764,16 +819,19 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 var apiUrl = string.IsNullOrWhiteSpace(txtApiUrl.Text) ? _configuration["ApiUrl"] : txtApiUrl.Text;
                 if (string.IsNullOrEmpty(apiUrl))
                 {
+                    LoggerHelper.LogError("Document submission failed: API URL is not configured");
                     throw new InvalidOperationException("API URL is not configured in appsettings.json or provided in the textbox");
                 }
                 var apiService = new ApiService(apiUrl);
                 _viewModel.UpdateApiService(apiService);
+                LoggerHelper.LogDebug($"API service updated with URL: {apiUrl}");
 
                 // Initialize progress bar
                 _progressBar.Visible = true;
                 _progressBar.Value = 0;
                 _progressBar.Maximum = checkedGroups.Count;
                 statusLabel2.Text = "";
+                LoggerHelper.LogInfo($"Submitting {checkedGroups.Count} groups");
 
                 foreach (string group in checkedGroups.ToList())
                 {
@@ -795,6 +853,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     {
                         statusLabel2.Text = $"Group '{group}' has fields with empty values: {string.Join(", ", emptyFields)}";
                         statusLabel2.ForeColor = Color.Red;
+                        LoggerHelper.LogWarning($"Document submission failed for group {group}: Empty fields: {string.Join(", ", emptyFields)}");
                         MessageBox.Show($"Group '{group}' has fields with empty values: {string.Join(", ", emptyFields)}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         _progressBar.Visible = false;
                         return;
@@ -806,7 +865,8 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                         ? $"{statusLabel2.Text}  ......  Submitting {group} documents"
                         : $"Submitting {group} documents";
                     statusLabel2.ForeColor = Color.Blue;
-                    Application.DoEvents(); // Ensure UI updates
+                    Application.DoEvents();
+                    LoggerHelper.LogInfo($"Submitting documents for group: {group}");
 
                     var requestGuid = await _viewModel.SubmitDocumentAsync(
                         cboBatchClassName.SelectedItem.ToString(),
@@ -822,8 +882,8 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
 
                     // Append submission confirmation and next group submission message
                     statusLabel2.Text = $"Documents for {group} submitted, Request Guid: {requestGuid}";
-                    //statusLabel2.ForeColor = Color.Green;
-                    Application.DoEvents(); // Ensure UI updates
+                    Application.DoEvents();
+                    LoggerHelper.LogInfo($"Documents submitted for group {group}, Request Guid: {requestGuid}");
 
                     _groups.Remove(group);
                     var rowToRemove = dataGridViewGroups.Rows.Cast<DataGridViewRow>()
@@ -840,6 +900,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 //statusLabel2.Text = "Submission completed.";
                 statusLabel2.Text = $"{statusLabel2.Text}  ......  Submitting completed.";
                 statusLabel2.ForeColor = Color.Green;
+                LoggerHelper.LogInfo("Document submission completed successfully");
             }
             catch (Exception ex)
             {
@@ -848,6 +909,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     ? "Unauthorized. Please log in again."
                     : $"Submission failed: {ex.Message}";
                 statusLabel2.ForeColor = Color.Red;
+                LoggerHelper.LogError("Document submission failed", ex);
                 MessageBox.Show(statusLabel2.Text, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 if (ex.Message.ToLower().Contains("unauthorized") || ex.Message.Contains("401"))
                     ShowLoginForm();
@@ -857,6 +919,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 _isSubmitting = false;
                 UpdateControlStates();
                 _progressBar.Visible = false;
+                LoggerHelper.LogDebug("Submission process completed");
             }
         }
 
@@ -865,6 +928,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             var selectedRow = dataGridViewGroups.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault();
             if (selectedRow == null)
             {
+                LoggerHelper.LogWarning("Attempted to browse files without selecting a group");
                 MessageBox.Show("Please select a group first.", "No Group Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -885,8 +949,13 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     _groups[selectedGroup].Documents.Add(doc);
                     if (dataGridViewGroups.SelectedRows[0].Cells["GroupName"].Value.ToString() == selectedGroup)
                         dataGridViewDocuments.Rows.Add(filePath, string.Empty);
+                    LoggerHelper.LogInfo($"Added file {filePath} to group {selectedGroup}");
                 }
                 UpdateControlStates();
+            }
+            else
+            {
+                LoggerHelper.LogDebug("File browsing cancelled");
             }
         }
 
@@ -895,6 +964,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             var selectedRow = dataGridViewGroups.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault();
             if (selectedRow == null)
             {
+                LoggerHelper.LogWarning("Attempted to remove file without selecting a group");
                 MessageBox.Show("Please select a group first.", "No Group Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -907,6 +977,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     var filePath = row.Cells["FilePath"].Value?.ToString();
                     _groups[selectedGroup].Documents.RemoveAll(doc => doc.FilePath == filePath);
                     dataGridViewDocuments.Rows.Remove(row);
+                    LoggerHelper.LogInfo($"Removed file {filePath} from group {selectedGroup}");
                 }
             }
             UpdateControlStates();
@@ -914,6 +985,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
 
         private void btnAddGroup_Click(object sender, EventArgs e)
         {
+            LoggerHelper.LogDebug("Adding new group");
             AddNewGroup();
         }
 
@@ -926,6 +998,11 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 _groups.Remove(selectedGroup);
                 dataGridViewGroups.Rows.Remove(selectedRow);
                 UpdateDocumentAndFieldGrid();
+                LoggerHelper.LogInfo($"Removed group: {selectedGroup}");
+            }
+            else
+            {
+                LoggerHelper.LogWarning("Attempted to remove group without selecting one");
             }
         }
 
@@ -934,6 +1011,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             var selectedRow = dataGridViewGroups.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault();
             if (selectedRow == null)
             {
+                LoggerHelper.LogWarning("Attempted to remove field without selecting a group");
                 MessageBox.Show("Please select a group first.", "No Group Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -946,6 +1024,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     var fieldName = row.Cells["FieldName"].Value?.ToString();
                     _groups[selectedGroup].Fields.RemoveAll(f => f.FieldName == fieldName);
                     dataGridViewFields.Rows.Remove(row);
+                    LoggerHelper.LogInfo($"Removed field {fieldName} from group {selectedGroup}");
                 }
             }
             UpdateFieldNameDropdown(selectedGroup);
@@ -964,7 +1043,10 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     var pageType = dataGridViewDocuments.Rows[e.RowIndex].Cells["PageType"].Value?.ToString();
                     var doc = _groups[selectedGroup].Documents.FirstOrDefault(d => d.FilePath == filePath);
                     if (doc != null)
+                    {
                         doc.PageType = pageType ?? string.Empty;
+                        LoggerHelper.LogDebug($"Updated page type to {pageType} for document {filePath} in group {selectedGroup}");
+                    }
                 }
             }
         }
@@ -975,6 +1057,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             {
                 dataGridViewDocuments.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = null;
                 e.Cancel = true;
+                LoggerHelper.LogError($"Data error in DataGridViewDocuments at row {e.RowIndex}, column PageType", e.Exception);
             }
         }
 
@@ -985,6 +1068,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 dataGridViewFields.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = null;
                 dataGridViewFields.Rows[e.RowIndex].Cells["FieldType"].Value = string.Empty;
                 e.Cancel = true;
+                LoggerHelper.LogError($"Data error in DataGridViewFields at row {e.RowIndex}, column FieldName", e.Exception);
             }
         }
 
@@ -997,6 +1081,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             {
                 statusLabel2.Text = "Please select a group before editing fields.";
                 statusLabel2.ForeColor = Color.Red;
+                LoggerHelper.LogWarning("Attempted to edit field without selecting a group");
                 MessageBox.Show("Please select a group before editing fields.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -1011,11 +1096,13 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 if (!string.IsNullOrEmpty(oldFieldName) && oldFieldName != fieldName)
                 {
                     _groups[selectedGroup].Fields.RemoveAll(f => f.FieldName == oldFieldName);
+                    LoggerHelper.LogDebug($"Removed old field {oldFieldName} from group {selectedGroup}");
                 }
 
                 if (string.IsNullOrWhiteSpace(fieldName))
                 {
                     dataGridViewFields.Rows[e.RowIndex].Cells["FieldType"].Value = string.Empty;
+                    LoggerHelper.LogDebug($"Cleared field type for empty field name in group {selectedGroup}");
                 }
                 else
                 {
@@ -1044,11 +1131,13 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                         // Commit the edit and refresh the grid
                         dataGridViewFields.EndEdit();
                         dataGridViewFields.Refresh();
+                        LoggerHelper.LogInfo($"Updated field {fieldName} in group {selectedGroup} with value {fieldValue}");
                     }
                     catch (Exception ex)
                     {
                         statusLabel2.Text = $"Failed to load field type: {ex.Message}";
                         statusLabel2.ForeColor = Color.Red;
+                        LoggerHelper.LogError($"Failed to load field type for {fieldName} in group {selectedGroup}", ex);
                         MessageBox.Show($"Failed to load field type: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
@@ -1079,11 +1168,13 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                             dataGridViewFields.Rows[e.RowIndex].Tag = fieldName;
                             dataGridViewFields.EndEdit();
                             dataGridViewFields.Refresh();
+                            LoggerHelper.LogInfo($"Added new field {fieldName} in group {selectedGroup} with value {fieldValue}");
                         }
                         catch (Exception ex)
                         {
                             statusLabel2.Text = $"Failed to load field type: {ex.Message}";
                             statusLabel2.ForeColor = Color.Red;
+                            LoggerHelper.LogError($"Failed to load field type for {fieldName} in group {selectedGroup}", ex);
                             MessageBox.Show($"Failed to load field type: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
