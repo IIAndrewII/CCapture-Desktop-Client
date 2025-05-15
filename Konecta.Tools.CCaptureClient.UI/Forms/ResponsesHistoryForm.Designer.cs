@@ -485,15 +485,15 @@
             statusStrip.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             statusStrip.ImageScalingSize = new Size(20, 20);
             statusStrip.Items.AddRange(new ToolStripItem[] { statusLabel });
-            statusStrip.Location = new Point(0, 776);
+            statusStrip.Location = new Point(0, 778);
             statusStrip.Name = "statusStrip";
-            statusStrip.Size = new Size(1200, 24);
+            statusStrip.Size = new Size(1200, 22);
             statusStrip.TabIndex = 1;
             // 
             // statusLabel
             // 
             statusLabel.Name = "statusLabel";
-            statusLabel.Size = new Size(0, 18);
+            statusLabel.Size = new Size(0, 16);
             // 
             // ResponsesHistoryForm
             // 

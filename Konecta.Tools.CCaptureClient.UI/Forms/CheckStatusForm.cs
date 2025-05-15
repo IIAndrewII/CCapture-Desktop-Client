@@ -404,7 +404,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     TreeNode requestNode = null;
                     try
                     {
-                        statusLabel3.Text = $"Checking status for {requestGuid}...";
+                        statusLabel3.Text = $"Checking status for {requestGuid}";
                         LoggerHelper.LogInfo($"Checking status for Request GUID: {requestGuid}");
                         var responseJson = await _viewModel.CheckVerificationStatusAsync(
                             requestGuid,

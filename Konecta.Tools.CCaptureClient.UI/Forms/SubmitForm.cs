@@ -862,7 +862,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     var groupData = _groups[group];
                     // Append "Submitting {group} documents" to the status label
                     statusLabel2.Text = statusLabel2.Text.Length > 0
-                        ? $"{statusLabel2.Text}  ......  Submitting {group} documents"
+                        ? $"{statusLabel2.Text}  ......  Submitting {group}"
                         : $"Submitting {group} documents";
                     statusLabel2.ForeColor = Color.Blue;
                     Application.DoEvents();
