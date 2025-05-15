@@ -87,9 +87,8 @@
             mainPanel.Dock = DockStyle.Fill;
             mainPanel.Font = new Font("Segoe UI", 12F);
             mainPanel.Location = new Point(0, 0);
-            mainPanel.Margin = new Padding(3, 2, 3, 2);
             mainPanel.Name = "mainPanel";
-            mainPanel.Size = new Size(1050, 600);
+            mainPanel.Size = new Size(1200, 800);
             mainPanel.TabIndex = 0;
             // 
             // tableLayout
@@ -103,8 +102,7 @@
             tableLayout.Controls.Add(VerificationStatusTree, 0, 4);
             tableLayout.Controls.Add(treeButtonLayout, 0, 5);
             tableLayout.Controls.Add(filterLayout, 0, 0);
-            tableLayout.Location = new Point(3, 9);
-            tableLayout.Margin = new Padding(3, 2, 3, 2);
+            tableLayout.Location = new Point(3, 12);
             tableLayout.Name = "tableLayout";
             tableLayout.RowCount = 6;
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 18.181818F));
@@ -113,7 +111,7 @@
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 3.63636374F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 34.5454559F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 5.4545455F));
-            tableLayout.Size = new Size(1044, 567);
+            tableLayout.Size = new Size(1193, 756);
             tableLayout.TabIndex = 0;
             // 
             // lblVerificationResponses
@@ -121,9 +119,9 @@
             lblVerificationResponses.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblVerificationResponses.AutoSize = true;
             lblVerificationResponses.Font = new Font("Segoe UI", 12F);
-            lblVerificationResponses.Location = new Point(3, 103);
+            lblVerificationResponses.Location = new Point(3, 137);
             lblVerificationResponses.Name = "lblVerificationResponses";
-            lblVerificationResponses.Size = new Size(168, 20);
+            lblVerificationResponses.Size = new Size(208, 27);
             lblVerificationResponses.TabIndex = 0;
             lblVerificationResponses.Text = "Check Status Requests:";
             // 
@@ -132,11 +130,10 @@
             dataGridViewResponses.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridViewResponses.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewResponses.Font = new Font("Segoe UI", 12F);
-            dataGridViewResponses.Location = new Point(3, 125);
-            dataGridViewResponses.Margin = new Padding(3, 2, 3, 2);
+            dataGridViewResponses.Location = new Point(3, 167);
             dataGridViewResponses.Name = "dataGridViewResponses";
             dataGridViewResponses.RowHeadersWidth = 51;
-            dataGridViewResponses.Size = new Size(1038, 191);
+            dataGridViewResponses.Size = new Size(1187, 255);
             dataGridViewResponses.TabIndex = 1;
             // 
             // lblVerificationStatus
@@ -144,9 +141,9 @@
             lblVerificationStatus.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblVerificationStatus.AutoSize = true;
             lblVerificationStatus.Font = new Font("Segoe UI", 12F);
-            lblVerificationStatus.Location = new Point(3, 318);
+            lblVerificationStatus.Location = new Point(3, 425);
             lblVerificationStatus.Name = "lblVerificationStatus";
-            lblVerificationStatus.Size = new Size(137, 20);
+            lblVerificationStatus.Size = new Size(172, 27);
             lblVerificationStatus.TabIndex = 2;
             lblVerificationStatus.Text = "Verification Status:";
             // 
@@ -154,10 +151,9 @@
             // 
             VerificationStatusTree.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             VerificationStatusTree.Font = new Font("Segoe UI", 12F);
-            VerificationStatusTree.Location = new Point(3, 340);
-            VerificationStatusTree.Margin = new Padding(3, 2, 3, 2);
+            VerificationStatusTree.Location = new Point(3, 455);
             VerificationStatusTree.Name = "VerificationStatusTree";
-            VerificationStatusTree.Size = new Size(1038, 191);
+            VerificationStatusTree.Size = new Size(1187, 255);
             VerificationStatusTree.TabIndex = 3;
             // 
             // treeButtonLayout
@@ -170,12 +166,11 @@
             treeButtonLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             treeButtonLayout.Controls.Add(btnExpandAll, 2, 0);
             treeButtonLayout.Controls.Add(btnCollapseAll, 3, 0);
-            treeButtonLayout.Location = new Point(3, 535);
-            treeButtonLayout.Margin = new Padding(3, 2, 3, 2);
+            treeButtonLayout.Location = new Point(3, 716);
             treeButtonLayout.Name = "treeButtonLayout";
             treeButtonLayout.RowCount = 1;
             treeButtonLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            treeButtonLayout.Size = new Size(1038, 30);
+            treeButtonLayout.Size = new Size(1187, 37);
             treeButtonLayout.TabIndex = 4;
             // 
             // btnExpandAll
@@ -185,10 +180,9 @@
             btnExpandAll.FlatStyle = FlatStyle.Flat;
             btnExpandAll.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnExpandAll.ForeColor = Color.White;
-            btnExpandAll.Location = new Point(521, 2);
-            btnExpandAll.Margin = new Padding(3, 2, 3, 2);
+            btnExpandAll.Location = new Point(595, 3);
             btnExpandAll.Name = "btnExpandAll";
-            btnExpandAll.Size = new Size(253, 26);
+            btnExpandAll.Size = new Size(290, 31);
             btnExpandAll.TabIndex = 0;
             btnExpandAll.Text = "Expand All";
             btnExpandAll.UseVisualStyleBackColor = false;
@@ -200,10 +194,9 @@
             btnCollapseAll.FlatStyle = FlatStyle.Flat;
             btnCollapseAll.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnCollapseAll.ForeColor = Color.White;
-            btnCollapseAll.Location = new Point(780, 2);
-            btnCollapseAll.Margin = new Padding(3, 2, 3, 2);
+            btnCollapseAll.Location = new Point(891, 3);
             btnCollapseAll.Name = "btnCollapseAll";
-            btnCollapseAll.Size = new Size(255, 26);
+            btnCollapseAll.Size = new Size(293, 31);
             btnCollapseAll.TabIndex = 1;
             btnCollapseAll.Text = "Collapse All";
             btnCollapseAll.UseVisualStyleBackColor = false;
@@ -246,15 +239,14 @@
             filterLayout.Controls.Add(lblSessionId, 4, 2);
             filterLayout.Controls.Add(lblMessageId, 6, 2);
             filterLayout.Controls.Add(lblUserCode, 8, 2);
-            filterLayout.Location = new Point(3, 2);
-            filterLayout.Margin = new Padding(3, 2, 3, 2);
+            filterLayout.Location = new Point(3, 3);
             filterLayout.Name = "filterLayout";
             filterLayout.RowCount = 4;
             filterLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             filterLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
             filterLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             filterLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
-            filterLayout.Size = new Size(1038, 99);
+            filterLayout.Size = new Size(1187, 131);
             filterLayout.TabIndex = 5;
             // 
             // lblStartDate
@@ -264,7 +256,7 @@
             lblStartDate.Font = new Font("Segoe UI", 12F);
             lblStartDate.Location = new Point(3, 0);
             lblStartDate.Name = "lblStartDate";
-            lblStartDate.Size = new Size(128, 19);
+            lblStartDate.Size = new Size(148, 26);
             lblStartDate.TabIndex = 0;
             lblStartDate.Text = "Start Date:";
             // 
@@ -273,9 +265,9 @@
             lblEndDate.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblEndDate.AutoSize = true;
             lblEndDate.Font = new Font("Segoe UI", 12F);
-            lblEndDate.Location = new Point(181, 0);
+            lblEndDate.Location = new Point(208, 0);
             lblEndDate.Name = "lblEndDate";
-            lblEndDate.Size = new Size(128, 19);
+            lblEndDate.Size = new Size(148, 26);
             lblEndDate.TabIndex = 2;
             lblEndDate.Text = "End:";
             // 
@@ -284,9 +276,9 @@
             lblStatus.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblStatus.AutoSize = true;
             lblStatus.Font = new Font("Segoe UI", 12F);
-            lblStatus.Location = new Point(359, 0);
+            lblStatus.Location = new Point(413, 0);
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(128, 19);
+            lblStatus.Size = new Size(148, 26);
             lblStatus.TabIndex = 4;
             lblStatus.Text = "Status:";
             // 
@@ -295,9 +287,9 @@
             lblSourceSystem.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblSourceSystem.AutoSize = true;
             lblSourceSystem.Font = new Font("Segoe UI", 12F);
-            lblSourceSystem.Location = new Point(537, 0);
+            lblSourceSystem.Location = new Point(618, 0);
             lblSourceSystem.Name = "lblSourceSystem";
-            lblSourceSystem.Size = new Size(128, 19);
+            lblSourceSystem.Size = new Size(148, 26);
             lblSourceSystem.TabIndex = 6;
             lblSourceSystem.Text = "Source System:";
             // 
@@ -306,9 +298,9 @@
             lblChannel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblChannel.AutoSize = true;
             lblChannel.Font = new Font("Segoe UI", 12F);
-            lblChannel.Location = new Point(715, 0);
+            lblChannel.Location = new Point(823, 0);
             lblChannel.Name = "lblChannel";
-            lblChannel.Size = new Size(83, 19);
+            lblChannel.Size = new Size(96, 26);
             lblChannel.TabIndex = 8;
             lblChannel.Text = "Channel:";
             // 
@@ -316,20 +308,18 @@
             // 
             txtChannel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtChannel.Font = new Font("Segoe UI", 12F);
-            txtChannel.Location = new Point(715, 21);
-            txtChannel.Margin = new Padding(3, 2, 3, 2);
+            txtChannel.Location = new Point(823, 29);
             txtChannel.Name = "txtChannel";
-            txtChannel.Size = new Size(83, 29);
+            txtChannel.Size = new Size(96, 34);
             txtChannel.TabIndex = 9;
             // 
             // txtSourceSystem
             // 
             txtSourceSystem.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtSourceSystem.Font = new Font("Segoe UI", 12F);
-            txtSourceSystem.Location = new Point(537, 21);
-            txtSourceSystem.Margin = new Padding(3, 2, 3, 2);
+            txtSourceSystem.Location = new Point(618, 29);
             txtSourceSystem.Name = "txtSourceSystem";
-            txtSourceSystem.Size = new Size(128, 29);
+            txtSourceSystem.Size = new Size(148, 34);
             txtSourceSystem.TabIndex = 7;
             // 
             // comboBoxStatus
@@ -337,10 +327,9 @@
             comboBoxStatus.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             comboBoxStatus.Font = new Font("Segoe UI", 12F);
             comboBoxStatus.FormattingEnabled = true;
-            comboBoxStatus.Location = new Point(359, 21);
-            comboBoxStatus.Margin = new Padding(3, 2, 3, 2);
+            comboBoxStatus.Location = new Point(413, 29);
             comboBoxStatus.Name = "comboBoxStatus";
-            comboBoxStatus.Size = new Size(128, 29);
+            comboBoxStatus.Size = new Size(148, 36);
             comboBoxStatus.TabIndex = 5;
             // 
             // datePickerEnd
@@ -348,10 +337,9 @@
             datePickerEnd.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             datePickerEnd.Font = new Font("Segoe UI", 12F);
             datePickerEnd.Format = DateTimePickerFormat.Short;
-            datePickerEnd.Location = new Point(181, 21);
-            datePickerEnd.Margin = new Padding(3, 2, 3, 2);
+            datePickerEnd.Location = new Point(208, 29);
             datePickerEnd.Name = "datePickerEnd";
-            datePickerEnd.Size = new Size(128, 29);
+            datePickerEnd.Size = new Size(148, 34);
             datePickerEnd.TabIndex = 3;
             // 
             // datePickerStart
@@ -359,10 +347,9 @@
             datePickerStart.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             datePickerStart.Font = new Font("Segoe UI", 12F);
             datePickerStart.Format = DateTimePickerFormat.Short;
-            datePickerStart.Location = new Point(3, 21);
-            datePickerStart.Margin = new Padding(3, 2, 3, 2);
+            datePickerStart.Location = new Point(3, 29);
             datePickerStart.Name = "datePickerStart";
-            datePickerStart.Size = new Size(128, 29);
+            datePickerStart.Size = new Size(148, 34);
             datePickerStart.TabIndex = 1;
             // 
             // btnClean
@@ -372,10 +359,9 @@
             btnClean.FlatStyle = FlatStyle.Flat;
             btnClean.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnClean.ForeColor = Color.White;
-            btnClean.Location = new Point(853, 69);
-            btnClean.Margin = new Padding(3, 2, 3, 2);
+            btnClean.Location = new Point(981, 94);
             btnClean.Name = "btnClean";
-            btnClean.Size = new Size(83, 26);
+            btnClean.Size = new Size(96, 34);
             btnClean.TabIndex = 11;
             btnClean.Text = "Clean";
             btnClean.UseVisualStyleBackColor = false;
@@ -387,10 +373,9 @@
             btnApplyFilters.FlatStyle = FlatStyle.Flat;
             btnApplyFilters.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnApplyFilters.ForeColor = Color.White;
-            btnApplyFilters.Location = new Point(942, 69);
-            btnApplyFilters.Margin = new Padding(3, 2, 3, 2);
+            btnApplyFilters.Location = new Point(1083, 94);
             btnApplyFilters.Name = "btnApplyFilters";
-            btnApplyFilters.Size = new Size(93, 27);
+            btnApplyFilters.Size = new Size(101, 34);
             btnApplyFilters.TabIndex = 10;
             btnApplyFilters.Text = "Apply Filters";
             btnApplyFilters.UseVisualStyleBackColor = false;
@@ -399,50 +384,45 @@
             // 
             txtRequestGuid.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtRequestGuid.Font = new Font("Segoe UI", 12F);
-            txtRequestGuid.Location = new Point(3, 69);
-            txtRequestGuid.Margin = new Padding(3, 2, 3, 2);
+            txtRequestGuid.Location = new Point(3, 94);
             txtRequestGuid.Name = "txtRequestGuid";
-            txtRequestGuid.Size = new Size(128, 29);
+            txtRequestGuid.Size = new Size(148, 34);
             txtRequestGuid.TabIndex = 12;
             // 
             // txtBatchClassName
             // 
             txtBatchClassName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtBatchClassName.Font = new Font("Segoe UI", 12F);
-            txtBatchClassName.Location = new Point(181, 69);
-            txtBatchClassName.Margin = new Padding(3, 2, 3, 2);
+            txtBatchClassName.Location = new Point(208, 94);
             txtBatchClassName.Name = "txtBatchClassName";
-            txtBatchClassName.Size = new Size(128, 29);
+            txtBatchClassName.Size = new Size(148, 34);
             txtBatchClassName.TabIndex = 13;
             // 
             // txtSessionId
             // 
             txtSessionId.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtSessionId.Font = new Font("Segoe UI", 12F);
-            txtSessionId.Location = new Point(359, 69);
-            txtSessionId.Margin = new Padding(3, 2, 3, 2);
+            txtSessionId.Location = new Point(413, 94);
             txtSessionId.Name = "txtSessionId";
-            txtSessionId.Size = new Size(128, 29);
+            txtSessionId.Size = new Size(148, 34);
             txtSessionId.TabIndex = 14;
             // 
             // txtMessageId
             // 
             txtMessageId.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtMessageId.Font = new Font("Segoe UI", 12F);
-            txtMessageId.Location = new Point(537, 69);
-            txtMessageId.Margin = new Padding(3, 2, 3, 2);
+            txtMessageId.Location = new Point(618, 94);
             txtMessageId.Name = "txtMessageId";
-            txtMessageId.Size = new Size(128, 29);
+            txtMessageId.Size = new Size(148, 34);
             txtMessageId.TabIndex = 15;
             // 
             // txtUserCode
             // 
             txtUserCode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtUserCode.Font = new Font("Segoe UI", 12F);
-            txtUserCode.Location = new Point(715, 69);
-            txtUserCode.Margin = new Padding(3, 2, 3, 2);
+            txtUserCode.Location = new Point(823, 94);
             txtUserCode.Name = "txtUserCode";
-            txtUserCode.Size = new Size(83, 29);
+            txtUserCode.Size = new Size(96, 34);
             txtUserCode.TabIndex = 16;
             // 
             // lblRequestGuid
@@ -450,9 +430,9 @@
             lblRequestGuid.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblRequestGuid.AutoSize = true;
             lblRequestGuid.Font = new Font("Segoe UI", 12F);
-            lblRequestGuid.Location = new Point(3, 48);
+            lblRequestGuid.Location = new Point(3, 65);
             lblRequestGuid.Name = "lblRequestGuid";
-            lblRequestGuid.Size = new Size(128, 19);
+            lblRequestGuid.Size = new Size(148, 26);
             lblRequestGuid.TabIndex = 17;
             lblRequestGuid.Text = "Request Guid:";
             // 
@@ -461,9 +441,9 @@
             lblBatchClassName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblBatchClassName.AutoSize = true;
             lblBatchClassName.Font = new Font("Segoe UI", 12F);
-            lblBatchClassName.Location = new Point(181, 48);
+            lblBatchClassName.Location = new Point(208, 65);
             lblBatchClassName.Name = "lblBatchClassName";
-            lblBatchClassName.Size = new Size(128, 19);
+            lblBatchClassName.Size = new Size(148, 26);
             lblBatchClassName.TabIndex = 18;
             lblBatchClassName.Text = "Batch Class:";
             // 
@@ -472,9 +452,9 @@
             lblSessionId.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblSessionId.AutoSize = true;
             lblSessionId.Font = new Font("Segoe UI", 12F);
-            lblSessionId.Location = new Point(359, 48);
+            lblSessionId.Location = new Point(413, 65);
             lblSessionId.Name = "lblSessionId";
-            lblSessionId.Size = new Size(128, 19);
+            lblSessionId.Size = new Size(148, 26);
             lblSessionId.TabIndex = 19;
             lblSessionId.Text = "Session ID:";
             // 
@@ -483,9 +463,9 @@
             lblMessageId.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblMessageId.AutoSize = true;
             lblMessageId.Font = new Font("Segoe UI", 12F);
-            lblMessageId.Location = new Point(537, 48);
+            lblMessageId.Location = new Point(618, 65);
             lblMessageId.Name = "lblMessageId";
-            lblMessageId.Size = new Size(128, 19);
+            lblMessageId.Size = new Size(148, 26);
             lblMessageId.TabIndex = 20;
             lblMessageId.Text = "Message ID:";
             // 
@@ -494,36 +474,34 @@
             lblUserCode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblUserCode.AutoSize = true;
             lblUserCode.Font = new Font("Segoe UI", 12F);
-            lblUserCode.Location = new Point(715, 48);
+            lblUserCode.Location = new Point(823, 65);
             lblUserCode.Name = "lblUserCode";
-            lblUserCode.Size = new Size(83, 19);
+            lblUserCode.Size = new Size(96, 26);
             lblUserCode.TabIndex = 21;
             lblUserCode.Text = "User Code:";
             // 
             // statusStrip
             // 
-            statusStrip.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            statusStrip.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             statusStrip.ImageScalingSize = new Size(20, 20);
             statusStrip.Items.AddRange(new ToolStripItem[] { statusLabel });
-            statusStrip.Location = new Point(0, 578);
+            statusStrip.Location = new Point(0, 776);
             statusStrip.Name = "statusStrip";
-            statusStrip.Padding = new Padding(1, 0, 12, 0);
-            statusStrip.Size = new Size(1050, 22);
+            statusStrip.Size = new Size(1200, 24);
             statusStrip.TabIndex = 1;
             // 
             // statusLabel
             // 
             statusLabel.Name = "statusLabel";
-            statusLabel.Size = new Size(0, 17);
+            statusLabel.Size = new Size(0, 18);
             // 
             // ResponsesHistoryForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 245, 245);
-            ClientSize = new Size(1050, 600);
+            ClientSize = new Size(1200, 800);
             Controls.Add(mainPanel);
-            Margin = new Padding(3, 2, 3, 2);
             Name = "ResponsesHistoryForm";
             Text = "Responses History";
             mainPanel.ResumeLayout(false);

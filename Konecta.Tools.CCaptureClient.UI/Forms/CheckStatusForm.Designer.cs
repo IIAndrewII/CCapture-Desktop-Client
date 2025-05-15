@@ -100,8 +100,9 @@
             checkStatusPanel.Dock = DockStyle.Fill;
             checkStatusPanel.Font = new Font("Segoe UI", 12F);
             checkStatusPanel.Location = new Point(0, 0);
+            checkStatusPanel.Margin = new Padding(3, 4, 3, 4);
             checkStatusPanel.Name = "checkStatusPanel";
-            checkStatusPanel.Size = new Size(1280, 720);
+            checkStatusPanel.Size = new Size(1463, 960);
             checkStatusPanel.TabIndex = 0;
             // 
             // metadataTableLayout
@@ -109,11 +110,11 @@
             metadataTableLayout.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             metadataTableLayout.ColumnCount = 6;
             metadataTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-            metadataTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            metadataTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 23F));
             metadataTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
-            metadataTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            metadataTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 23F));
             metadataTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
-            metadataTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 21F));
+            metadataTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
             metadataTableLayout.Controls.Add(txtSourceSystem, 0, 1);
             metadataTableLayout.Controls.Add(lblSourceSystem, 0, 0);
             metadataTableLayout.Controls.Add(txtChannel, 2, 1);
@@ -128,25 +129,27 @@
             metadataTableLayout.Controls.Add(lblInteractionDate, 0, 4);
             metadataTableLayout.Controls.Add(txtApiUrl, 4, 3);
             metadataTableLayout.Controls.Add(pickerInteractionDateTime, 0, 5);
-            metadataTableLayout.Location = new Point(12, 12);
+            metadataTableLayout.Location = new Point(14, 16);
+            metadataTableLayout.Margin = new Padding(3, 4, 3, 4);
             metadataTableLayout.Name = "metadataTableLayout";
             metadataTableLayout.RowCount = 6;
-            metadataTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
             metadataTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            metadataTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            metadataTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 53F));
             metadataTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            metadataTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            metadataTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 53F));
             metadataTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            metadataTableLayout.Size = new Size(1256, 210);
+            metadataTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 53F));
+            metadataTableLayout.Size = new Size(1435, 280);
             metadataTableLayout.TabIndex = 2;
             // 
             // txtSourceSystem
             // 
             txtSourceSystem.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtSourceSystem.Font = new Font("Segoe UI", 12F);
-            txtSourceSystem.Location = new Point(3, 35);
+            txtSourceSystem.Location = new Point(3, 49);
+            txtSourceSystem.Margin = new Padding(3, 4, 3, 4);
             txtSourceSystem.Name = "txtSourceSystem";
-            txtSourceSystem.Size = new Size(392, 29);
+            txtSourceSystem.Size = new Size(448, 34);
             txtSourceSystem.TabIndex = 0;
             // 
             // lblSourceSystem
@@ -155,7 +158,7 @@
             lblSourceSystem.Font = new Font("Segoe UI", 12F);
             lblSourceSystem.Location = new Point(3, 0);
             lblSourceSystem.Name = "lblSourceSystem";
-            lblSourceSystem.Size = new Size(116, 21);
+            lblSourceSystem.Size = new Size(143, 28);
             lblSourceSystem.TabIndex = 0;
             lblSourceSystem.Text = "Source System:";
             // 
@@ -163,18 +166,19 @@
             // 
             txtChannel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtChannel.Font = new Font("Segoe UI", 12F);
-            txtChannel.Location = new Point(421, 35);
+            txtChannel.Location = new Point(480, 49);
+            txtChannel.Margin = new Padding(3, 4, 3, 4);
             txtChannel.Name = "txtChannel";
-            txtChannel.Size = new Size(392, 29);
+            txtChannel.Size = new Size(448, 34);
             txtChannel.TabIndex = 1;
             // 
             // lblChannel
             // 
             lblChannel.AutoSize = true;
             lblChannel.Font = new Font("Segoe UI", 12F);
-            lblChannel.Location = new Point(421, 0);
+            lblChannel.Location = new Point(480, 0);
             lblChannel.Name = "lblChannel";
-            lblChannel.Size = new Size(70, 21);
+            lblChannel.Size = new Size(86, 28);
             lblChannel.TabIndex = 0;
             lblChannel.Text = "Channel:";
             // 
@@ -182,18 +186,19 @@
             // 
             txtSessionID.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtSessionID.Font = new Font("Segoe UI", 12F);
-            txtSessionID.Location = new Point(839, 35);
+            txtSessionID.Location = new Point(957, 49);
+            txtSessionID.Margin = new Padding(3, 4, 3, 4);
             txtSessionID.Name = "txtSessionID";
-            txtSessionID.Size = new Size(392, 29);
+            txtSessionID.Size = new Size(448, 34);
             txtSessionID.TabIndex = 2;
             // 
             // lblSessionID
             // 
             lblSessionID.AutoSize = true;
             lblSessionID.Font = new Font("Segoe UI", 12F);
-            lblSessionID.Location = new Point(839, 0);
+            lblSessionID.Location = new Point(957, 0);
             lblSessionID.Name = "lblSessionID";
-            lblSessionID.Size = new Size(85, 21);
+            lblSessionID.Size = new Size(105, 28);
             lblSessionID.TabIndex = 0;
             lblSessionID.Text = "Session ID:";
             // 
@@ -201,18 +206,19 @@
             // 
             txtMessageID.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtMessageID.Font = new Font("Segoe UI", 12F);
-            txtMessageID.Location = new Point(3, 105);
+            txtMessageID.Location = new Point(3, 142);
+            txtMessageID.Margin = new Padding(3, 4, 3, 4);
             txtMessageID.Name = "txtMessageID";
-            txtMessageID.Size = new Size(392, 29);
+            txtMessageID.Size = new Size(448, 34);
             txtMessageID.TabIndex = 3;
             // 
             // lblMessageID
             // 
             lblMessageID.AutoSize = true;
             lblMessageID.Font = new Font("Segoe UI", 12F);
-            lblMessageID.Location = new Point(3, 70);
+            lblMessageID.Location = new Point(3, 93);
             lblMessageID.Name = "lblMessageID";
-            lblMessageID.Size = new Size(93, 21);
+            lblMessageID.Size = new Size(116, 28);
             lblMessageID.TabIndex = 0;
             lblMessageID.Text = "Message ID:";
             // 
@@ -220,18 +226,19 @@
             // 
             txtUserCode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtUserCode.Font = new Font("Segoe UI", 12F);
-            txtUserCode.Location = new Point(421, 105);
+            txtUserCode.Location = new Point(480, 142);
+            txtUserCode.Margin = new Padding(3, 4, 3, 4);
             txtUserCode.Name = "txtUserCode";
-            txtUserCode.Size = new Size(392, 29);
+            txtUserCode.Size = new Size(448, 34);
             txtUserCode.TabIndex = 4;
             // 
             // lblUserCode
             // 
             lblUserCode.AutoSize = true;
             lblUserCode.Font = new Font("Segoe UI", 12F);
-            lblUserCode.Location = new Point(421, 70);
+            lblUserCode.Location = new Point(480, 93);
             lblUserCode.Name = "lblUserCode";
-            lblUserCode.Size = new Size(85, 21);
+            lblUserCode.Size = new Size(106, 28);
             lblUserCode.TabIndex = 0;
             lblUserCode.Text = "User Code:";
             // 
@@ -239,9 +246,9 @@
             // 
             lblApiUrl.AutoSize = true;
             lblApiUrl.Font = new Font("Segoe UI", 12F);
-            lblApiUrl.Location = new Point(839, 70);
+            lblApiUrl.Location = new Point(957, 93);
             lblApiUrl.Name = "lblApiUrl";
-            lblApiUrl.Size = new Size(69, 21);
+            lblApiUrl.Size = new Size(85, 28);
             lblApiUrl.TabIndex = 7;
             lblApiUrl.Text = "API URL:";
             // 
@@ -249,9 +256,9 @@
             // 
             lblInteractionDate.AutoSize = true;
             lblInteractionDate.Font = new Font("Segoe UI", 12F);
-            lblInteractionDate.Location = new Point(3, 140);
+            lblInteractionDate.Location = new Point(3, 186);
             lblInteractionDate.Name = "lblInteractionDate";
-            lblInteractionDate.Size = new Size(161, 21);
+            lblInteractionDate.Size = new Size(203, 28);
             lblInteractionDate.TabIndex = 0;
             lblInteractionDate.Text = "Interaction Date Time:";
             // 
@@ -259,9 +266,10 @@
             // 
             txtApiUrl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtApiUrl.Font = new Font("Segoe UI", 12F);
-            txtApiUrl.Location = new Point(839, 105);
+            txtApiUrl.Location = new Point(957, 142);
+            txtApiUrl.Margin = new Padding(3, 4, 3, 4);
             txtApiUrl.Name = "txtApiUrl";
-            txtApiUrl.Size = new Size(392, 29);
+            txtApiUrl.Size = new Size(448, 34);
             txtApiUrl.TabIndex = 6;
             // 
             // pickerInteractionDateTime
@@ -270,9 +278,10 @@
             pickerInteractionDateTime.CustomFormat = "ddd, dd MMM yyyy hh:mm tt";
             pickerInteractionDateTime.Font = new Font("Segoe UI", 12F);
             pickerInteractionDateTime.Format = DateTimePickerFormat.Custom;
-            pickerInteractionDateTime.Location = new Point(3, 175);
+            pickerInteractionDateTime.Location = new Point(3, 236);
+            pickerInteractionDateTime.Margin = new Padding(3, 4, 3, 4);
             pickerInteractionDateTime.Name = "pickerInteractionDateTime";
-            pickerInteractionDateTime.Size = new Size(392, 29);
+            pickerInteractionDateTime.Size = new Size(448, 34);
             pickerInteractionDateTime.TabIndex = 5;
             // 
             // tableLayout3
@@ -288,24 +297,25 @@
             tableLayout3.Controls.Add(lblRequestGuid, 0, 0);
             tableLayout3.Controls.Add(btnCheckStatus, 0, 3);
             tableLayout3.Controls.Add(tableLayoutPanel1, 0, 2);
-            tableLayout3.Location = new Point(12, 228);
+            tableLayout3.Location = new Point(14, 304);
+            tableLayout3.Margin = new Padding(3, 4, 3, 4);
             tableLayout3.Name = "tableLayout3";
             tableLayout3.RowCount = 5;
-            tableLayout3.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            tableLayout3.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             tableLayout3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayout3.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
-            tableLayout3.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
-            tableLayout3.RowStyles.Add(new RowStyle(SizeType.Absolute, 46F));
-            tableLayout3.Size = new Size(1256, 459);
+            tableLayout3.RowStyles.Add(new RowStyle(SizeType.Absolute, 61F));
+            tableLayout3.RowStyles.Add(new RowStyle(SizeType.Absolute, 61F));
+            tableLayout3.RowStyles.Add(new RowStyle(SizeType.Absolute, 61F));
+            tableLayout3.Size = new Size(1435, 612);
             tableLayout3.TabIndex = 0;
             // 
             // lblVerificationStatus
             // 
             lblVerificationStatus.AutoSize = true;
             lblVerificationStatus.Font = new Font("Segoe UI", 12F);
-            lblVerificationStatus.Location = new Point(475, 0);
+            lblVerificationStatus.Location = new Point(542, 0);
             lblVerificationStatus.Name = "lblVerificationStatus";
-            lblVerificationStatus.Size = new Size(137, 21);
+            lblVerificationStatus.Size = new Size(172, 28);
             lblVerificationStatus.TabIndex = 2;
             lblVerificationStatus.Text = "Verification Status:";
             // 
@@ -313,9 +323,10 @@
             // 
             VerificationStatusTree.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             VerificationStatusTree.Font = new Font("Segoe UI", 12F);
-            VerificationStatusTree.Location = new Point(475, 33);
+            VerificationStatusTree.Location = new Point(542, 44);
+            VerificationStatusTree.Margin = new Padding(3, 4, 3, 4);
             VerificationStatusTree.Name = "VerificationStatusTree";
-            VerificationStatusTree.Size = new Size(778, 285);
+            VerificationStatusTree.Size = new Size(890, 381);
             VerificationStatusTree.TabIndex = 3;
             // 
             // tableLayoutPanel4
@@ -326,11 +337,12 @@
             tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel4.Controls.Add(btnExpandAll, 0, 0);
             tableLayoutPanel4.Controls.Add(btnCollapseAll, 1, 0);
-            tableLayoutPanel4.Location = new Point(730, 324);
+            tableLayoutPanel4.Location = new Point(834, 433);
+            tableLayoutPanel4.Margin = new Padding(3, 4, 3, 4);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
             tableLayoutPanel4.RowCount = 1;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel4.Size = new Size(523, 40);
+            tableLayoutPanel4.Size = new Size(598, 53);
             tableLayoutPanel4.TabIndex = 27;
             // 
             // btnExpandAll
@@ -340,9 +352,10 @@
             btnExpandAll.FlatStyle = FlatStyle.Flat;
             btnExpandAll.Font = new Font("Segoe UI", 12F);
             btnExpandAll.ForeColor = Color.White;
-            btnExpandAll.Location = new Point(3, 3);
+            btnExpandAll.Location = new Point(3, 4);
+            btnExpandAll.Margin = new Padding(3, 4, 3, 4);
             btnExpandAll.Name = "btnExpandAll";
-            btnExpandAll.Size = new Size(255, 34);
+            btnExpandAll.Size = new Size(293, 45);
             btnExpandAll.TabIndex = 4;
             btnExpandAll.Text = "Expand All";
             btnExpandAll.UseVisualStyleBackColor = false;
@@ -354,9 +367,10 @@
             btnCollapseAll.FlatStyle = FlatStyle.Flat;
             btnCollapseAll.Font = new Font("Segoe UI", 12F);
             btnCollapseAll.ForeColor = Color.White;
-            btnCollapseAll.Location = new Point(264, 3);
+            btnCollapseAll.Location = new Point(302, 4);
+            btnCollapseAll.Margin = new Padding(3, 4, 3, 4);
             btnCollapseAll.Name = "btnCollapseAll";
-            btnCollapseAll.Size = new Size(256, 34);
+            btnCollapseAll.Size = new Size(293, 45);
             btnCollapseAll.TabIndex = 5;
             btnCollapseAll.Text = "Collapse All";
             btnCollapseAll.UseVisualStyleBackColor = false;
@@ -368,10 +382,11 @@
             dataGridViewRequests.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewRequests.Columns.AddRange(new DataGridViewColumn[] { Select, RequestGuid, Details });
             dataGridViewRequests.Font = new Font("Segoe UI", 12F);
-            dataGridViewRequests.Location = new Point(3, 33);
+            dataGridViewRequests.Location = new Point(3, 44);
+            dataGridViewRequests.Margin = new Padding(3, 4, 3, 4);
             dataGridViewRequests.Name = "dataGridViewRequests";
             dataGridViewRequests.RowHeadersWidth = 51;
-            dataGridViewRequests.Size = new Size(466, 285);
+            dataGridViewRequests.Size = new Size(533, 381);
             dataGridViewRequests.TabIndex = 1;
             // 
             // Select
@@ -404,7 +419,7 @@
             lblRequestGuid.Font = new Font("Segoe UI", 12F);
             lblRequestGuid.Location = new Point(3, 0);
             lblRequestGuid.Name = "lblRequestGuid";
-            lblRequestGuid.Size = new Size(113, 21);
+            lblRequestGuid.Size = new Size(140, 28);
             lblRequestGuid.TabIndex = 0;
             lblRequestGuid.Text = "Request Guids:";
             // 
@@ -415,9 +430,10 @@
             btnCheckStatus.FlatStyle = FlatStyle.Flat;
             btnCheckStatus.Font = new Font("Segoe UI", 12F);
             btnCheckStatus.ForeColor = Color.White;
-            btnCheckStatus.Location = new Point(3, 370);
+            btnCheckStatus.Location = new Point(3, 494);
+            btnCheckStatus.Margin = new Padding(3, 4, 3, 4);
             btnCheckStatus.Name = "btnCheckStatus";
-            btnCheckStatus.Size = new Size(466, 40);
+            btnCheckStatus.Size = new Size(533, 53);
             btnCheckStatus.TabIndex = 4;
             btnCheckStatus.Text = "Check Status";
             btnCheckStatus.UseVisualStyleBackColor = false;
@@ -430,11 +446,12 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.Controls.Add(btnUncheckAll, 1, 0);
             tableLayoutPanel1.Controls.Add(btnCheckAll, 0, 0);
-            tableLayoutPanel1.Location = new Point(3, 324);
+            tableLayoutPanel1.Location = new Point(3, 433);
+            tableLayoutPanel1.Margin = new Padding(3, 4, 3, 4);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(466, 40);
+            tableLayoutPanel1.Size = new Size(533, 53);
             tableLayoutPanel1.TabIndex = 28;
             // 
             // btnUncheckAll
@@ -444,9 +461,10 @@
             btnUncheckAll.FlatStyle = FlatStyle.Flat;
             btnUncheckAll.Font = new Font("Segoe UI", 12F);
             btnUncheckAll.ForeColor = Color.White;
-            btnUncheckAll.Location = new Point(236, 3);
+            btnUncheckAll.Location = new Point(269, 4);
+            btnUncheckAll.Margin = new Padding(3, 4, 3, 4);
             btnUncheckAll.Name = "btnUncheckAll";
-            btnUncheckAll.Size = new Size(227, 34);
+            btnUncheckAll.Size = new Size(261, 45);
             btnUncheckAll.TabIndex = 7;
             btnUncheckAll.Text = "Uncheck All";
             btnUncheckAll.UseVisualStyleBackColor = false;
@@ -458,9 +476,10 @@
             btnCheckAll.FlatStyle = FlatStyle.Flat;
             btnCheckAll.Font = new Font("Segoe UI", 12F);
             btnCheckAll.ForeColor = Color.White;
-            btnCheckAll.Location = new Point(3, 3);
+            btnCheckAll.Location = new Point(3, 4);
+            btnCheckAll.Margin = new Padding(3, 4, 3, 4);
             btnCheckAll.Name = "btnCheckAll";
-            btnCheckAll.Size = new Size(227, 34);
+            btnCheckAll.Size = new Size(260, 45);
             btnCheckAll.TabIndex = 6;
             btnCheckAll.Text = "Check All";
             btnCheckAll.UseVisualStyleBackColor = false;
@@ -472,18 +491,19 @@
             statusStrip3.ImageScalingSize = new Size(20, 20);
             statusStrip3.Items.AddRange(new ToolStripItem[] { statusLabel3, toolStripProgressBar1 });
             statusStrip3.LayoutStyle = ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            statusStrip3.Location = new Point(0, 690);
+            statusStrip3.Location = new Point(0, 920);
             statusStrip3.Name = "statusStrip3";
-            statusStrip3.Padding = new Padding(10, 0, 10, 0);
-            statusStrip3.Size = new Size(1280, 30);
+            statusStrip3.Padding = new Padding(11, 0, 11, 0);
+            statusStrip3.Size = new Size(1463, 40);
             statusStrip3.TabIndex = 1;
             // 
             // statusLabel3
             // 
             statusLabel3.AutoSize = false;
+            statusLabel3.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             statusLabel3.ImageAlign = ContentAlignment.MiddleLeft;
             statusLabel3.Name = "statusLabel3";
-            statusLabel3.Size = new Size(800, 25);
+            statusLabel3.Size = new Size(1000, 25);
             statusLabel3.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // toolStripProgressBar1
@@ -492,7 +512,7 @@
             toolStripProgressBar1.Margin = new Padding(0);
             toolStripProgressBar1.Name = "toolStripProgressBar1";
             toolStripProgressBar1.Padding = new Padding(5);
-            toolStripProgressBar1.Size = new Size(210, 30);
+            toolStripProgressBar1.Size = new Size(229, 40);
             toolStripProgressBar1.Visible = false;
             // 
             // errorProvider
@@ -502,11 +522,12 @@
             // 
             // CheckStatusForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 245, 245);
-            ClientSize = new Size(1280, 720);
+            ClientSize = new Size(1463, 960);
             Controls.Add(checkStatusPanel);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "CheckStatusForm";
             Text = "Check Status";
             checkStatusPanel.ResumeLayout(false);
