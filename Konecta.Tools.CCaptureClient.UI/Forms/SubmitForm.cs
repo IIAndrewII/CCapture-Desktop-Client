@@ -1,6 +1,6 @@
 ﻿using Konecta.Tools.CCaptureClient.Core.ApiEntities;
 using Konecta.Tools.CCaptureClient.Core.Interfaces;
-using Konecta.Tools.CCaptureClient.CCaptureClientUI.ViewModels;
+using Konecta.Tools.CCaptureClient.UI.ViewModels;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Konecta.Tools.CCaptureClient.Infrastructure.Services;
 
-namespace Konecta.Tools.CCaptureClient
+namespace Konecta.Tools.CCaptureClient.UI.Forms
 {
     public partial class SubmitForm : Form
     {
@@ -696,6 +696,7 @@ namespace Konecta.Tools.CCaptureClient
                 _progressBar.Visible = true;
                 _progressBar.Value = 0;
                 _progressBar.Maximum = checkedGroups.Count;
+                statusLabel2.Text = "";
 
                 foreach (string group in checkedGroups.ToList())
                 {
@@ -723,8 +724,12 @@ namespace Konecta.Tools.CCaptureClient
                     }
 
                     var groupData = _groups[group];
-                    statusLabel2.Text = $"Submitting {group} documents...";
+                    // Append "Submitting {group} documents" to the status label
+                    statusLabel2.Text = statusLabel2.Text.Length > 0
+                        ? $"{statusLabel2.Text}  ......  Submitting {group} documents"
+                        : $"Submitting {group} documents";
                     statusLabel2.ForeColor = Color.Blue;
+                    Application.DoEvents(); // Ensure UI updates
 
                     var requestGuid = await _viewModel.SubmitDocumentAsync(
                         cboBatchClassName.SelectedItem.ToString(),
@@ -738,8 +743,10 @@ namespace Konecta.Tools.CCaptureClient
                         group,
                         groupData.Documents);
 
-                    statusLabel2.Text = $"Documents for {group} submitted! Request Guid: {requestGuid}";
-                    statusLabel2.ForeColor = Color.Green;
+                    // Append submission confirmation and next group submission message
+                    statusLabel2.Text = $"Documents for {group} submitted, Request Guid: {requestGuid}";
+                    //statusLabel2.ForeColor = Color.Green;
+                    Application.DoEvents(); // Ensure UI updates
 
                     _groups.Remove(group);
                     var rowToRemove = dataGridViewGroups.Rows.Cast<DataGridViewRow>()
@@ -753,7 +760,8 @@ namespace Konecta.Tools.CCaptureClient
 
                 UpdateDocumentAndFieldGrid();
                 _progressBar.Visible = false;
-                statusLabel2.Text = "Submission completed.";
+                //statusLabel2.Text = "Submission completed.";
+                statusLabel2.Text = $"{statusLabel2.Text}  ......  Submitting completed.";
                 statusLabel2.ForeColor = Color.Green;
             }
             catch (Exception ex)

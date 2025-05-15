@@ -1,6 +1,7 @@
 ﻿using Konecta.Tools.CCaptureClient.Core.Interfaces;
 using Konecta.Tools.CCaptureClient.Infrastructure.Services;
-using Konecta.Tools.CCaptureClient.CCaptureClientUI.ViewModels;
+using Konecta.Tools.CCaptureClient.UI.ViewModels;
+using Konecta.Tools.CCaptureClient.Core.Models;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Drawing;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Konecta.Tools.CCaptureClient.Core.DbEntities;
 
-namespace Konecta.Tools.CCaptureClient
+namespace Konecta.Tools.CCaptureClient.UI.Forms
 {
     public partial class CheckStatusForm : Form
     {
@@ -389,7 +390,7 @@ namespace Konecta.Tools.CCaptureClient
                         response.Channel = txtChannel.Text;
                         response.SessionId = txtSessionID.Text;
                         response.MessageId = txtMessageID.Text;
-                        response.UserId = txtUserCode.Text;
+                        response.UserCode = txtUserCode.Text;
                         response.InteractionDateTime = pickerInteractionDateTime.Value;
                         response.ResponseJson = responseJson;
 

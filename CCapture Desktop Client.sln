@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Konecta.Tools.CCaptureClient.UI", "..\CCaptureMockAPI\CCaptureWinForm\Konecta.Tools.CCaptureClient.UI.csproj", "{63AA206C-5D8C-7822-BFE3-5E834059CEE5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Konecta.Tools.CCaptureClient.Core", "Konecta.Tools.CCaptureClient.Core\Konecta.Tools.CCaptureClient.Core.csproj", "{0079254A-E9EB-42CA-88ED-6A4395CC86DC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Konecta.Tools.CCaptureClient.Infrastructure", "Konecta.Tools.CCaptureClient.Infrastructure\Konecta.Tools.CCaptureClient.Infrastructure.csproj", "{D22A5FAF-830F-46E1-AF24-6516947382E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Konecta.Tools.CCaptureClient.UI", "Konecta.Tools.CCaptureClient.UI\Konecta.Tools.CCaptureClient.UI.csproj", "{02704B57-9037-4EEC-938D-6E2660F5E7F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{63AA206C-5D8C-7822-BFE3-5E834059CEE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{63AA206C-5D8C-7822-BFE3-5E834059CEE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{63AA206C-5D8C-7822-BFE3-5E834059CEE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{63AA206C-5D8C-7822-BFE3-5E834059CEE5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0079254A-E9EB-42CA-88ED-6A4395CC86DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0079254A-E9EB-42CA-88ED-6A4395CC86DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0079254A-E9EB-42CA-88ED-6A4395CC86DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +23,10 @@ Global
 		{D22A5FAF-830F-46E1-AF24-6516947382E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D22A5FAF-830F-46E1-AF24-6516947382E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D22A5FAF-830F-46E1-AF24-6516947382E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02704B57-9037-4EEC-938D-6E2660F5E7F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02704B57-9037-4EEC-938D-6E2660F5E7F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02704B57-9037-4EEC-938D-6E2660F5E7F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02704B57-9037-4EEC-938D-6E2660F5E7F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

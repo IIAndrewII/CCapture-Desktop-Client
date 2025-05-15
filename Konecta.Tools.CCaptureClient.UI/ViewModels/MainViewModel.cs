@@ -1,5 +1,4 @@
 ﻿using Konecta.Tools.CCaptureClient.Core.ApiEntities;
-using Konecta.Tools.CCaptureClient.Core.DbEntities;
 using Konecta.Tools.CCaptureClient.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -7,8 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Konecta.Tools.CCaptureClient.Core.DbEntities;
 
-namespace Konecta.Tools.CCaptureClient.CCaptureClientUI.ViewModels
+namespace Konecta.Tools.CCaptureClient.UI.ViewModels
 {
     public class MainViewModel
     {

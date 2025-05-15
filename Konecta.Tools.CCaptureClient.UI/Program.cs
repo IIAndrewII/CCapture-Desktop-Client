@@ -4,8 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Konecta.Tools.CCaptureClient.Infrastructure.Services;
 using Konecta.Tools.CCaptureClient.Core.Interfaces;
+using Konecta.Tools.CCaptureClient.UI.Forms;
 
-namespace Konecta.Tools.CCaptureClient
+namespace Konecta.Tools.CCaptureClient.UI
 {
     internal static class Program
     {

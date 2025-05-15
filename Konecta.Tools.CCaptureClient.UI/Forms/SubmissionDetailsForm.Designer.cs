@@ -1,4 +1,4 @@
-﻿namespace Konecta.Tools.CCaptureClient
+﻿namespace Konecta.Tools.CCaptureClient.UI.Forms
 {
     partial class SubmissionDetailsForm
     {
@@ -299,7 +299,7 @@
             lblUserCode.Name = "lblUserCode";
             lblUserCode.Size = new Size(64, 21);
             lblUserCode.TabIndex = 12;
-            lblUserCode.Text = "User ID:";
+            lblUserCode.Text = "User Code:";
             // 
             // txtUserCode
             // 

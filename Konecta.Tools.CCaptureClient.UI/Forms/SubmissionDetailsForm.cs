@@ -1,15 +1,15 @@
-﻿using Konecta.Tools.CCaptureClient.CCaptureClientUI.ViewModels;
+﻿using Konecta.Tools.CCaptureClient.Core.Models;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Diagnostics; // Required for Process.Start
 using System.IO; // Required for File.Exists
 
-namespace Konecta.Tools.CCaptureClient
+namespace Konecta.Tools.CCaptureClient.UI.Forms
 {
     public partial class SubmissionDetailsForm : Form
     {
-        public SubmissionDetailsForm(SubmissionDetailsViewModel details)
+        public SubmissionDetailsForm(SubmissionDetailsModel details)
         {
             InitializeComponent();
             PopulateDetails(details);
@@ -17,7 +17,7 @@ namespace Konecta.Tools.CCaptureClient
             dataGridViewDocuments.CellDoubleClick += DataGridViewDocuments_CellDoubleClick;
         }
 
-        private void PopulateDetails(SubmissionDetailsViewModel details)
+        private void PopulateDetails(SubmissionDetailsModel details)
         {
             if (details == null)
             {

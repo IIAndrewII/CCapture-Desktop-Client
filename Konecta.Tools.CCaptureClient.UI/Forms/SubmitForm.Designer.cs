@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Konecta.Tools.CCaptureClient
+namespace Konecta.Tools.CCaptureClient.UI.Forms
 {
     partial class SubmitForm
     {
@@ -25,6 +25,7 @@ namespace Konecta.Tools.CCaptureClient
         private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.StatusStrip statusStrip2;
         private System.Windows.Forms.ToolStripStatusLabel statusLabel2;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.DataGridView dataGridViewDocuments;
         private System.Windows.Forms.DataGridView dataGridViewFields;
         private System.Windows.Forms.Label lblDocuments;
@@ -98,6 +99,7 @@ namespace Konecta.Tools.CCaptureClient
             btnRemoveField = new Button();
             statusStrip2 = new StatusStrip();
             statusLabel2 = new ToolStripStatusLabel();
+            toolStripProgressBar1 = new ToolStripProgressBar();
             errorProvider = new ErrorProvider(components);
             submitPanel.SuspendLayout();
             metadataPanel.SuspendLayout();
@@ -119,9 +121,8 @@ namespace Konecta.Tools.CCaptureClient
             submitPanel.Dock = DockStyle.Fill;
             submitPanel.Font = new Font("Segoe UI", 12F);
             submitPanel.Location = new Point(0, 0);
-            submitPanel.Margin = new Padding(3, 4, 3, 4);
             submitPanel.Name = "submitPanel";
-            submitPanel.Size = new Size(1375, 733);
+            submitPanel.Size = new Size(1203, 550);
             submitPanel.TabIndex = 1;
             // 
             // metadataPanel
@@ -129,20 +130,19 @@ namespace Konecta.Tools.CCaptureClient
             metadataPanel.Controls.Add(tableLayout2);
             metadataPanel.Dock = DockStyle.Fill;
             metadataPanel.Location = new Point(0, 0);
-            metadataPanel.Margin = new Padding(3, 4, 3, 4);
             metadataPanel.Name = "metadataPanel";
-            metadataPanel.Size = new Size(1375, 709);
+            metadataPanel.Size = new Size(1203, 520);
             metadataPanel.TabIndex = 9;
             // 
             // tableLayout2
             // 
             tableLayout2.ColumnCount = 6;
             tableLayout2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
-            tableLayout2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 23F));
+            tableLayout2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayout2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
-            tableLayout2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 23F));
+            tableLayout2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayout2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
-            tableLayout2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 26F));
+            tableLayout2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 24F));
             tableLayout2.Controls.Add(cboBatchClassName, 0, 1);
             tableLayout2.Controls.Add(lblBatchClassName, 0, 0);
             tableLayout2.Controls.Add(txtSourceSystem, 2, 1);
@@ -171,7 +171,6 @@ namespace Konecta.Tools.CCaptureClient
             tableLayout2.Controls.Add(tableLayoutPanel1, 4, 8);
             tableLayout2.Dock = DockStyle.Fill;
             tableLayout2.Location = new Point(0, 0);
-            tableLayout2.Margin = new Padding(3, 4, 3, 4);
             tableLayout2.Name = "tableLayout2";
             tableLayout2.RowCount = 10;
             tableLayout2.RowStyles.Add(new RowStyle(SizeType.Percent, 5.398111F));
@@ -184,7 +183,7 @@ namespace Konecta.Tools.CCaptureClient
             tableLayout2.RowStyles.Add(new RowStyle(SizeType.Percent, 40.48583F));
             tableLayout2.RowStyles.Add(new RowStyle(SizeType.Percent, 8.232119F));
             tableLayout2.RowStyles.Add(new RowStyle(SizeType.Percent, 8.232119F));
-            tableLayout2.Size = new Size(1375, 709);
+            tableLayout2.Size = new Size(1203, 520);
             tableLayout2.TabIndex = 0;
             // 
             // cboBatchClassName
@@ -192,10 +191,9 @@ namespace Konecta.Tools.CCaptureClient
             cboBatchClassName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             cboBatchClassName.Font = new Font("Segoe UI", 12F);
             cboBatchClassName.FormattingEnabled = true;
-            cboBatchClassName.Location = new Point(3, 45);
-            cboBatchClassName.Margin = new Padding(3, 4, 3, 4);
+            cboBatchClassName.Location = new Point(3, 32);
             cboBatchClassName.Name = "cboBatchClassName";
-            cboBatchClassName.Size = new Size(428, 36);
+            cboBatchClassName.Size = new Size(373, 29);
             cboBatchClassName.TabIndex = 0;
             // 
             // lblBatchClassName
@@ -203,9 +201,9 @@ namespace Konecta.Tools.CCaptureClient
             lblBatchClassName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblBatchClassName.AutoSize = true;
             lblBatchClassName.Font = new Font("Segoe UI", 12F);
-            lblBatchClassName.Location = new Point(3, 10);
+            lblBatchClassName.Location = new Point(3, 7);
             lblBatchClassName.Name = "lblBatchClassName";
-            lblBatchClassName.Size = new Size(112, 28);
+            lblBatchClassName.Size = new Size(91, 21);
             lblBatchClassName.TabIndex = 0;
             lblBatchClassName.Text = "Batch Class:";
             // 
@@ -213,10 +211,9 @@ namespace Konecta.Tools.CCaptureClient
             // 
             txtSourceSystem.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtSourceSystem.Font = new Font("Segoe UI", 12F);
-            txtSourceSystem.Location = new Point(460, 46);
-            txtSourceSystem.Margin = new Padding(3, 4, 3, 4);
+            txtSourceSystem.Location = new Point(402, 32);
             txtSourceSystem.Name = "txtSourceSystem";
-            txtSourceSystem.Size = new Size(428, 34);
+            txtSourceSystem.Size = new Size(373, 29);
             txtSourceSystem.TabIndex = 1;
             // 
             // lblSourceSystem
@@ -224,9 +221,9 @@ namespace Konecta.Tools.CCaptureClient
             lblSourceSystem.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblSourceSystem.AutoSize = true;
             lblSourceSystem.Font = new Font("Segoe UI", 12F);
-            lblSourceSystem.Location = new Point(460, 10);
+            lblSourceSystem.Location = new Point(402, 7);
             lblSourceSystem.Name = "lblSourceSystem";
-            lblSourceSystem.Size = new Size(143, 28);
+            lblSourceSystem.Size = new Size(116, 21);
             lblSourceSystem.TabIndex = 0;
             lblSourceSystem.Text = "Source System:";
             // 
@@ -234,10 +231,9 @@ namespace Konecta.Tools.CCaptureClient
             // 
             txtChannel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtChannel.Font = new Font("Segoe UI", 12F);
-            txtChannel.Location = new Point(917, 46);
-            txtChannel.Margin = new Padding(3, 4, 3, 4);
+            txtChannel.Location = new Point(801, 32);
             txtChannel.Name = "txtChannel";
-            txtChannel.Size = new Size(428, 34);
+            txtChannel.Size = new Size(373, 29);
             txtChannel.TabIndex = 2;
             // 
             // lblChannel
@@ -245,9 +241,9 @@ namespace Konecta.Tools.CCaptureClient
             lblChannel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblChannel.AutoSize = true;
             lblChannel.Font = new Font("Segoe UI", 12F);
-            lblChannel.Location = new Point(917, 10);
+            lblChannel.Location = new Point(801, 7);
             lblChannel.Name = "lblChannel";
-            lblChannel.Size = new Size(86, 28);
+            lblChannel.Size = new Size(70, 21);
             lblChannel.TabIndex = 0;
             lblChannel.Text = "Channel:";
             // 
@@ -255,10 +251,9 @@ namespace Konecta.Tools.CCaptureClient
             // 
             txtUserCode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtUserCode.Font = new Font("Segoe UI", 12F);
-            txtUserCode.Location = new Point(3, 134);
-            txtUserCode.Margin = new Padding(3, 4, 3, 4);
+            txtUserCode.Location = new Point(3, 97);
             txtUserCode.Name = "txtUserCode";
-            txtUserCode.Size = new Size(428, 34);
+            txtUserCode.Size = new Size(373, 29);
             txtUserCode.TabIndex = 3;
             // 
             // lblUserCode
@@ -266,20 +261,19 @@ namespace Konecta.Tools.CCaptureClient
             lblUserCode.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblUserCode.AutoSize = true;
             lblUserCode.Font = new Font("Segoe UI", 12F);
-            lblUserCode.Location = new Point(3, 98);
+            lblUserCode.Location = new Point(3, 72);
             lblUserCode.Name = "lblUserCode";
-            lblUserCode.Size = new Size(79, 28);
+            lblUserCode.Size = new Size(85, 21);
             lblUserCode.TabIndex = 0;
-            lblUserCode.Text = "User ID:";
+            lblUserCode.Text = "User Code:";
             // 
             // txtSessionID
             // 
             txtSessionID.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtSessionID.Font = new Font("Segoe UI", 12F);
-            txtSessionID.Location = new Point(460, 134);
-            txtSessionID.Margin = new Padding(3, 4, 3, 4);
+            txtSessionID.Location = new Point(402, 97);
             txtSessionID.Name = "txtSessionID";
-            txtSessionID.Size = new Size(428, 34);
+            txtSessionID.Size = new Size(373, 29);
             txtSessionID.TabIndex = 4;
             // 
             // lblSessionID
@@ -287,9 +281,9 @@ namespace Konecta.Tools.CCaptureClient
             lblSessionID.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblSessionID.AutoSize = true;
             lblSessionID.Font = new Font("Segoe UI", 12F);
-            lblSessionID.Location = new Point(460, 98);
+            lblSessionID.Location = new Point(402, 72);
             lblSessionID.Name = "lblSessionID";
-            lblSessionID.Size = new Size(105, 28);
+            lblSessionID.Size = new Size(85, 21);
             lblSessionID.TabIndex = 0;
             lblSessionID.Text = "Session ID:";
             // 
@@ -297,10 +291,9 @@ namespace Konecta.Tools.CCaptureClient
             // 
             txtMessageID.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtMessageID.Font = new Font("Segoe UI", 12F);
-            txtMessageID.Location = new Point(917, 134);
-            txtMessageID.Margin = new Padding(3, 4, 3, 4);
+            txtMessageID.Location = new Point(801, 97);
             txtMessageID.Name = "txtMessageID";
-            txtMessageID.Size = new Size(428, 34);
+            txtMessageID.Size = new Size(373, 29);
             txtMessageID.TabIndex = 5;
             // 
             // lblMessageID
@@ -308,9 +301,9 @@ namespace Konecta.Tools.CCaptureClient
             lblMessageID.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblMessageID.AutoSize = true;
             lblMessageID.Font = new Font("Segoe UI", 12F);
-            lblMessageID.Location = new Point(917, 98);
+            lblMessageID.Location = new Point(801, 72);
             lblMessageID.Name = "lblMessageID";
-            lblMessageID.Size = new Size(116, 28);
+            lblMessageID.Size = new Size(93, 21);
             lblMessageID.TabIndex = 0;
             lblMessageID.Text = "Message ID:";
             // 
@@ -319,9 +312,9 @@ namespace Konecta.Tools.CCaptureClient
             lblInteractionDate.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblInteractionDate.AutoSize = true;
             lblInteractionDate.Font = new Font("Segoe UI", 12F);
-            lblInteractionDate.Location = new Point(3, 186);
+            lblInteractionDate.Location = new Point(3, 137);
             lblInteractionDate.Name = "lblInteractionDate";
-            lblInteractionDate.Size = new Size(203, 28);
+            lblInteractionDate.Size = new Size(161, 21);
             lblInteractionDate.TabIndex = 24;
             lblInteractionDate.Text = "Interaction Date Time:";
             // 
@@ -331,10 +324,9 @@ namespace Konecta.Tools.CCaptureClient
             pickerInteractionDateTime.CustomFormat = "ddd, dd MMM yyyy hh:mm tt";
             pickerInteractionDateTime.Font = new Font("Segoe UI", 12F);
             pickerInteractionDateTime.Format = DateTimePickerFormat.Custom;
-            pickerInteractionDateTime.Location = new Point(3, 222);
-            pickerInteractionDateTime.Margin = new Padding(3, 4, 3, 4);
+            pickerInteractionDateTime.Location = new Point(3, 162);
             pickerInteractionDateTime.Name = "pickerInteractionDateTime";
-            pickerInteractionDateTime.Size = new Size(428, 34);
+            pickerInteractionDateTime.Size = new Size(373, 29);
             pickerInteractionDateTime.TabIndex = 25;
             // 
             // lblApiUrl
@@ -342,9 +334,9 @@ namespace Konecta.Tools.CCaptureClient
             lblApiUrl.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblApiUrl.AutoSize = true;
             lblApiUrl.Font = new Font("Segoe UI", 12F);
-            lblApiUrl.Location = new Point(460, 186);
+            lblApiUrl.Location = new Point(402, 137);
             lblApiUrl.Name = "lblApiUrl";
-            lblApiUrl.Size = new Size(85, 28);
+            lblApiUrl.Size = new Size(69, 21);
             lblApiUrl.TabIndex = 30;
             lblApiUrl.Text = "API URL:";
             // 
@@ -352,10 +344,9 @@ namespace Konecta.Tools.CCaptureClient
             // 
             txtApiUrl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtApiUrl.Font = new Font("Segoe UI", 12F);
-            txtApiUrl.Location = new Point(460, 222);
-            txtApiUrl.Margin = new Padding(3, 4, 3, 4);
+            txtApiUrl.Location = new Point(402, 162);
             txtApiUrl.Name = "txtApiUrl";
-            txtApiUrl.Size = new Size(428, 34);
+            txtApiUrl.Size = new Size(373, 29);
             txtApiUrl.TabIndex = 29;
             // 
             // lblDocuments
@@ -363,9 +354,9 @@ namespace Konecta.Tools.CCaptureClient
             lblDocuments.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblDocuments.AutoSize = true;
             lblDocuments.Font = new Font("Segoe UI", 12F);
-            lblDocuments.Location = new Point(3, 274);
+            lblDocuments.Location = new Point(3, 202);
             lblDocuments.Name = "lblDocuments";
-            lblDocuments.Size = new Size(176, 28);
+            lblDocuments.Size = new Size(140, 21);
             lblDocuments.TabIndex = 12;
             lblDocuments.Text = "Document Groups:";
             // 
@@ -377,11 +368,10 @@ namespace Konecta.Tools.CCaptureClient
             dataGridViewGroups.Columns.AddRange(new DataGridViewColumn[] { Submit, GroupName });
             dataGridViewGroups.Dock = DockStyle.Fill;
             dataGridViewGroups.Font = new Font("Segoe UI", 12F);
-            dataGridViewGroups.Location = new Point(3, 306);
-            dataGridViewGroups.Margin = new Padding(3, 4, 3, 4);
+            dataGridViewGroups.Location = new Point(3, 226);
             dataGridViewGroups.Name = "dataGridViewGroups";
             dataGridViewGroups.RowHeadersWidth = 51;
-            dataGridViewGroups.Size = new Size(428, 279);
+            dataGridViewGroups.Size = new Size(373, 204);
             dataGridViewGroups.TabIndex = 11;
             // 
             // Submit
@@ -393,7 +383,7 @@ namespace Konecta.Tools.CCaptureClient
             Submit.Name = "Submit";
             Submit.Resizable = DataGridViewTriState.True;
             Submit.SortMode = DataGridViewColumnSortMode.Automatic;
-            Submit.Width = 104;
+            Submit.Width = 85;
             // 
             // GroupName
             // 
@@ -412,12 +402,11 @@ namespace Konecta.Tools.CCaptureClient
             tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel4.Controls.Add(btnAddGroup, 0, 0);
             tableLayoutPanel4.Controls.Add(btnRemoveGroup, 1, 0);
-            tableLayoutPanel4.Location = new Point(3, 595);
-            tableLayoutPanel4.Margin = new Padding(3, 4, 3, 4);
+            tableLayoutPanel4.Location = new Point(3, 437);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
             tableLayoutPanel4.RowCount = 1;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel4.Size = new Size(428, 45);
+            tableLayoutPanel4.Size = new Size(373, 34);
             tableLayoutPanel4.TabIndex = 26;
             // 
             // btnAddGroup
@@ -427,10 +416,9 @@ namespace Konecta.Tools.CCaptureClient
             btnAddGroup.FlatStyle = FlatStyle.Flat;
             btnAddGroup.Font = new Font("Segoe UI", 12F);
             btnAddGroup.ForeColor = Color.White;
-            btnAddGroup.Location = new Point(3, 4);
-            btnAddGroup.Margin = new Padding(3, 4, 3, 4);
+            btnAddGroup.Location = new Point(3, 3);
             btnAddGroup.Name = "btnAddGroup";
-            btnAddGroup.Size = new Size(208, 37);
+            btnAddGroup.Size = new Size(180, 28);
             btnAddGroup.TabIndex = 20;
             btnAddGroup.Text = "Add Group";
             btnAddGroup.UseVisualStyleBackColor = false;
@@ -442,10 +430,9 @@ namespace Konecta.Tools.CCaptureClient
             btnRemoveGroup.FlatStyle = FlatStyle.Flat;
             btnRemoveGroup.Font = new Font("Segoe UI", 12F);
             btnRemoveGroup.ForeColor = Color.White;
-            btnRemoveGroup.Location = new Point(217, 4);
-            btnRemoveGroup.Margin = new Padding(3, 4, 3, 4);
+            btnRemoveGroup.Location = new Point(189, 3);
             btnRemoveGroup.Name = "btnRemoveGroup";
-            btnRemoveGroup.Size = new Size(208, 37);
+            btnRemoveGroup.Size = new Size(181, 28);
             btnRemoveGroup.TabIndex = 12;
             btnRemoveGroup.Text = "Remove Group";
             btnRemoveGroup.UseVisualStyleBackColor = false;
@@ -455,9 +442,9 @@ namespace Konecta.Tools.CCaptureClient
             label1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 12F);
-            label1.Location = new Point(460, 274);
+            label1.Location = new Point(402, 202);
             label1.Name = "label1";
-            label1.Size = new Size(115, 28);
+            label1.Size = new Size(92, 21);
             label1.TabIndex = 27;
             label1.Text = "Documents:";
             // 
@@ -469,11 +456,10 @@ namespace Konecta.Tools.CCaptureClient
             dataGridViewDocuments.Columns.AddRange(new DataGridViewColumn[] { FilePath, PageType });
             dataGridViewDocuments.Dock = DockStyle.Fill;
             dataGridViewDocuments.Font = new Font("Segoe UI", 12F);
-            dataGridViewDocuments.Location = new Point(460, 306);
-            dataGridViewDocuments.Margin = new Padding(3, 4, 3, 4);
+            dataGridViewDocuments.Location = new Point(402, 226);
             dataGridViewDocuments.Name = "dataGridViewDocuments";
             dataGridViewDocuments.RowHeadersWidth = 51;
-            dataGridViewDocuments.Size = new Size(428, 279);
+            dataGridViewDocuments.Size = new Size(373, 204);
             dataGridViewDocuments.TabIndex = 13;
             // 
             // FilePath
@@ -499,12 +485,11 @@ namespace Konecta.Tools.CCaptureClient
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel3.Controls.Add(btnBrowseFile, 0, 0);
             tableLayoutPanel3.Controls.Add(btnRemoveFile, 1, 0);
-            tableLayoutPanel3.Location = new Point(460, 595);
-            tableLayoutPanel3.Margin = new Padding(3, 4, 3, 4);
+            tableLayoutPanel3.Location = new Point(402, 437);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new Size(428, 45);
+            tableLayoutPanel3.Size = new Size(373, 34);
             tableLayoutPanel3.TabIndex = 23;
             // 
             // btnBrowseFile
@@ -514,10 +499,9 @@ namespace Konecta.Tools.CCaptureClient
             btnBrowseFile.FlatStyle = FlatStyle.Flat;
             btnBrowseFile.Font = new Font("Segoe UI", 12F);
             btnBrowseFile.ForeColor = Color.White;
-            btnBrowseFile.Location = new Point(3, 4);
-            btnBrowseFile.Margin = new Padding(3, 4, 3, 4);
+            btnBrowseFile.Location = new Point(3, 3);
             btnBrowseFile.Name = "btnBrowseFile";
-            btnBrowseFile.Size = new Size(208, 37);
+            btnBrowseFile.Size = new Size(180, 28);
             btnBrowseFile.TabIndex = 15;
             btnBrowseFile.Text = "Add Files";
             btnBrowseFile.UseVisualStyleBackColor = false;
@@ -529,10 +513,9 @@ namespace Konecta.Tools.CCaptureClient
             btnRemoveFile.FlatStyle = FlatStyle.Flat;
             btnRemoveFile.Font = new Font("Segoe UI", 12F);
             btnRemoveFile.ForeColor = Color.White;
-            btnRemoveFile.Location = new Point(217, 4);
-            btnRemoveFile.Margin = new Padding(3, 4, 3, 4);
+            btnRemoveFile.Location = new Point(189, 3);
             btnRemoveFile.Name = "btnRemoveFile";
-            btnRemoveFile.Size = new Size(208, 37);
+            btnRemoveFile.Size = new Size(181, 28);
             btnRemoveFile.TabIndex = 16;
             btnRemoveFile.Text = "Remove File";
             btnRemoveFile.UseVisualStyleBackColor = false;
@@ -542,9 +525,9 @@ namespace Konecta.Tools.CCaptureClient
             lblFields.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblFields.AutoSize = true;
             lblFields.Font = new Font("Segoe UI", 12F);
-            lblFields.Location = new Point(917, 274);
+            lblFields.Location = new Point(801, 202);
             lblFields.Name = "lblFields";
-            lblFields.Size = new Size(104, 28);
+            lblFields.Size = new Size(82, 21);
             lblFields.TabIndex = 11;
             lblFields.Text = "Field Data:";
             // 
@@ -556,11 +539,10 @@ namespace Konecta.Tools.CCaptureClient
             dataGridViewFields.Columns.AddRange(new DataGridViewColumn[] { FieldName, FieldValue, FieldType });
             dataGridViewFields.Dock = DockStyle.Fill;
             dataGridViewFields.Font = new Font("Segoe UI", 12F);
-            dataGridViewFields.Location = new Point(917, 306);
-            dataGridViewFields.Margin = new Padding(3, 4, 3, 4);
+            dataGridViewFields.Location = new Point(801, 226);
             dataGridViewFields.Name = "dataGridViewFields";
             dataGridViewFields.RowHeadersWidth = 51;
-            dataGridViewFields.Size = new Size(428, 279);
+            dataGridViewFields.Size = new Size(373, 204);
             dataGridViewFields.TabIndex = 14;
             // 
             // FieldName
@@ -596,10 +578,9 @@ namespace Konecta.Tools.CCaptureClient
             btnSubmitDocument.FlatStyle = FlatStyle.Flat;
             btnSubmitDocument.Font = new Font("Segoe UI", 12F);
             btnSubmitDocument.ForeColor = Color.White;
-            btnSubmitDocument.Location = new Point(917, 651);
-            btnSubmitDocument.Margin = new Padding(3, 4, 3, 4);
+            btnSubmitDocument.Location = new Point(801, 478);
             btnSubmitDocument.Name = "btnSubmitDocument";
-            btnSubmitDocument.Size = new Size(428, 53);
+            btnSubmitDocument.Size = new Size(373, 39);
             btnSubmitDocument.TabIndex = 17;
             btnSubmitDocument.Text = "Submit Groups";
             btnSubmitDocument.UseVisualStyleBackColor = false;
@@ -612,12 +593,11 @@ namespace Konecta.Tools.CCaptureClient
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 52.9411774F));
             tableLayoutPanel1.Controls.Add(btnAddField, 0, 0);
             tableLayoutPanel1.Controls.Add(btnRemoveField, 1, 0);
-            tableLayoutPanel1.Location = new Point(917, 595);
-            tableLayoutPanel1.Margin = new Padding(3, 4, 3, 4);
+            tableLayoutPanel1.Location = new Point(801, 437);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(428, 45);
+            tableLayoutPanel1.Size = new Size(373, 34);
             tableLayoutPanel1.TabIndex = 31;
             // 
             // btnAddField
@@ -627,10 +607,9 @@ namespace Konecta.Tools.CCaptureClient
             btnAddField.FlatStyle = FlatStyle.Flat;
             btnAddField.Font = new Font("Segoe UI", 12F);
             btnAddField.ForeColor = Color.White;
-            btnAddField.Location = new Point(3, 4);
-            btnAddField.Margin = new Padding(3, 4, 3, 4);
+            btnAddField.Location = new Point(3, 3);
             btnAddField.Name = "btnAddField";
-            btnAddField.Size = new Size(195, 37);
+            btnAddField.Size = new Size(169, 28);
             btnAddField.TabIndex = 29;
             btnAddField.Text = "Add Field";
             btnAddField.UseVisualStyleBackColor = false;
@@ -642,29 +621,41 @@ namespace Konecta.Tools.CCaptureClient
             btnRemoveField.FlatStyle = FlatStyle.Flat;
             btnRemoveField.Font = new Font("Segoe UI", 12F);
             btnRemoveField.ForeColor = Color.White;
-            btnRemoveField.Location = new Point(204, 4);
-            btnRemoveField.Margin = new Padding(3, 4, 3, 4);
+            btnRemoveField.Location = new Point(178, 3);
             btnRemoveField.Name = "btnRemoveField";
-            btnRemoveField.Size = new Size(221, 37);
+            btnRemoveField.Size = new Size(192, 28);
             btnRemoveField.TabIndex = 28;
             btnRemoveField.Text = "Remove Field";
             btnRemoveField.UseVisualStyleBackColor = false;
             // 
             // statusStrip2
             // 
-            statusStrip2.Font = new Font("Segoe UI", 10F);
+            statusStrip2.AutoSize = false;
+            statusStrip2.Font = new Font("Segoe UI", 12F);
             statusStrip2.ImageScalingSize = new Size(20, 20);
-            statusStrip2.Items.AddRange(new ToolStripItem[] { statusLabel2 });
-            statusStrip2.Location = new Point(0, 709);
+            statusStrip2.Items.AddRange(new ToolStripItem[] { statusLabel2, toolStripProgressBar1 });
+            statusStrip2.LayoutStyle = ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            statusStrip2.Location = new Point(0, 520);
             statusStrip2.Name = "statusStrip2";
-            statusStrip2.Padding = new Padding(1, 0, 16, 0);
-            statusStrip2.Size = new Size(1375, 24);
+            statusStrip2.Padding = new Padding(9, 0, 9, 0);
+            statusStrip2.Size = new Size(1203, 30);
             statusStrip2.TabIndex = 11;
             // 
             // statusLabel2
             // 
+            statusLabel2.AutoSize = false;
             statusLabel2.Name = "statusLabel2";
-            statusLabel2.Size = new Size(0, 18);
+            statusLabel2.Size = new Size(1000, 25);
+            statusLabel2.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // toolStripProgressBar1
+            // 
+            toolStripProgressBar1.Alignment = ToolStripItemAlignment.Right;
+            toolStripProgressBar1.Margin = new Padding(10);
+            toolStripProgressBar1.Name = "toolStripProgressBar1";
+            toolStripProgressBar1.Padding = new Padding(5);
+            toolStripProgressBar1.Size = new Size(220, 10);
+            toolStripProgressBar1.Visible = false;
             // 
             // errorProvider
             // 
@@ -673,18 +664,16 @@ namespace Konecta.Tools.CCaptureClient
             // 
             // SubmitForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 245, 245);
-            ClientSize = new Size(1375, 733);
+            ClientSize = new Size(1203, 550);
             Controls.Add(submitPanel);
             FormBorderStyle = FormBorderStyle.FixedDialog;
-            Margin = new Padding(3, 4, 3, 4);
             Name = "SubmitForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Submit Document";
             submitPanel.ResumeLayout(false);
-            submitPanel.PerformLayout();
             metadataPanel.ResumeLayout(false);
             tableLayout2.ResumeLayout(false);
             tableLayout2.PerformLayout();

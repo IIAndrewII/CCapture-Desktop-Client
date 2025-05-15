@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Konecta.Tools.CCaptureClient.CCaptureClientUI.ViewModels
+namespace Konecta.Tools.CCaptureClient.UI.ViewModels
 {
     public class Document_Row
     {

@@ -6,25 +6,26 @@ using System.Drawing;
 using System.Linq;
 using System.Text.Json;
 using System.Windows.Forms;
+using Konecta.Tools.CCaptureClient.UI.ViewModels;
+using Konecta.Tools.CCaptureClient.Core.Models;
 using Konecta.Tools.CCaptureClient.Core.DbEntities;
-using Konecta.Tools.CCaptureClient.CCaptureClientUI.ViewModels;
 using System.Windows.Forms.VisualStyles;
 
-namespace Konecta.Tools.CCaptureClient
+namespace Konecta.Tools.CCaptureClient.UI.Forms
 {
     public partial class ResponsesHistoryForm : Form
     {
         private readonly IDatabaseService _databaseService;
         private readonly IConfiguration _configuration;
-        private List<VerificationResponseViewModel> _verificationResponses;
+        private List<VerificationResponseModel> _verificationResponses;
 
         public ResponsesHistoryForm(IDatabaseService databaseService, IConfiguration configuration)
         {
             InitializeComponent();
             _databaseService = databaseService;
             _configuration = configuration;
-            _verificationResponses = new List<VerificationResponseViewModel>();
-
+            _verificationResponses = new List<VerificationResponseModel>();
+            
             ConfigureDataGridViewResponses();
             ConfigureTreeView();
             ConfigureFilterControls();
@@ -86,9 +87,15 @@ namespace Konecta.Tools.CCaptureClient
                 };
                 string sourceSystem = string.IsNullOrWhiteSpace(txtSourceSystem.Text) ? null : txtSourceSystem.Text;
                 string channel = string.IsNullOrWhiteSpace(txtChannel.Text) ? null : txtChannel.Text;
+                string requestGuid = string.IsNullOrWhiteSpace(txtRequestGuid.Text) ? null : txtRequestGuid.Text;
+                string batchClassName = string.IsNullOrWhiteSpace(txtBatchClassName.Text) ? null : txtBatchClassName.Text;
+                string sessionId = string.IsNullOrWhiteSpace(txtSessionId.Text) ? null : txtSessionId.Text;
+                string messageId = string.IsNullOrWhiteSpace(txtMessageId.Text) ? null : txtMessageId.Text;
+                string userCode = string.IsNullOrWhiteSpace(txtUserCode.Text) ? null : txtUserCode.Text;
 
                 _verificationResponses = await _databaseService.GetFilteredVerificationResponses(
-                    startDate, endDate, status, sourceSystem, channel);
+                    startDate, endDate, status, sourceSystem, channel,
+                    requestGuid, batchClassName, sessionId, messageId, userCode);
 
                 dataGridViewResponses.DataSource = _verificationResponses.Select(r => new
                 {
@@ -100,7 +107,7 @@ namespace Konecta.Tools.CCaptureClient
                     r.Channel,
                     r.SessionId,
                     r.MessageId,
-                    r.UserId
+                    r.UserCode
                 }).ToList();
 
                 statusLabel.Text = $"Loaded {_verificationResponses.Count} responses.";
