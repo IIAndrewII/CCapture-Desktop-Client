@@ -1,4 +1,5 @@
-﻿using Konecta.Tools.CCaptureClient.UI.ViewModels;
+﻿using Konecta.Tools.CCaptureClient.Infrastructure;
+using Konecta.Tools.CCaptureClient.UI.ViewModels;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -15,16 +16,19 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             _viewModel = viewModel;
             _errorProvider = new ErrorProvider(this) { BlinkStyle = ErrorBlinkStyle.NeverBlink };
             InitializeComponent();
+            LoggerHelper.LogInfo("LoginForm initialized"); // Log form initialization
         }
 
         private void chkShowPassword_CheckedChanged(object sender, EventArgs e)
         {
             txtAppPassword.UseSystemPasswordChar = !chkShowPassword.Checked;
+            LoggerHelper.LogInfo($"Show password toggled: {chkShowPassword.Checked}"); // Log password visibility toggle
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
+            LoggerHelper.LogInfo("Login cancelled"); // Log cancellation
         }
 
         private async void btnGetToken_Click(object sender, EventArgs e)
@@ -33,6 +37,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             {
                 _errorProvider.Clear();
                 statusLabel.Text = string.Empty;
+                LoggerHelper.LogInfo("Attempting login"); // Log login attempt
 
                 if (string.IsNullOrWhiteSpace(txtAppName.Text))
                     _errorProvider.SetError(txtAppName, "Please enter the application name.");
@@ -47,6 +52,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 {
                     statusLabel.Text = "Please fill in all required fields.";
                     statusLabel.ForeColor = Color.Red;
+                    LoggerHelper.LogWarning("Login failed: Missing required fields"); // Log warning
                     return;
                 }
 
@@ -62,6 +68,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 statusLabel.Text = "You're logged in!";
                 statusLabel.ForeColor = Color.Green;
                 DialogResult = DialogResult.OK;
+                LoggerHelper.LogInfo("Login successful"); // Log successful login
             }
             catch (Exception ex)
             {
@@ -69,10 +76,12 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     ? "Login failed. Please check your credentials and try again."
                     : "Something went wrong. Please try again.";
                 statusLabel.ForeColor = Color.Red;
+                LoggerHelper.LogError("Login failed", ex); // Log error
             }
             finally
             {
                 btnGetToken.Enabled = true;
+                LoggerHelper.LogDebug("Login process finalized"); // Log process completion
             }
         }
     }

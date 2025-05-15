@@ -6,6 +6,7 @@ using System;
 using System.Windows.Forms;
 using System.Linq;
 using Konecta.Tools.CCaptureClient.Core.ApiEntities;
+using Konecta.Tools.CCaptureClient.Infrastructure;
 
 namespace Konecta.Tools.CCaptureClient.UI.Forms
 {
@@ -32,6 +33,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             var apiUrl = _configuration["ApiUrl"];
             if (string.IsNullOrEmpty(apiUrl))
             {
+                LoggerHelper.LogError("ApiUrl is not configured in appsettings.json"); // Log error
                 throw new InvalidOperationException("ApiUrl is not configured in appsettings.json");
             }
             var apiService = new ApiService(apiUrl);
@@ -44,6 +46,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             submitDocumentToolStripMenuItem.Click += (s, e) => OpenSubmitForm();
             checkStatusToolStripMenuItem.Click += (s, e) => OpenCheckStatusForm();
             viewVerificationResponsesToolStripMenuItem.Click += (s, e) => OpenVerificationResponseForm();
+            LoggerHelper.LogInfo("MainForm initialized"); // Log form initialization
         }
 
         private void OpenSubmitForm()
@@ -57,10 +60,12 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     WindowState = FormWindowState.Maximized
                 };
                 submitForm.Show();
+                LoggerHelper.LogInfo("Opened new SubmitForm"); // Log new form opening
             }
             else
             {
                 existingForm.Activate();
+                LoggerHelper.LogInfo("Activated existing SubmitForm"); // Log form activation
             }
         }
 
@@ -75,10 +80,12 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     WindowState = FormWindowState.Maximized
                 };
                 checkStatusForm.Show();
+                LoggerHelper.LogInfo("Opened new CheckStatusForm"); // Log new form opening
             }
             else
             {
                 existingForm.Activate();
+                LoggerHelper.LogInfo("Activated existing CheckStatusForm"); // Log form activation
             }
         }
 
@@ -93,10 +100,12 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     WindowState = FormWindowState.Maximized
                 };
                 verificationResponseForm.Show();
+                LoggerHelper.LogInfo("Opened new ResponsesHistoryForm"); // Log new form opening
             }
             else
             {
                 existingForm.Activate();
+                LoggerHelper.LogInfo("Activated existing ResponsesHistoryForm"); // Log form activation
             }
         }
     }

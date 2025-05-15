@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Diagnostics; // Required for Process.Start
 using System.IO; // Required for File.Exists
+using Konecta.Tools.CCaptureClient.Infrastructure; 
 
 namespace Konecta.Tools.CCaptureClient.UI.Forms
 {
@@ -15,6 +16,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             PopulateDetails(details);
             // Register the double-click event handler for dataGridViewDocuments
             dataGridViewDocuments.CellDoubleClick += DataGridViewDocuments_CellDoubleClick;
+            LoggerHelper.LogInfo("SubmissionDetailsForm initialized"); // Log form initialization
         }
 
         private void PopulateDetails(SubmissionDetailsModel details)
@@ -22,6 +24,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             if (details == null)
             {
                 MessageBox.Show("No submission details found.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoggerHelper.LogWarning("No submission details provided"); // Log warning
                 return;
             }
 
@@ -60,11 +63,13 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     field.CreatedAt?.ToString("yyyy-MM-dd HH:mm:ss")
                 );
             }
+            LoggerHelper.LogInfo($"Populated details for Request GUID: {details.Submission.RequestGuid}, {details.Documents.Count} documents, {details.Fields.Count} fields"); // Log data population
         }
 
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
+            LoggerHelper.LogInfo("Closed SubmissionDetailsForm"); // Log form closure
         }
 
         private void DataGridViewDocuments_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -78,6 +83,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 if (string.IsNullOrEmpty(filePath))
                 {
                     MessageBox.Show("No file path specified for this document.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LoggerHelper.LogWarning("No file path specified for document"); // Log warning
                     return;
                 }
 
@@ -88,16 +94,23 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     {
                         // Open the file with the default application
                         Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
+                        LoggerHelper.LogInfo($"Opened file: {filePath}"); // Log file opening
                     }
                     else
                     {
                         MessageBox.Show($"The file '{filePath}' does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        LoggerHelper.LogError($"File does not exist: {filePath}"); // Log error
                     }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Failed to open the file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LoggerHelper.LogError($"Failed to open file: {filePath}", ex); // Log error
                 }
+            }
+            else
+            {
+                LoggerHelper.LogWarning("Invalid row selected for document double-click"); // Log warning
             }
         }
     }
