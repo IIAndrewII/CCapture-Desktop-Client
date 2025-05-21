@@ -5,9 +5,11 @@ namespace Konecta.Tools.CCaptureClient.Core.DbEntities;
 
 public partial class BatchClass
 {
-    public int BatchClassId { get; set; }
+    public int IdBatchClass { get; set; }
 
     public string Name { get; set; } = null!;
 
-    public virtual ICollection<Batch> Batches { get; set; } = new List<Batch>();
+    public virtual ICollection<BatchFieldDef> BatchFieldDefs { get; set; } = new List<BatchFieldDef>();
+
+    public virtual ICollection<DocumentClass> DocumentClasses { get; set; } = new List<DocumentClass>();
 }

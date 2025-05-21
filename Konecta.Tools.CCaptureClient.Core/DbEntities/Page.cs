@@ -13,7 +13,7 @@ public partial class Page
 
     public string? Sections { get; set; }
 
-    public virtual ICollection<PageType> PageTypes { get; set; } = new List<PageType>();
+    public virtual ICollection<PageType1> PageType1s { get; set; } = new List<PageType1>();
 
     public virtual VerificationDocument VerificationDocument { get; set; } = null!;
 }
