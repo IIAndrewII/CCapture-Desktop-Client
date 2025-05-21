@@ -15,7 +15,7 @@ public partial class Batch
 
     public int? BatchClassId { get; set; }
 
-    public virtual BatchClass1? BatchClass { get; set; }
+    public virtual BatchClass? BatchClass { get; set; }
 
     public virtual ICollection<BatchField> BatchFields { get; set; } = new List<BatchField>();
 
