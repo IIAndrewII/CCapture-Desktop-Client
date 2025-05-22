@@ -88,7 +88,7 @@ namespace Konecta.Tools.CCaptureClient.UI.ViewModels
                 // Save fields
                 foreach (var field in fields)
                 {
-                    var fieldType = await _apiDatabaseService.GetFieldTypeAsync(field.FieldName);
+                    var fieldType = await _databaseService.GetFieldTypeAsync(field.FieldName);
                     await _databaseService.SaveFieldAsync(submissionId, field.FieldName, field.FieldValue, fieldType);
                 }
 

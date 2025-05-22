@@ -30,6 +30,114 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
             return context;
         }
 
+        // Get batch class names from API_batch_class
+        public async Task<List<string>> GetBatchClassNamesAsync()
+        {
+            using (var context = CreateContext())
+            {
+                try
+                {
+                    LoggerHelper.LogInfo("Retrieving batch class names"); // Log query attempt
+                    var results = await context.ApiBatchClasses
+                        .Select(bc => bc.Name)
+                        .OrderBy(name => name)
+                        .ToListAsync();
+                    LoggerHelper.LogInfo($"Retrieved {results.Count} batch class names"); // Log successful retrieval
+                    return results;
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogError("Failed to retrieve batch class names", ex); // Log error
+                    throw;
+                }
+            }
+        }
+
+        // Get field names for a batch class from API_batch_field_def
+        public async Task<List<string>> GetFieldNamesAsync(string batchClassName)
+        {
+            using (var context = CreateContext())
+            {
+                try
+                {
+                    LoggerHelper.LogInfo($"Retrieving field names for batch class: {batchClassName}");
+
+                    var results = await context.ApiBatchFieldDefs
+                        .Where(bfd => bfd.IdBatchClass == context.ApiBatchClasses
+                            .Where(bc => bc.Name == batchClassName)
+                            .Select(bc => bc.IdBatchClass)
+                            .FirstOrDefault())
+                        .Select(bfd => bfd.FieldName)
+                        .OrderBy(fieldName => fieldName)
+                        .ToListAsync();
+
+                    LoggerHelper.LogInfo($"Retrieved {results.Count} field names for batch class: {batchClassName}");
+                    return results;
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogError($"Failed to retrieve field names for batch class: {batchClassName}", ex);
+                    throw;
+                }
+            }
+        }
+
+
+        // Get page types for a batch class from API_page_type
+        public async Task<List<string>> GetPageTypesAsync(string batchClassName)
+        {
+            using (var context = CreateContext())
+            {
+                try
+                {
+                    LoggerHelper.LogInfo($"Retrieving page types for batch class: {batchClassName}"); // Log query attempt
+                    var results = await context.ApiPageTypes
+                        .Where(pt => pt.IdDocumentClass == context.ApiDocumentClasses
+                            .Where(dc => dc.IdBatchClass == context.ApiBatchClasses
+                                .Where(bc => bc.Name == batchClassName)
+                                .Select(bc => bc.IdBatchClass)
+                                .FirstOrDefault())
+                            .Select(dc => dc.IdDocumentClass)
+                            .FirstOrDefault())
+                        .Select(pt => pt.Name)
+                        .OrderBy(name => name)
+                        .ToListAsync();
+                    LoggerHelper.LogInfo($"Retrieved {results.Count} page types for batch class: {batchClassName}"); // Log successful retrieval
+                    return results;
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogError($"Failed to retrieve page types for batch class: {batchClassName}", ex); // Log error
+                    throw;
+                }
+            }
+        }
+
+
+        // Get field type for a field from API_field_type and API_batch_field_def
+        public async Task<string> GetFieldTypeAsync(string fieldName)
+        {
+            using (var context = CreateContext())
+            {
+                try
+                {
+                    LoggerHelper.LogInfo($"Retrieving field type for field: {fieldName}"); // Log query attempt
+                    var fieldType = await context.ApiBatchFieldDefs
+                        .Where(bfd => bfd.FieldName == fieldName)
+                        .Select(bfd => bfd.IdFieldTypeNavigation.TypeName)
+                        .FirstOrDefaultAsync();
+                    LoggerHelper.LogInfo($"Retrieved field type: {fieldType ?? "None"} for field: {fieldName}"); // Log successful retrieval
+                    return fieldType ?? string.Empty;
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogError($"Failed to retrieve field type for field: {fieldName}", ex); // Log error
+                    throw;
+                }
+            }
+        }
+
+
         public async Task<int> SaveGroupAsync(string groupName, bool isSubmitted)
         {
             using (var context = CreateContext())

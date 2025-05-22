@@ -25,5 +25,10 @@ namespace Konecta.Tools.CCaptureClient.Core.Interfaces
             string? sessionId = null,
             string? messageId = null,
             string? userCode = null);
+
+        Task<List<string>> GetBatchClassNamesAsync();
+        Task<List<string>> GetFieldNamesAsync(string batchClassName);
+        Task<string> GetFieldTypeAsync(string fieldName);
+        Task<List<string>> GetPageTypesAsync(string batchClassName);
     }
 }

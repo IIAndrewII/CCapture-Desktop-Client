@@ -516,7 +516,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
 
             try
             {
-                var fieldType = await _apiDatabaseService.GetFieldTypeAsync(defaultFieldName);
+                var fieldType = await _databaseService.GetFieldTypeAsync(defaultFieldName);
                 _groups[selectedGroup].Fields.Add(newField);
                 int rowIndex = dataGridViewFields.Rows.Add(defaultFieldName, string.Empty, fieldType);
                 dataGridViewFields.Rows[rowIndex].Tag = defaultFieldName; // Set the Tag for the new row
@@ -541,7 +541,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             try
             {
                 LoggerHelper.LogDebug("Populating batch class names");
-                var batchClassNames = await _apiDatabaseService.GetBatchClassNamesAsync();
+                var batchClassNames = await _databaseService.GetBatchClassNamesAsync();
                 cboBatchClassName.Items.Clear();
                 cboBatchClassName.Items.AddRange(batchClassNames.ToArray());
                 if (cboBatchClassName.Items.Count > 0)
@@ -566,8 +566,8 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 LoggerHelper.LogInfo($"Selected batch class: {selectedBatchClass}");
                 try
                 {
-                    var pageTypes = await _apiDatabaseService.GetPageTypesAsync(selectedBatchClass);
-                    var fieldNames = await _apiDatabaseService.GetFieldNamesAsync(selectedBatchClass);
+                    var pageTypes = await _databaseService.GetPageTypesAsync(selectedBatchClass);
+                    var fieldNames = await _databaseService.GetFieldNamesAsync(selectedBatchClass);
 
                     var pageTypeColumn = (DataGridViewComboBoxColumn)dataGridViewDocuments.Columns["PageType"];
                     pageTypeColumn.Items.Clear();
@@ -643,7 +643,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                             {
                                 try
                                 {
-                                    var fieldType = _apiDatabaseService.GetFieldTypeAsync(field.FieldName).Result;
+                                    var fieldType = _databaseService.GetFieldTypeAsync(field.FieldName).Result;
                                     dataGridViewFields.Rows[rowIndex].Cells["FieldType"].Value = fieldType;
                                 }
                                 catch (Exception ex)
@@ -1108,7 +1108,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 {
                     try
                     {
-                        var fieldType = await _apiDatabaseService.GetFieldTypeAsync(fieldName);
+                        var fieldType = await _databaseService.GetFieldTypeAsync(fieldName);
                         dataGridViewFields.Rows[e.RowIndex].Cells["FieldType"].Value = fieldType;
 
                         var existingField = _groups[selectedGroup].Fields.FirstOrDefault(f => f.FieldName == fieldName);
@@ -1163,7 +1163,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
 
                         try
                         {
-                            var fieldType = await _apiDatabaseService.GetFieldTypeAsync(fieldName);
+                            var fieldType = await _databaseService.GetFieldTypeAsync(fieldName);
                             dataGridViewFields.Rows[e.RowIndex].Cells["FieldType"].Value = fieldType;
                             dataGridViewFields.Rows[e.RowIndex].Tag = fieldName;
                             dataGridViewFields.EndEdit();
