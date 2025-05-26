@@ -75,7 +75,9 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 {
                     if (!existingGuids.Contains(guid))
                     {
-                        dataGridViewRequests.Rows.Add(false, guid);
+                        // Assuming _databaseService has a method to get submission date
+                        var submissionDate = await _databaseService.GetSubmissionDateAsync(guid);
+                        dataGridViewRequests.Rows.Add(false, guid, submissionDate?.ToString("yyyy-MM-dd HH:mm:ss"));
                         existingGuids.Add(guid);
                     }
                 }
@@ -93,7 +95,33 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
 
         private void ConfigureDataGridViewRequests()
         {
-            // Configure DataGridView as needed
+            //dataGridViewRequests.Columns.Clear();
+            //dataGridViewRequests.Columns.Add(new DataGridViewCheckBoxColumn
+            //{
+            //    Name = "Select",
+            //    HeaderText = "Select",
+            //    Width = 50
+            //});
+            //dataGridViewRequests.Columns.Add(new DataGridViewTextBoxColumn
+            //{
+            //    Name = "RequestGuid",
+            //    HeaderText = "Request GUID",
+            //    Width = 200
+            //});
+            //dataGridViewRequests.Columns.Add(new DataGridViewTextBoxColumn
+            //{
+            //    Name = "SubmissionDate",
+            //    HeaderText = "Submission Date",
+            //    Width = 150
+            //});
+            //dataGridViewRequests.Columns.Add(new DataGridViewButtonColumn
+            //{
+            //    Name = "Details",
+            //    HeaderText = "Details",
+            //    Text = "View",
+            //    UseColumnTextForButtonValue = true,
+            //    Width = 80
+            //});
             LoggerHelper.LogDebug("Configured DataGridViewRequests");
         }
 
@@ -114,6 +142,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             btnCollapseAll.Click += btnCollapseAll_Click;
             btnCheckAll.Click += btnCheckAll_Click;
             btnUncheckAll.Click += btnUncheckAll_Click;
+            btnDeleteSelected.Click += btnDeleteSelected_Click;
             dataGridViewRequests.DataError += DataGridViewRequests_DataError;
             dataGridViewRequests.CellContentClick += DataGridViewRequests_CellContentClick;
 
@@ -135,7 +164,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
 
         private void UpdateButtonStates(bool isProcessing)
         {
-            // Determine button states when not processing
             bool canCheckStatus = !isProcessing && dataGridViewRequests.Rows
                 .Cast<DataGridViewRow>()
                 .Any(row => row.Cells["Select"].Value is true &&
@@ -148,12 +176,13 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             bool canUncheckAll = hasRows && dataGridViewRequests.Rows
                 .Cast<DataGridViewRow>()
                 .Any(row => row.Cells["Select"].Value is true);
+            bool canDelete = canUncheckAll; // Delete button enabled if any row is selected
             bool hasTreeNodes = !isProcessing && VerificationStatusTree.Nodes.Count > 0;
 
-            // Apply enabled states
             btnCheckStatus.Enabled = canCheckStatus;
             btnCheckAll.Enabled = canCheckAll;
             btnUncheckAll.Enabled = canUncheckAll;
+            btnDeleteSelected.Enabled = canDelete; // Enable delete button based on selection
             btnExpandAll.Enabled = hasTreeNodes;
             btnCollapseAll.Enabled = hasTreeNodes;
             txtSourceSystem.Enabled = !isProcessing;
@@ -164,13 +193,13 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             pickerInteractionDateTime.Enabled = !isProcessing;
             dataGridViewRequests.Enabled = !isProcessing;
 
-            // Update visual styles for buttons and controls
             foreach (Control control in new Control[] {
                 btnCheckStatus,
                 btnExpandAll,
                 btnCollapseAll,
                 btnCheckAll,
                 btnUncheckAll,
+                btnDeleteSelected,
                 txtSourceSystem,
                 txtChannel,
                 txtSessionID,
@@ -218,6 +247,52 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             }
             UpdateButtonStates(false);
             LoggerHelper.LogInfo("Unchecked all Request GUIDs");
+        }
+
+        private async void btnDeleteSelected_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                var selectedRows = dataGridViewRequests.Rows
+                    .Cast<DataGridViewRow>()
+                    .Where(row => row.Cells["Select"].Value is true)
+                    .ToList();
+
+                if (!selectedRows.Any())
+                {
+                    MessageBox.Show("No rows selected for deletion.", "Confirm", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoggerHelper.LogWarning("Delete selected rows failed: No rows selected.");
+                    return;
+                }
+
+                if (MessageBox.Show($"Are you sure you want to delete {selectedRows.Count} selected row(s)?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    foreach (var row in selectedRows)
+                    {
+                        var requestGuid = row.Cells["RequestGuid"].Value?.ToString();
+                        if (!string.IsNullOrWhiteSpace(requestGuid))
+                        {
+                            var updateResult = await _databaseService.UpdateCheckedGuidAsync(requestGuid);
+                            if (updateResult)
+                            {
+                                dataGridViewRequests.Rows.Remove(row);
+                            }
+                            else
+                            {
+                                LoggerHelper.LogWarning($"Failed to mark Request GUID as checked in database: {requestGuid}");
+                                MessageBox.Show($"Failed to mark Request GUID {requestGuid} as checked in database.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+                        }
+                    }
+                    UpdateButtonStates(false);
+                    LoggerHelper.LogInfo($"Processed {selectedRows.Count} selected rows for deletion from DataGridViewRequests");
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogError("Failed to process deletion of selected rows", ex);
+                MessageBox.Show($"Error during deletion: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async void DataGridViewRequests_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -321,7 +396,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     MessageBox.Show("Login failed. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            UpdateButtonStates(false); // Update button states after login attempt
+            UpdateButtonStates(false);
         }
 
         private async void btnCheckStatus_Click(object sender, EventArgs e)
@@ -332,7 +407,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 UpdateButtonStates(true);
                 LoggerHelper.LogInfo("Starting status check");
 
-                // Validate metadata inputs
                 if (string.IsNullOrWhiteSpace(txtSourceSystem.Text))
                     _errorProvider.SetError(txtSourceSystem, "Please enter the source system.");
                 if (string.IsNullOrWhiteSpace(txtChannel.Text))
@@ -344,7 +418,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 if (string.IsNullOrWhiteSpace(txtUserCode.Text))
                     _errorProvider.SetError(txtUserCode, "Please enter the user ID.");
 
-                // Collect selected RequestGuids
                 var requestGuids = dataGridViewRequests.Rows
                     .Cast<DataGridViewRow>()
                     .Where(row => row.Cells["Select"].Value is true)
@@ -499,6 +572,33 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                                         docNode.Nodes.Add($"Document Class: {doc.DocumentClass.Name}").ForeColor = Color.Black;
                                     }
 
+                                    if (doc.DocumentFields?.Any() == true)
+                                    {
+                                        var docFieldsNode = docNode.Nodes.Add("Document Fields");
+                                        docFieldsNode.ForeColor = Color.Black;
+                                        foreach (var field in doc.DocumentFields)
+                                        {
+                                            var fieldNode = docFieldsNode.Nodes.Add($"Field: {field.Name}");
+                                            fieldNode.ForeColor = Color.Black;
+                                            fieldNode.Nodes.Add($"Value: {field.Value}").ForeColor = Color.Black;
+                                            fieldNode.Nodes.Add($"Confidence: {field.Confidence}").ForeColor = Color.Black;
+                                        }
+                                    }
+
+                                    //if (doc.Signatures?.Any() == true)
+                                    //{
+                                    //    var signaturesNode = docNode.Nodes.Add("Signatures");
+                                    //    signaturesNode.ForeColor = Color.Black;
+                                    //    foreach (var signature in doc.Signatures)
+                                    //    {
+                                    //        var sigNode = signaturesNode.Nodes.Add($"Signature");
+                                    //        sigNode.ForeColor = Color.Black;
+                                    //        // Add relevant signature properties (assuming a Signature class with properties like Id, Type, etc.)
+                                    //        sigNode.Nodes.Add($"Id: {signature.Id ?? "N/A"}").ForeColor = Color.Black;
+                                    //        sigNode.Nodes.Add($"Type: {signature.Type ?? "N/A"}").ForeColor = Color.Black;
+                                    //    }
+                                    //}
+
                                     if (doc.Pages?.Any() == true)
                                     {
                                         var pagesNode = docNode.Nodes.Add("Pages");
@@ -519,6 +619,18 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                                                     pageTypeNode.Nodes.Add($"Confidence: {pageType.Confidence}").ForeColor = Color.Black;
                                                 }
                                             }
+
+                                            //if (page.Sections?.Any() == true)
+                                            //{
+                                            //    var sectionsNode = pageNode.Nodes.Add("Sections");
+                                            //    sectionsNode.ForeColor = Color.Black;
+                                            //    foreach (var section in page.Sections)
+                                            //    {
+                                            //        var sectionNode = sectionsNode.Nodes.Add($"Section: {section.Name ?? "N/A"}");
+                                            //        sectionNode.ForeColor = Color.Black;
+                                            //        sectionNode.Nodes.Add($"Content: {section.Content ?? "N/A"}").ForeColor = Color.Black;
+                                            //    }
+                                            //}
                                         }
                                     }
                                 }
@@ -576,11 +688,12 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
 
         private void DataGridViewRequests_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
-            if (e.ColumnIndex == dataGridViewRequests.Columns["RequestGuid"].Index)
+            if (e.ColumnIndex == dataGridViewRequests.Columns["RequestGuid"].Index ||
+                e.ColumnIndex == dataGridViewRequests.Columns["SubmissionDate"].Index)
             {
                 dataGridViewRequests.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = null;
                 e.Cancel = true;
-                LoggerHelper.LogError($"Data error in DataGridViewRequests at row {e.RowIndex}, column RequestGuid", e.Exception);
+                LoggerHelper.LogError($"Data error in DataGridViewRequests at row {e.RowIndex}, column {dataGridViewRequests.Columns[e.ColumnIndex].Name}", e.Exception);
             }
         }
     }

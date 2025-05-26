@@ -82,7 +82,6 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
             }
         }
 
-
         // Get page types for a batch class from API_page_type
         public async Task<List<string>> GetPageTypesAsync(string batchClassName)
         {
@@ -113,7 +112,6 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
             }
         }
 
-
         // Get field type for a field from API_field_type and API_batch_field_def
         public async Task<string> GetFieldTypeAsync(string fieldName)
         {
@@ -136,7 +134,6 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
                 }
             }
         }
-
 
         public async Task<int> SaveGroupAsync(string groupName, bool isSubmitted)
         {
@@ -284,6 +281,35 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
                 catch (Exception ex)
                 {
                     LoggerHelper.LogError($"Failed to retrieve submission details for Request GUID: {requestGuid}", ex); // Log error
+                    throw;
+                }
+            }
+        }
+
+        public async Task<DateTime?> GetSubmissionDateAsync(string requestGuid)
+        {
+            using (var context = CreateContext())
+            {
+                try
+                {
+                    LoggerHelper.LogInfo($"Retrieving submission date for Request GUID: {requestGuid}"); // Log retrieval attempt
+                    var submission = await context.Submissions
+                        .Where(s => s.RequestGuid == requestGuid)
+                        .Select(s => s.InteractionDateTime)
+                        .FirstOrDefaultAsync();
+
+                    if (submission == default)
+                    {
+                        LoggerHelper.LogWarning($"No submission found for Request GUID: {requestGuid}"); // Log warning
+                        return null;
+                    }
+
+                    LoggerHelper.LogInfo($"Retrieved submission date {submission:yyyy-MM-dd HH:mm:ss} for Request GUID: {requestGuid}"); // Log successful retrieval
+                    return submission;
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogError($"Failed to retrieve submission date for Request GUID: {requestGuid}", ex); // Log error
                     throw;
                 }
             }

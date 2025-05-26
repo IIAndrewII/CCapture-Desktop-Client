@@ -11,6 +11,7 @@ namespace Konecta.Tools.CCaptureClient.Core.Interfaces
         Task SaveFieldAsync(int submissionId, string fieldName, string fieldValue, string fieldType);
         Task<SubmissionDetailsModel> GetSubmissionDetailsAsync(string requestGuid);
         Task<int> SaveVerificationResponseAsync(VerificationResponse verificationResponse);
+        Task<DateTime?> GetSubmissionDateAsync(string requestGuid);
         Task<bool> UpdateCheckedGuidAsync(string requestGuid);
         Task<List<string>> GetUncheckedRequestGuidsAsync();
         Task<List<VerificationResponse>> GetAllVerificationResponses();
