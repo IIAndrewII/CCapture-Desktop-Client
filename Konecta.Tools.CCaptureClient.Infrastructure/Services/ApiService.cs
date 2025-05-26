@@ -1,4 +1,5 @@
-﻿using Konecta.Tools.CCaptureClient.Core.ApiEntities;
+﻿using Azure;
+using Konecta.Tools.CCaptureClient.Core.ApiEntities;
 using Konecta.Tools.CCaptureClient.Core.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -93,7 +94,7 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
 
                 _httpClient.DefaultRequestHeaders.Add("sourceSystem", request.SourceSystem);
                 _httpClient.DefaultRequestHeaders.Add("channel", request.Channel);
-                _httpClient.DefaultRequestHeaders.Add("interactionDate-Time", request.InteractionDateTime);
+                _httpClient.DefaultRequestHeaders.Add("interactionDateTime", request.InteractionDateTime);
                 _httpClient.DefaultRequestHeaders.Add("sessionID", request.SessionID);
                 _httpClient.DefaultRequestHeaders.Add("messageID", request.MessageID);
                 _httpClient.DefaultRequestHeaders.Add("userCode", request.UserCode);
@@ -107,7 +108,7 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
                 // Read the response content
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<JObject>(responseContent);
-                string requestGuid = result["requestGuid"]?.ToString();
+                string requestGuid = result["RequestGuid"]?.ToString();
                 LoggerHelper.LogInfo($"Document submitted successfully, Request GUID: {requestGuid}"); // Log successful submission
                 return requestGuid;
             }
@@ -120,18 +121,19 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
 
         public async Task<string> CheckVerificationStatusAsync(VerificationStatusRequest request, string authToken)
         {
+            HttpResponseMessage? response = null;
             try
             {
                 LoggerHelper.LogInfo($"Checking verification status for Request GUID: {request.RequestGuid}"); // Log status check attempt
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
                 _httpClient.DefaultRequestHeaders.Add("sourceSystem", request.SourceSystem);
                 _httpClient.DefaultRequestHeaders.Add("channel", request.Channel);
-                _httpClient.DefaultRequestHeaders.Add("interactionDate-Time", request.InteractionDateTime);
+                _httpClient.DefaultRequestHeaders.Add("interactionDateTime", request.InteractionDateTime);
                 _httpClient.DefaultRequestHeaders.Add("sessionID", request.SessionID);
                 _httpClient.DefaultRequestHeaders.Add("messageID", request.MessageID);
                 _httpClient.DefaultRequestHeaders.Add("userCode", request.UserCode);
 
-                var response = await _httpClient.GetAsync($"{_baseUrl}/ProcessDocument/ReadDocumentVerification?requestGuid={request.RequestGuid}");
+                response = await _httpClient.GetAsync($"{_baseUrl}/ProcessDocument/ReadDocumentVerification?requestGuid={request.RequestGuid}");
 
                 response.EnsureSuccessStatusCode();
                 var responseContent = await response.Content.ReadAsStringAsync();
@@ -139,9 +141,11 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
                 return responseContent;
             }
             catch (Exception ex)
-            {
-                LoggerHelper.LogError($"Failed to check verification status for Request GUID: {request.RequestGuid}", ex); // Log error
-                throw;
+            {                
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var newEx = new Exception(responseContent);
+                LoggerHelper.LogError($"Failed to check verification status for Request GUID: {request.RequestGuid}", newEx); // Log error
+                throw newEx;
             }
         }
     }
