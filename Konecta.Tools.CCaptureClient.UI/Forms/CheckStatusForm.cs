@@ -6,6 +6,7 @@ using System;
 using System.Drawing;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Konecta.Tools.CCaptureClient.Core.DbEntities;
@@ -253,30 +254,30 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
         {
             try
             {
-                var selectedRows = dataGridViewRequests.Rows
-                    .Cast<DataGridViewRow>()
-                    .Where(row => row.Cells["Select"].Value is true)
-                    .ToList();
+            var selectedRows = dataGridViewRequests.Rows
+                .Cast<DataGridViewRow>()
+                .Where(row => row.Cells["Select"].Value is true)
+                .ToList();
 
-                if (!selectedRows.Any())
-                {
+            if (!selectedRows.Any())
+            {
                     MessageBox.Show("No rows selected for deletion.", "Confirm", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoggerHelper.LogWarning("Delete selected rows failed: No rows selected.");
-                    return;
-                }
+                return;
+            }
 
-                if (MessageBox.Show($"Are you sure you want to delete {selectedRows.Count} selected row(s)?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show($"Are you sure you want to delete {selectedRows.Count} selected row(s)?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                foreach (var row in selectedRows)
                 {
-                    foreach (var row in selectedRows)
-                    {
                         var requestGuid = row.Cells["RequestGuid"].Value?.ToString();
                         if (!string.IsNullOrWhiteSpace(requestGuid))
                         {
                             var updateResult = await _databaseService.UpdateCheckedGuidAsync(requestGuid);
                             if (updateResult)
                             {
-                                dataGridViewRequests.Rows.Remove(row);
-                            }
+                    dataGridViewRequests.Rows.Remove(row);
+                }
                             else
                             {
                                 LoggerHelper.LogWarning($"Failed to mark Request GUID as checked in database: {requestGuid}");
@@ -284,10 +285,10 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                             }
                         }
                     }
-                    UpdateButtonStates(false);
+                UpdateButtonStates(false);
                     LoggerHelper.LogInfo($"Processed {selectedRows.Count} selected rows for deletion from DataGridViewRequests");
-                }
             }
+        }
             catch (Exception ex)
             {
                 LoggerHelper.LogError("Failed to process deletion of selected rows", ex);
@@ -484,6 +485,14 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                             txtUserCode.Text,
                             pickerInteractionDateTime.Value.ToString("o"));
 
+                        // Parse the JSON response
+                        var jsonNode = JsonNode.Parse(responseJson);
+                        if (jsonNode == null)
+                        {
+                            throw new JsonException("Failed to parse JSON response");
+                        }
+
+                        // Still deserialize for saving to database
                         var response = JsonSerializer.Deserialize<VerificationResponse>(responseJson, new JsonSerializerOptions
                         {
                             PropertyNameCaseInsensitive = true
@@ -516,140 +525,10 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                         requestNode = VerificationStatusTree.Nodes.Add($"Request Guid: {requestGuid}");
                         requestNode.ForeColor = Color.Black;
 
-                        var statusNode = requestNode.Nodes.Add($"Status: {response.Status}");
-                        statusNode.ForeColor = response.Status == 0 ? Color.Green : Color.Red;
+                        // Build tree from JSON
+                        BuildTreeFromJson(jsonNode, requestNode);
 
-                        var executionDateNode = requestNode.Nodes.Add($"Execution Date: {response.ExecutionDate:yyyy-MM-dd HH:mm:ss}");
-                        executionDateNode.ForeColor = Color.Black;
-
-                        if (!string.IsNullOrEmpty(response.ErrorMessage))
-                        {
-                            var errorNode = requestNode.Nodes.Add($"Error Message: {response.ErrorMessage}");
-                            errorNode.ForeColor = Color.Red;
-                            LoggerHelper.LogWarning($"Error message for Request GUID {requestGuid}: {response.ErrorMessage}");
-                        }
-
-                        if (response.Batch != null)
-                        {
-                            var batchNode = requestNode.Nodes.Add("Batch");
-                            batchNode.ForeColor = Color.Black;
-
-                            batchNode.Nodes.Add($"Id: {response.Batch.BatchId}").ForeColor = Color.Black;
-                            batchNode.Nodes.Add($"Name: {response.Batch.Name}").ForeColor = Color.Black;
-                            batchNode.Nodes.Add($"Creation Date: {response.Batch.CreationDate:yyyy-MM-dd HH:mm:ss}").ForeColor = Color.Black;
-                            batchNode.Nodes.Add($"Close Date: {response.Batch.CloseDate:yyyy-MM-dd HH:mm:ss}").ForeColor = Color.Black;
-
-                            if (response.Batch.BatchClass != null)
-                            {
-                                var batchClassNode = batchNode.Nodes.Add($"Batch Class: {response.Batch.BatchClass.Name}");
-                                batchClassNode.ForeColor = Color.Black;
-                            }
-
-                            if (response.Batch.BatchFields?.Any() == true)
-                            {
-                                var fieldsNode = batchNode.Nodes.Add("Batch Fields");
-                                fieldsNode.ForeColor = Color.Black;
-                                foreach (var field in response.Batch.BatchFields)
-                                {
-                                    var fieldNode = fieldsNode.Nodes.Add($"Field: {field.Name}");
-                                    fieldNode.ForeColor = Color.Black;
-                                    fieldNode.Nodes.Add($"Value: {field.Value}").ForeColor = Color.Black;
-                                    fieldNode.Nodes.Add($"Confidence: {field.Confidence}").ForeColor = Color.Black;
-                                }
-                            }
-
-                            if (response.Batch.VerificationDocuments?.Any() == true)
-                            {
-                                var docsNode = batchNode.Nodes.Add("Documents");
-                                docsNode.ForeColor = Color.Black;
-                                foreach (var doc in response.Batch.VerificationDocuments)
-                                {
-                                    var docNode = docsNode.Nodes.Add($"Document: {doc.Name}");
-                                    docNode.ForeColor = Color.Black;
-
-                                    if (doc.DocumentClass != null)
-                                    {
-                                        docNode.Nodes.Add($"Document Class: {doc.DocumentClass.Name}").ForeColor = Color.Black;
-                                    }
-
-                                    if (doc.DocumentFields?.Any() == true)
-                                    {
-                                        var docFieldsNode = docNode.Nodes.Add("Document Fields");
-                                        docFieldsNode.ForeColor = Color.Black;
-                                        foreach (var field in doc.DocumentFields)
-                                        {
-                                            var fieldNode = docFieldsNode.Nodes.Add($"Field: {field.Name}");
-                                            fieldNode.ForeColor = Color.Black;
-                                            fieldNode.Nodes.Add($"Value: {field.Value}").ForeColor = Color.Black;
-                                            fieldNode.Nodes.Add($"Confidence: {field.Confidence}").ForeColor = Color.Black;
-                                        }
-                                    }
-
-                                    //if (doc.Signatures?.Any() == true)
-                                    //{
-                                    //    var signaturesNode = docNode.Nodes.Add("Signatures");
-                                    //    signaturesNode.ForeColor = Color.Black;
-                                    //    foreach (var signature in doc.Signatures)
-                                    //    {
-                                    //        var sigNode = signaturesNode.Nodes.Add($"Signature");
-                                    //        sigNode.ForeColor = Color.Black;
-                                    //        // Add relevant signature properties (assuming a Signature class with properties like Id, Type, etc.)
-                                    //        sigNode.Nodes.Add($"Id: {signature.Id ?? "N/A"}").ForeColor = Color.Black;
-                                    //        sigNode.Nodes.Add($"Type: {signature.Type ?? "N/A"}").ForeColor = Color.Black;
-                                    //    }
-                                    //}
-
-                                    if (doc.Pages?.Any() == true)
-                                    {
-                                        var pagesNode = docNode.Nodes.Add("Pages");
-                                        pagesNode.ForeColor = Color.Black;
-                                        foreach (var page in doc.Pages)
-                                        {
-                                            var pageNode = pagesNode.Nodes.Add($"Page: {page.FileName}");
-                                            pageNode.ForeColor = Color.Black;
-
-                                            if (page.PageTypes?.Any() == true)
-                                            {
-                                                var pageTypesNode = pageNode.Nodes.Add("Page Types");
-                                                pageTypesNode.ForeColor = Color.Black;
-                                                foreach (var pageType in page.PageTypes)
-                                                {
-                                                    var pageTypeNode = pageTypesNode.Nodes.Add($"Type: {pageType.Name}");
-                                                    pageTypeNode.ForeColor = Color.Black;
-                                                    pageTypeNode.Nodes.Add($"Confidence: {pageType.Confidence}").ForeColor = Color.Black;
-                                                }
-                                            }
-
-                                            //if (page.Sections?.Any() == true)
-                                            //{
-                                            //    var sectionsNode = pageNode.Nodes.Add("Sections");
-                                            //    sectionsNode.ForeColor = Color.Black;
-                                            //    foreach (var section in page.Sections)
-                                            //    {
-                                            //        var sectionNode = sectionsNode.Nodes.Add($"Section: {section.Name ?? "N/A"}");
-                                            //        sectionNode.ForeColor = Color.Black;
-                                            //        sectionNode.Nodes.Add($"Content: {section.Content ?? "N/A"}").ForeColor = Color.Black;
-                                            //    }
-                                            //}
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (response.Batch.BatchStates?.Any() == true)
-                            {
-                                var statesNode = batchNode.Nodes.Add("Batch States");
-                                statesNode.ForeColor = Color.Black;
-                                foreach (var state in response.Batch.BatchStates)
-                                {
-                                    var stateNode = statesNode.Nodes.Add($"State: {state.Value}");
-                                    stateNode.ForeColor = Color.Black;
-                                    stateNode.Nodes.Add($"Track Date: {state.TrackDate:yyyy-MM-dd HH:mm:ss}").ForeColor = Color.Black;
-                                    stateNode.Nodes.Add($"Workstation: {state.Workstation}").ForeColor = Color.Black;
-                                }
-                            }
-                        }
-                        LoggerHelper.LogInfo($"Status check completed for Request GUID: {requestGuid}, Status: {response.Status}");
+                        LoggerHelper.LogInfo($"Status check completed for Request GUID: {requestGuid}");
                     }
                     catch (Exception ex)
                     {
@@ -683,6 +562,93 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             {
                 UpdateButtonStates(false);
                 LoggerHelper.LogDebug("Status check process finalized");
+            }
+        }
+
+        private void BuildTreeFromJson(JsonNode node, TreeNode parentNode)
+        {
+            if (node == null) return;
+
+            switch (node)
+            {
+                case JsonObject obj:
+                    foreach (var property in obj)
+                    {
+                        var key = property.Key;
+                        var value = property.Value;
+
+                        if (value == null)
+                        {
+                            var childNode = parentNode.Nodes.Add($"{key}: null");
+                            childNode.ForeColor = Color.Black;
+                            continue;
+                        }
+
+                        if (value is JsonArray)
+                        {
+                            var arrayNode = parentNode.Nodes.Add(key);
+                            arrayNode.ForeColor = Color.Black;
+                            int index2 = 0;
+                            foreach (var item in value.AsArray())
+                            {
+                                var itemNode = arrayNode.Nodes.Add($"{key} [{index2}]");
+                                itemNode.ForeColor = Color.Black;
+                                BuildTreeFromJson(item, itemNode);
+                                index2++;
+                            }
+                        }
+                        else if (value is JsonObject)
+                        {
+                            var objectNode = parentNode.Nodes.Add(key);
+                            objectNode.ForeColor = Color.Black;
+                            BuildTreeFromJson(value, objectNode);
+                        }
+                        else
+                        {
+                            var valueString2 = value.ToString();
+                            string displayString;
+
+                            // Special handling for Status key
+                            if (key == "Status")
+                            {
+                                displayString = valueString2 == "0" ? "OK" : "KO";
+                                var childNode = parentNode.Nodes.Add($"{key}: {displayString}");
+                                childNode.ForeColor = valueString2 == "0" ? Color.Green : Color.Red;
+                            }
+                            else
+                            {
+                                // Format dates if they look like ISO 8601
+                                if (DateTime.TryParse(valueString2, out var dateTime2))
+                                {
+                                    valueString2 = dateTime2.ToString("yyyy-MM-dd HH:mm:ss");
+                                }
+                                var childNode = parentNode.Nodes.Add($"{key}: {valueString2}");
+                                childNode.ForeColor = key == "ErrorMessage" && !string.IsNullOrEmpty(valueString2) ? Color.Red : Color.Black;
+                            }
+                        }
+                    }
+                    break;
+
+                case JsonArray array:
+                    int index = 0;
+                    foreach (var item in array)
+                    {
+                        var itemNode = parentNode.Nodes.Add($"Item [{index}]");
+                        itemNode.ForeColor = Color.Black;
+                        BuildTreeFromJson(item, itemNode);
+                        index++;
+                    }
+                    break;
+
+                case JsonValue jsonValue:
+                    var valueString = jsonValue.ToString();
+                    if (DateTime.TryParse(valueString, out var dateTime))
+                    {
+                        valueString = dateTime.ToString("yyyy-MM-dd HH:mm:ss");
+                    }
+                    var valueNode = parentNode.Nodes.Add($"Value: {valueString}");
+                    valueNode.ForeColor = Color.Black;
+                    break;
             }
         }
 

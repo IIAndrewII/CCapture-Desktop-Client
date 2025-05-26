@@ -11,6 +11,7 @@ using Konecta.Tools.CCaptureClient.Core.Models;
 using Konecta.Tools.CCaptureClient.Core.DbEntities;
 using System.Windows.Forms.VisualStyles;
 using Konecta.Tools.CCaptureClient.Infrastructure;
+using System.Text.Json.Nodes;
 
 namespace Konecta.Tools.CCaptureClient.UI.Forms
 {
@@ -165,14 +166,26 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
 
                         if (response != null && !string.IsNullOrEmpty(response.ResponseJson))
                         {
-                            var deserializedResponse = JsonSerializer.Deserialize<VerificationResponse>(
-                                response.ResponseJson, new JsonSerializerOptions
-                                {
-                                    PropertyNameCaseInsensitive = true
-                                });
+                            // Parse the JSON string into a JsonNode
+                            var jsonNode = JsonNode.Parse(response.ResponseJson);
+                            if (jsonNode != null)
+                            {
+                                // Create a root node for the request GUID
+                                var rootNode = VerificationStatusTree.Nodes.Add($"Request Guid: {requestGuid}");
+                                rootNode.ForeColor = Color.Black;
 
-                            PopulateTreeView(deserializedResponse, requestGuid);
-                            LoggerHelper.LogDebug($"Populated TreeView for Request GUID: {requestGuid}"); // Log successful population
+                                // Build the tree using BuildTreeFromJson
+                                BuildTreeFromJson(jsonNode, rootNode);
+                                LoggerHelper.LogDebug($"Populated TreeView for Request GUID: {requestGuid}"); // Log successful population
+                            }
+                            else
+                            {
+                                var requestNode = VerificationStatusTree.Nodes.Add($"Request Guid: {requestGuid}");
+                                requestNode.ForeColor = Color.Black;
+                                var errorNode = requestNode.Nodes.Add("Error: Failed to parse JSON response");
+                                errorNode.ForeColor = Color.Red;
+                                LoggerHelper.LogWarning($"Failed to parse JSON response for Request GUID: {requestGuid}"); // Log warning
+                            }
                         }
                         else
                         {
@@ -205,106 +218,130 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             VerificationStatusTree.CollapseAll();
         }
 
-        private void PopulateTreeView(VerificationResponse response, string requestGuid)
+        private void PopulateTreeView(string responseJson, string requestGuid)
         {
             var requestNode = VerificationStatusTree.Nodes.Add($"Request Guid: {requestGuid}");
             requestNode.ForeColor = Color.Black;
 
-            var statusNode = requestNode.Nodes.Add($"Status: {(response.Status == 0 ? "OK" : "KO")}");
-            statusNode.ForeColor = response.Status == 0 ? Color.Green : Color.Red;
-
-            var executionDateNode = requestNode.Nodes.Add($"Execution Date: {response.ExecutionDate:yyyy-MM-dd HH:mm:ss}");
-            executionDateNode.ForeColor = Color.Black;
-
-            if (!string.IsNullOrEmpty(response.ErrorMessage))
+            try
             {
-                var errorNode = requestNode.Nodes.Add($"Error Message: {response.ErrorMessage}");
-                errorNode.ForeColor = Color.Red;
-                LoggerHelper.LogWarning($"Error message for Request GUID {requestGuid}: {response.ErrorMessage}"); // Log warning
-            }
-
-            if (response.Batch != null)
-            {
-                var batchNode = requestNode.Nodes.Add("Batch");
-                batchNode.ForeColor = Color.Black;
-
-                batchNode.Nodes.Add($"Id: {response.Batch.BatchId}").ForeColor = Color.Black;
-                batchNode.Nodes.Add($"Name: {response.Batch.Name}").ForeColor = Color.Black;
-                batchNode.Nodes.Add($"Creation Date: {response.Batch.CreationDate:yyyy-MM-dd HH:mm:ss}").ForeColor = Color.Black;
-                batchNode.Nodes.Add($"Close Date: {response.Batch.CloseDate:yyyy-MM-dd HH:mm:ss}").ForeColor = Color.Black;
-
-                if (response.Batch.BatchClass != null)
+                if (!string.IsNullOrEmpty(responseJson))
                 {
-                    var batchClassNode = batchNode.Nodes.Add($"Batch Class: {response.Batch.BatchClass.Name}");
-                    batchClassNode.ForeColor = Color.Black;
-                }
-
-                if (response.Batch.BatchFields?.Any() == true)
-                {
-                    var fieldsNode = batchNode.Nodes.Add("Batch Fields");
-                    fieldsNode.ForeColor = Color.Black;
-                    foreach (var field in response.Batch.BatchFields)
+                    // Parse the JSON string into a JsonNode
+                    var jsonNode = JsonNode.Parse(responseJson);
+                    if (jsonNode != null)
                     {
-                        var fieldNode = fieldsNode.Nodes.Add($"Field: {field.Name}");
-                        fieldNode.ForeColor = Color.Black;
-                        fieldNode.Nodes.Add($"Value: {field.Value}").ForeColor = Color.Black;
-                        fieldNode.Nodes.Add($"Confidence: {field.Confidence}").ForeColor = Color.Black;
+                        // Build the tree using BuildTreeFromJson
+                        BuildTreeFromJson(jsonNode, requestNode);
+                        LoggerHelper.LogDebug($"Populated TreeView nodes for Request GUID: {requestGuid}"); // Log TreeView population
+                    }
+                    else
+                    {
+                        var errorNode = requestNode.Nodes.Add("Error: Failed to parse JSON response");
+                        errorNode.ForeColor = Color.Red;
+                        LoggerHelper.LogWarning($"Failed to parse JSON response for Request GUID: {requestGuid}"); // Log warning
                     }
                 }
-
-                if (response.Batch.VerificationDocuments?.Any() == true)
+                else
                 {
-                    var docsNode = batchNode.Nodes.Add("Documents");
-                    docsNode.ForeColor = Color.Black;
-                    foreach (var doc in response.Batch.VerificationDocuments)
-                    {
-                        var docNode = docsNode.Nodes.Add($"Document: {doc.Name}");
-                        docNode.ForeColor = Color.Black;
+                    var errorNode = requestNode.Nodes.Add("Error: No JSON response available");
+                    errorNode.ForeColor = Color.Red;
+                    LoggerHelper.LogWarning($"No JSON response available for Request GUID: {requestGuid}"); // Log warning
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorNode = requestNode.Nodes.Add($"Error: {ex.Message}");
+                errorNode.ForeColor = Color.Red;
+                LoggerHelper.LogError($"Failed to populate TreeView for Request GUID: {requestGuid}", ex); // Log error
+            }
+        }
 
-                        if (doc.DocumentClass != null)
+        private void BuildTreeFromJson(JsonNode node, TreeNode parentNode)
+        {
+            if (node == null) return;
+
+            switch (node)
+            {
+                case JsonObject obj:
+                    foreach (var property in obj)
+                    {
+                        var key = property.Key;
+                        var value = property.Value;
+
+                        if (value == null)
                         {
-                            docNode.Nodes.Add($"Document Class: {doc.DocumentClass.Name}").ForeColor = Color.Black;
+                            var childNode = parentNode.Nodes.Add($"{key}: null");
+                            childNode.ForeColor = Color.Black;
+                            continue;
                         }
 
-                        if (doc.Pages?.Any() == true)
+                        if (value is JsonArray)
                         {
-                            var pagesNode = docNode.Nodes.Add("Pages");
-                            pagesNode.ForeColor = Color.Black;
-                            foreach (var page in doc.Pages)
+                            var arrayNode = parentNode.Nodes.Add(key);
+                            arrayNode.ForeColor = Color.Black;
+                            int index2 = 0;
+                            foreach (var item in value.AsArray())
                             {
-                                var pageNode = pagesNode.Nodes.Add($"Page: {page.FileName}");
-                                pageNode.ForeColor = Color.Black;
+                                var itemNode = arrayNode.Nodes.Add($"{key} [{index2}]");
+                                itemNode.ForeColor = Color.Black;
+                                BuildTreeFromJson(item, itemNode);
+                                index2++;
+                            }
+                        }
+                        else if (value is JsonObject)
+                        {
+                            var objectNode = parentNode.Nodes.Add(key);
+                            objectNode.ForeColor = Color.Black;
+                            BuildTreeFromJson(value, objectNode);
+                        }
+                        else
+                        {
+                            var valueString2 = value.ToString();
+                            string displayString;
 
-                                if (page.PageTypes?.Any() == true)
+                            // Special handling for Status key
+                            if (key == "Status")
+                            {
+                                displayString = valueString2 == "0" ? "OK" : "KO";
+                                var childNode = parentNode.Nodes.Add($"{key}: {displayString}");
+                                childNode.ForeColor = valueString2 == "0" ? Color.Green : Color.Red;
+                            }
+                            else
+                            {
+                                // Format dates if they look like ISO 8601
+                                if (DateTime.TryParse(valueString2, out var dateTime2))
                                 {
-                                    var pageTypesNode = pageNode.Nodes.Add("Page Types");
-                                    pageTypesNode.ForeColor = Color.Black;
-                                    foreach (var pageType in page.PageTypes)
-                                    {
-                                        var pageTypeNode = pageTypesNode.Nodes.Add($"Type: {pageType.Name}");
-                                        pageTypeNode.ForeColor = Color.Black;
-                                        pageTypeNode.Nodes.Add($"Confidence: {pageType.Confidence}").ForeColor = Color.Black;
-                                    }
+                                    valueString2 = dateTime2.ToString("yyyy-MM-dd HH:mm:ss");
                                 }
+                                var childNode = parentNode.Nodes.Add($"{key}: {valueString2}");
+                                childNode.ForeColor = key == "ErrorMessage" && !string.IsNullOrEmpty(valueString2) ? Color.Red : Color.Black;
                             }
                         }
                     }
-                }
+                    break;
 
-                if (response.Batch.BatchStates?.Any() == true)
-                {
-                    var statesNode = batchNode.Nodes.Add("Batch States");
-                    statesNode.ForeColor = Color.Black;
-                    foreach (var state in response.Batch.BatchStates)
+                case JsonArray array:
+                    int index = 0;
+                    foreach (var item in array)
                     {
-                        var stateNode = statesNode.Nodes.Add($"State: {state.Value}");
-                        stateNode.ForeColor = Color.Black;
-                        stateNode.Nodes.Add($"Track Date: {state.TrackDate:yyyy-MM-dd HH:mm:ss}").ForeColor = Color.Black;
-                        stateNode.Nodes.Add($"Workstation: {state.Workstation}").ForeColor = Color.Black;
+                        var itemNode = parentNode.Nodes.Add($"Item [{index}]");
+                        itemNode.ForeColor = Color.Black;
+                        BuildTreeFromJson(item, itemNode);
+                        index++;
                     }
-                }
+                    break;
+
+                case JsonValue jsonValue:
+                    var valueString = jsonValue.ToString();
+                    if (DateTime.TryParse(valueString, out var dateTime))
+                    {
+                        valueString = dateTime.ToString("yyyy-MM-dd HH:mm:ss");
+                    }
+                    var valueNode = parentNode.Nodes.Add($"Value: {valueString}");
+                    valueNode.ForeColor = Color.Black;
+                    break;
             }
-            LoggerHelper.LogDebug($"Populated TreeView nodes for Request GUID: {requestGuid}"); // Log TreeView population
         }
 
         private void btnClean_Click(object sender, EventArgs e)
