@@ -244,7 +244,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             btnSubmitDocument.Enabled = hasGroups && !_isSubmitting;
             btnBrowseFile.Enabled = hasGroups && !_isSubmitting;
             btnRemoveFile.Enabled = hasGroups && hasDocuments && !_isSubmitting;
-            btnAssignToNewGroup.Enabled = hasGroups && hasDocuments && !_isSubmitting;
+            btnAssignToNewGroup.Enabled = !_isSubmitting; // Always enabled unless submitting
             btnRemoveField.Enabled = hasGroups && hasFields && !_isSubmitting;
             btnAddField.Enabled = hasGroups && !_isSubmitting;
             btnRemoveGroup.Enabled = hasGroups && !_isSubmitting;
@@ -399,80 +399,48 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
 
         private void btnAssignToNewGroup_Click(object sender, EventArgs e)
         {
-            var selectedGroupRow = dataGridViewGroups.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault();
-            if (selectedGroupRow == null)
+            var openFileDialog = new OpenFileDialog
             {
-                LoggerHelper.LogWarning("Attempted to assign to new group without selecting a group");
-                MessageBox.Show("Please select a group first.", "No Group Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                Multiselect = true,
+                Filter = "PDF and Image Files (*.pdf;*.jpg;*.jpeg;*.png;*.bmp)|*.pdf;*.jpg;*.jpeg;*.png;*.bmp",
+                Title = "Select PDF or Image Files"
+            };
 
-            string currentGroup = selectedGroupRow.Cells["GroupName"].Value.ToString();
-            // Check if group has only one document
-            if (_groups[currentGroup].Documents.Count <= 1)
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                LoggerHelper.LogWarning($"Cannot move last document from group: {currentGroup}");
-                MessageBox.Show("Cannot move the last document in the group.", "Invalid Operation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Get selected documents in top-to-bottom order
-            var selectedDocuments = dataGridViewDocuments.SelectedRows.Cast<DataGridViewRow>()
-                .Where(row => !row.IsNewRow)
-                .OrderBy(row => row.Index) // Sort by row index to process top-to-bottom
-                .Select(row => row.Cells["FilePath"].Value?.ToString())
-                .ToList();
-
-            if (!selectedDocuments.Any())
-            {
-                LoggerHelper.LogWarning("No documents selected for assigning to new group");
-                MessageBox.Show("Please select at least one document to assign to new groups.", "No Documents Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Check if moving selected documents would leave group empty
-            if (_groups[currentGroup].Documents.Count == selectedDocuments.Count)
-            {
-                LoggerHelper.LogWarning($"Cannot move all documents from group: {currentGroup}");
-                MessageBox.Show("Cannot move all documents from the group.", "Invalid Operation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Process each document individually
-            foreach (var docPath in selectedDocuments)
-            {
-                // Generate unique group name
-                int counter = _groups.Count + 1;
-                string newGroupName;
-                do
+                foreach (var filePath in openFileDialog.FileNames)
                 {
-                    newGroupName = $"Group {counter}";
-                    counter++;
-                } while (_groups.ContainsKey(newGroupName));
+                    // Generate unique group name
+                    int counter = _groups.Count + 1;
+                    string newGroupName;
+                    do
+                    {
+                        newGroupName = $"Group {counter}";
+                        counter++;
+                    } while (_groups.ContainsKey(newGroupName));
 
-                // Create new group
-                _groups.Add(newGroupName, new GroupData());
+                    // Create new group
+                    _groups.Add(newGroupName, new GroupData());
 
-                // Move single document to new group
-                var documentToMove = _groups[currentGroup].Documents
-                    .FirstOrDefault(doc => doc.FilePath == docPath);
-
-                if (documentToMove != null)
-                {
-                    _groups[newGroupName].Documents.Add(documentToMove);
-                    _groups[currentGroup].Documents.Remove(documentToMove);
+                    // Add single document to new group
+                    var doc = new Document_Row { FilePath = filePath, PageType = string.Empty };
+                    _groups[newGroupName].Documents.Add(doc);
 
                     // Add new group to grid
                     int rowIndex = dataGridViewGroups.Rows.Add(true, newGroupName);
                     dataGridViewGroups.ClearSelection();
                     dataGridViewGroups.Rows[rowIndex].Selected = true;
-                    LoggerHelper.LogInfo($"Moved document {docPath} from {currentGroup} to new group {newGroupName}");
+                    LoggerHelper.LogInfo($"Created new group {newGroupName} with file {filePath}");
                 }
-            }
 
-            // Update grids and controls
-            UpdateDocumentAndFieldGrid();
-            UpdateControlStates();
+                // Update grids and controls
+                UpdateDocumentAndFieldGrid();
+                UpdateControlStates();
+            }
+            else
+            {
+                LoggerHelper.LogDebug("File selection cancelled for assigning to new groups");
+            }
         }
 
         private async void btnAddField_Click(object sender, EventArgs e)
@@ -893,7 +861,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
 
                 UpdateDocumentAndFieldGrid();
                 _progressBar.Visible = false;
-                //statusLabel2.Text = "Submission completed.";
                 statusLabel2.Text = $"{statusLabel2.Text}  ......  Submitting completed.";
                 statusLabel2.ForeColor = Color.Green;
                 LoggerHelper.LogInfo("Document submission completed successfully");
