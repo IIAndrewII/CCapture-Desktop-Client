@@ -63,7 +63,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
         {
             try
             {
-                LoggerHelper.LogDebug("Populating unchecked Request GUIDs");
+                LoggerHelper.LogDebug("Populating unchecked Request GUIDs and InteractionDateTimes");
                 var existingGuids = dataGridViewRequests.Rows
                     .Cast<DataGridViewRow>()
                     .Select(row => row.Cells["RequestGuid"].Value?.ToString())
@@ -72,24 +72,25 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
 
                 var uncheckedGuids = await _databaseService.GetUncheckedRequestGuidsAsync();
 
-                foreach (var guid in uncheckedGuids)
+                foreach (var item in uncheckedGuids)
                 {
-                    if (!existingGuids.Contains(guid))
+                    var guid = item.GetType().GetProperty("RequestGuid")?.GetValue(item)?.ToString();
+                    var interactionDateTime = item.GetType().GetProperty("InteractionDateTime")?.GetValue(item) as DateTime?;
+
+                    if (!string.IsNullOrWhiteSpace(guid) && !existingGuids.Contains(guid))
                     {
-                        // Assuming _databaseService has a method to get submission date
-                        var submissionDate = await _databaseService.GetSubmissionDateAsync(guid);
-                        dataGridViewRequests.Rows.Add(false, guid, submissionDate?.ToString("yyyy-MM-dd HH:mm:ss"));
+                        dataGridViewRequests.Rows.Add(false, guid, interactionDateTime?.ToString("yyyy-MM-dd HH:mm:ss"));
                         existingGuids.Add(guid);
                     }
                 }
 
                 dataGridViewRequests.Refresh();
                 UpdateButtonStates(false);
-                LoggerHelper.LogInfo($"Loaded {uncheckedGuids.Count} unchecked Request GUIDs");
+                LoggerHelper.LogInfo($"Loaded {uncheckedGuids.Count} unchecked Request GUIDs and InteractionDateTimes");
             }
             catch (Exception ex)
             {
-                LoggerHelper.LogError("Failed to load unchecked Request GUIDs", ex);
+                LoggerHelper.LogError("Failed to load unchecked Request GUIDs and InteractionDateTimes", ex);
                 MessageBox.Show($"Error loading unchecked GUIDs: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

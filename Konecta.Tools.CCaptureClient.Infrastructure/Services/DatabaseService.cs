@@ -473,23 +473,23 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
             }
         }
 
-        public async Task<List<string>> GetUncheckedRequestGuidsAsync()
+        public async Task<List<object>> GetUncheckedRequestGuidsAsync()
         {
             using (var context = CreateContext())
             {
                 try
                 {
-                    LoggerHelper.LogInfo("Retrieving unchecked Request GUIDs"); // Log retrieval attempt
-                    var guids = await context.Submissions
+                    LoggerHelper.LogInfo("Retrieving unchecked Request GUIDs and InteractionDateTimes"); // Log retrieval attempt
+                    var results = await context.Submissions
                         .Where(s => !s.CheckedGuid)
-                        .Select(s => s.RequestGuid)
+                        .Select(s => new { s.RequestGuid, s.InteractionDateTime })
                         .ToListAsync();
-                    LoggerHelper.LogInfo($"Retrieved {guids.Count} unchecked Request GUIDs"); // Log successful retrieval
-                    return guids;
+                    LoggerHelper.LogInfo($"Retrieved {results.Count} unchecked Request GUIDs and InteractionDateTimes"); // Log successful retrieval
+                    return results.Cast<object>().ToList();
                 }
                 catch (Exception ex)
                 {
-                    LoggerHelper.LogError("Failed to retrieve unchecked Request GUIDs", ex); // Log error
+                    LoggerHelper.LogError("Failed to retrieve unchecked Request GUIDs and InteractionDateTimes", ex); // Log error
                     throw;
                 }
             }

@@ -13,7 +13,7 @@ namespace Konecta.Tools.CCaptureClient.Core.Interfaces
         Task<int> SaveVerificationResponseAsync(VerificationResponse verificationResponse);
         Task<DateTime?> GetSubmissionDateAsync(string requestGuid);
         Task<bool> UpdateCheckedGuidAsync(string requestGuid);
-        Task<List<string>> GetUncheckedRequestGuidsAsync();
+        Task<List<object>> GetUncheckedRequestGuidsAsync();
         Task<List<VerificationResponse>> GetAllVerificationResponses();
         Task<List<VerificationResponseModel>> GetFilteredVerificationResponses(
             DateTime? startDate = null,
