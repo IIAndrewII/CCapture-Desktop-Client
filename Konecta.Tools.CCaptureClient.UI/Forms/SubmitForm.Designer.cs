@@ -40,8 +40,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnRemoveField;
-        private System.Windows.Forms.TextBox txtApiUrl;
-        private System.Windows.Forms.Label lblApiUrl;
 
         protected override void Dispose(bool disposing)
         {
@@ -72,8 +70,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             lblMessageID = new Label();
             lblInteractionDate = new Label();
             pickerInteractionDateTime = new DateTimePicker();
-            lblApiUrl = new Label();
-            txtApiUrl = new TextBox();
             lblDocuments = new Label();
             dataGridViewGroups = new DataGridView();
             Submit = new DataGridViewCheckBoxColumn();
@@ -160,8 +156,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             tableLayout2.Controls.Add(lblMessageID, 4, 2);
             tableLayout2.Controls.Add(lblInteractionDate, 0, 4);
             tableLayout2.Controls.Add(pickerInteractionDateTime, 0, 5);
-            tableLayout2.Controls.Add(lblApiUrl, 2, 4);
-            tableLayout2.Controls.Add(txtApiUrl, 2, 5);
             tableLayout2.Controls.Add(lblDocuments, 0, 6);
             tableLayout2.Controls.Add(dataGridViewGroups, 0, 7);
             tableLayout2.Controls.Add(tableLayoutPanel4, 0, 8);
@@ -340,27 +334,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             pickerInteractionDateTime.Name = "pickerInteractionDateTime";
             pickerInteractionDateTime.Size = new Size(426, 34);
             pickerInteractionDateTime.TabIndex = 25;
-            // 
-            // lblApiUrl
-            // 
-            lblApiUrl.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            lblApiUrl.AutoSize = true;
-            lblApiUrl.Font = new Font("Segoe UI", 12F);
-            lblApiUrl.Location = new Point(458, 181);
-            lblApiUrl.Name = "lblApiUrl";
-            lblApiUrl.Size = new Size(85, 28);
-            lblApiUrl.TabIndex = 30;
-            lblApiUrl.Text = "API URL:";
-            // 
-            // txtApiUrl
-            // 
-            txtApiUrl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtApiUrl.Font = new Font("Segoe UI", 12F);
-            txtApiUrl.Location = new Point(458, 216);
-            txtApiUrl.Margin = new Padding(3, 4, 3, 4);
-            txtApiUrl.Name = "txtApiUrl";
-            txtApiUrl.Size = new Size(427, 34);
-            txtApiUrl.TabIndex = 29;
             // 
             // lblDocuments
             // 

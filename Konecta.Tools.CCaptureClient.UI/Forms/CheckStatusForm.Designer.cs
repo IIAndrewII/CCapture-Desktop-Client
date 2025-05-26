@@ -32,8 +32,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.DateTimePicker pickerInteractionDateTime;
         private System.Windows.Forms.Label lblInteractionDate;
-        private System.Windows.Forms.TextBox txtApiUrl;
-        private System.Windows.Forms.Label lblApiUrl;
 
         protected override void Dispose(bool disposing)
         {
@@ -59,9 +57,7 @@
             lblMessageID = new Label();
             txtUserCode = new TextBox();
             lblUserCode = new Label();
-            lblApiUrl = new Label();
             lblInteractionDate = new Label();
-            txtApiUrl = new TextBox();
             pickerInteractionDateTime = new DateTimePicker();
             tableLayout3 = new TableLayoutPanel();
             lblVerificationStatus = new Label();
@@ -125,10 +121,8 @@
             metadataTableLayout.Controls.Add(lblMessageID, 0, 2);
             metadataTableLayout.Controls.Add(txtUserCode, 2, 3);
             metadataTableLayout.Controls.Add(lblUserCode, 2, 2);
-            metadataTableLayout.Controls.Add(lblApiUrl, 4, 2);
-            metadataTableLayout.Controls.Add(lblInteractionDate, 0, 4);
-            metadataTableLayout.Controls.Add(txtApiUrl, 4, 3);
-            metadataTableLayout.Controls.Add(pickerInteractionDateTime, 0, 5);
+            metadataTableLayout.Controls.Add(pickerInteractionDateTime, 4, 3);
+            metadataTableLayout.Controls.Add(lblInteractionDate, 4, 2);
             metadataTableLayout.Location = new Point(14, 16);
             metadataTableLayout.Margin = new Padding(3, 4, 3, 4);
             metadataTableLayout.Name = "metadataTableLayout";
@@ -139,7 +133,7 @@
             metadataTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 53F));
             metadataTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             metadataTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 53F));
-            metadataTableLayout.Size = new Size(1435, 280);
+            metadataTableLayout.Size = new Size(1435, 229);
             metadataTableLayout.TabIndex = 2;
             // 
             // txtSourceSystem
@@ -242,35 +236,15 @@
             lblUserCode.TabIndex = 0;
             lblUserCode.Text = "User Code:";
             // 
-            // lblApiUrl
-            // 
-            lblApiUrl.AutoSize = true;
-            lblApiUrl.Font = new Font("Segoe UI", 12F);
-            lblApiUrl.Location = new Point(957, 93);
-            lblApiUrl.Name = "lblApiUrl";
-            lblApiUrl.Size = new Size(85, 28);
-            lblApiUrl.TabIndex = 7;
-            lblApiUrl.Text = "API URL:";
-            // 
             // lblInteractionDate
             // 
             lblInteractionDate.AutoSize = true;
             lblInteractionDate.Font = new Font("Segoe UI", 12F);
-            lblInteractionDate.Location = new Point(3, 186);
+            lblInteractionDate.Location = new Point(957, 93);
             lblInteractionDate.Name = "lblInteractionDate";
             lblInteractionDate.Size = new Size(203, 28);
             lblInteractionDate.TabIndex = 0;
             lblInteractionDate.Text = "Interaction Date Time:";
-            // 
-            // txtApiUrl
-            // 
-            txtApiUrl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtApiUrl.Font = new Font("Segoe UI", 12F);
-            txtApiUrl.Location = new Point(957, 142);
-            txtApiUrl.Margin = new Padding(3, 4, 3, 4);
-            txtApiUrl.Name = "txtApiUrl";
-            txtApiUrl.Size = new Size(448, 34);
-            txtApiUrl.TabIndex = 6;
             // 
             // pickerInteractionDateTime
             // 
@@ -278,7 +252,7 @@
             pickerInteractionDateTime.CustomFormat = "ddd, dd MMM yyyy hh:mm tt";
             pickerInteractionDateTime.Font = new Font("Segoe UI", 12F);
             pickerInteractionDateTime.Format = DateTimePickerFormat.Custom;
-            pickerInteractionDateTime.Location = new Point(3, 236);
+            pickerInteractionDateTime.Location = new Point(957, 142);
             pickerInteractionDateTime.Margin = new Padding(3, 4, 3, 4);
             pickerInteractionDateTime.Name = "pickerInteractionDateTime";
             pickerInteractionDateTime.Size = new Size(448, 34);
@@ -297,7 +271,7 @@
             tableLayout3.Controls.Add(lblRequestGuid, 0, 0);
             tableLayout3.Controls.Add(btnCheckStatus, 0, 3);
             tableLayout3.Controls.Add(tableLayoutPanel1, 0, 2);
-            tableLayout3.Location = new Point(14, 304);
+            tableLayout3.Location = new Point(14, 253);
             tableLayout3.Margin = new Padding(3, 4, 3, 4);
             tableLayout3.Name = "tableLayout3";
             tableLayout3.RowCount = 5;
@@ -306,7 +280,7 @@
             tableLayout3.RowStyles.Add(new RowStyle(SizeType.Absolute, 61F));
             tableLayout3.RowStyles.Add(new RowStyle(SizeType.Absolute, 61F));
             tableLayout3.RowStyles.Add(new RowStyle(SizeType.Absolute, 61F));
-            tableLayout3.Size = new Size(1435, 612);
+            tableLayout3.Size = new Size(1435, 663);
             tableLayout3.TabIndex = 0;
             // 
             // lblVerificationStatus
@@ -326,7 +300,7 @@
             VerificationStatusTree.Location = new Point(542, 44);
             VerificationStatusTree.Margin = new Padding(3, 4, 3, 4);
             VerificationStatusTree.Name = "VerificationStatusTree";
-            VerificationStatusTree.Size = new Size(890, 381);
+            VerificationStatusTree.Size = new Size(890, 432);
             VerificationStatusTree.TabIndex = 3;
             // 
             // tableLayoutPanel4
@@ -337,7 +311,7 @@
             tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel4.Controls.Add(btnExpandAll, 0, 0);
             tableLayoutPanel4.Controls.Add(btnCollapseAll, 1, 0);
-            tableLayoutPanel4.Location = new Point(834, 433);
+            tableLayoutPanel4.Location = new Point(834, 484);
             tableLayoutPanel4.Margin = new Padding(3, 4, 3, 4);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
             tableLayoutPanel4.RowCount = 1;
@@ -386,7 +360,7 @@
             dataGridViewRequests.Margin = new Padding(3, 4, 3, 4);
             dataGridViewRequests.Name = "dataGridViewRequests";
             dataGridViewRequests.RowHeadersWidth = 51;
-            dataGridViewRequests.Size = new Size(533, 381);
+            dataGridViewRequests.Size = new Size(533, 432);
             dataGridViewRequests.TabIndex = 1;
             // 
             // Select
@@ -430,7 +404,7 @@
             btnCheckStatus.FlatStyle = FlatStyle.Flat;
             btnCheckStatus.Font = new Font("Segoe UI", 12F);
             btnCheckStatus.ForeColor = Color.White;
-            btnCheckStatus.Location = new Point(3, 494);
+            btnCheckStatus.Location = new Point(3, 545);
             btnCheckStatus.Margin = new Padding(3, 4, 3, 4);
             btnCheckStatus.Name = "btnCheckStatus";
             btnCheckStatus.Size = new Size(533, 53);
@@ -446,7 +420,7 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.Controls.Add(btnUncheckAll, 1, 0);
             tableLayoutPanel1.Controls.Add(btnCheckAll, 0, 0);
-            tableLayoutPanel1.Location = new Point(3, 433);
+            tableLayoutPanel1.Location = new Point(3, 484);
             tableLayoutPanel1.Margin = new Padding(3, 4, 3, 4);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;

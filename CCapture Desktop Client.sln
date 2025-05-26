@@ -9,6 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Konecta.Tools.CCaptureClien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Konecta.Tools.CCaptureClient.UI", "Konecta.Tools.CCaptureClient.UI\Konecta.Tools.CCaptureClient.UI.csproj", "{02704B57-9037-4EEC-938D-6E2660F5E7F2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DB Script", "DB Script", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		DB Script\CCapture.sql = DB Script\CCapture.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

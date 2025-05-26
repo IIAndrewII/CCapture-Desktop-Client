@@ -39,7 +39,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             _configuration = configuration;
             _viewModel = viewModel;
 
-            txtApiUrl.Text = _configuration["ApiUrl"];
             ConfigureDataGridViewRequests();
             ConfigureTreeView();
             AttachEventHandlers();
@@ -140,8 +139,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             bool canCheckStatus = !isProcessing && dataGridViewRequests.Rows
                 .Cast<DataGridViewRow>()
                 .Any(row => row.Cells["Select"].Value is true &&
-                            !string.IsNullOrWhiteSpace(row.Cells["RequestGuid"].Value?.ToString()) &&
-                            Guid.TryParse(row.Cells["RequestGuid"].Value?.ToString(), out _));
+                            !string.IsNullOrWhiteSpace(row.Cells["RequestGuid"].Value?.ToString()));
 
             bool hasRows = !isProcessing && dataGridViewRequests.Rows.Count > 0;
             bool canCheckAll = hasRows && dataGridViewRequests.Rows
@@ -158,7 +156,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             btnUncheckAll.Enabled = canUncheckAll;
             btnExpandAll.Enabled = hasTreeNodes;
             btnCollapseAll.Enabled = hasTreeNodes;
-            txtApiUrl.Enabled = !isProcessing;
             txtSourceSystem.Enabled = !isProcessing;
             txtChannel.Enabled = !isProcessing;
             txtSessionID.Enabled = !isProcessing;
@@ -174,7 +171,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 btnCollapseAll,
                 btnCheckAll,
                 btnUncheckAll,
-                txtApiUrl,
                 txtSourceSystem,
                 txtChannel,
                 txtSessionID,
@@ -229,7 +225,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             if (e.ColumnIndex == dataGridViewRequests.Columns["Details"].Index && e.RowIndex >= 0)
             {
                 var requestGuid = dataGridViewRequests.Rows[e.RowIndex].Cells["RequestGuid"].Value?.ToString();
-                if (!string.IsNullOrWhiteSpace(requestGuid) && Guid.TryParse(requestGuid, out _))
+                if (!string.IsNullOrWhiteSpace(requestGuid))
                 {
                     try
                     {
@@ -353,7 +349,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     .Cast<DataGridViewRow>()
                     .Where(row => row.Cells["Select"].Value is true)
                     .Select(row => row.Cells["RequestGuid"].Value?.ToString())
-                    .Where(guid => !string.IsNullOrWhiteSpace(guid) && Guid.TryParse(guid, out _))
+                    .Where(guid => !string.IsNullOrWhiteSpace(guid))
                     .Distinct()
                     .ToList();
 
@@ -381,7 +377,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     return;
                 }
 
-                var apiUrl = string.IsNullOrWhiteSpace(txtApiUrl.Text) ? _configuration["ApiUrl"] : txtApiUrl.Text;
+                var apiUrl = _configuration["ApiUrl"];
                 if (string.IsNullOrEmpty(apiUrl))
                 {
                     LoggerHelper.LogError("Status check failed: API URL is not configured");

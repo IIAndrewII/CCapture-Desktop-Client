@@ -59,7 +59,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             _viewModel = viewModel;
 
             _groups = new Dictionary<string, GroupData>();
-            txtApiUrl.Text = _configuration["ApiUrl"];
             ConfigureDataGridViewGroupsColumns();
             ConfigureDataGridViewColumns();
             AttachEventHandlers();
@@ -188,7 +187,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             btnAddGroup.EnabledChanged += Control_EnabledChanged;
             btnRemoveGroup.EnabledChanged += Control_EnabledChanged;
             btnAssignToNewGroup.EnabledChanged += Control_EnabledChanged;
-            txtApiUrl.EnabledChanged += Control_EnabledChanged;
             txtSourceSystem.EnabledChanged += Control_EnabledChanged;
             txtChannel.EnabledChanged += Control_EnabledChanged;
             txtUserCode.EnabledChanged += Control_EnabledChanged;
@@ -257,7 +255,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             cboBatchClassName.Enabled = !_isSubmitting;
             pickerInteractionDateTime.Enabled = !_isSubmitting;
 
-            txtApiUrl.Enabled = !_isSubmitting;
             txtSourceSystem.Enabled = !_isSubmitting;
             txtChannel.Enabled = !_isSubmitting;
             txtUserCode.Enabled = !_isSubmitting;
@@ -274,7 +271,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 btnAddField,
                 btnAddGroup,
                 btnRemoveGroup,
-                txtApiUrl,
                 txtSourceSystem,
                 txtChannel,
                 txtUserCode,
@@ -816,7 +812,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     return;
                 }
 
-                var apiUrl = string.IsNullOrWhiteSpace(txtApiUrl.Text) ? _configuration["ApiUrl"] : txtApiUrl.Text;
+                var apiUrl = _configuration["ApiUrl"];
                 if (string.IsNullOrEmpty(apiUrl))
                 {
                     LoggerHelper.LogError("Document submission failed: API URL is not configured");
