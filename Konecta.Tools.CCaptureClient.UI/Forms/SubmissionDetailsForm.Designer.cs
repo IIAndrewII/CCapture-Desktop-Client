@@ -87,6 +87,8 @@
             dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
             btnClose = new Button();
+            txtApiUrl = new TextBox();
+            lblApiUrl = new Label();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewDocuments).BeginInit();
@@ -115,7 +117,7 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 70F));
-            tableLayoutPanel1.Size = new Size(800, 600);
+            tableLayoutPanel1.Size = new Size(1160, 600);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // lblSubmissionDetails
@@ -157,6 +159,8 @@
             tableLayoutPanel2.Controls.Add(txtRequestGuid, 4, 5);
             tableLayoutPanel2.Controls.Add(lblSubmittedAt, 0, 6);
             tableLayoutPanel2.Controls.Add(txtSubmittedAt, 0, 7);
+            tableLayoutPanel2.Controls.Add(txtApiUrl, 2, 7);
+            tableLayoutPanel2.Controls.Add(lblApiUrl, 2, 6);
             tableLayoutPanel2.Location = new Point(3, 53);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 8;
@@ -168,7 +172,7 @@
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 45F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 45F));
-            tableLayoutPanel2.Size = new Size(794, 325);
+            tableLayoutPanel2.Size = new Size(1154, 325);
             tableLayoutPanel2.TabIndex = 1;
             // 
             // lblGroupName
@@ -188,14 +192,14 @@
             txtGroupName.Location = new Point(3, 43);
             txtGroupName.Name = "txtGroupName";
             txtGroupName.ReadOnly = true;
-            txtGroupName.Size = new Size(245, 29);
+            txtGroupName.Size = new Size(365, 29);
             txtGroupName.TabIndex = 1;
             // 
             // lblBatchClassName
             // 
             lblBatchClassName.AutoSize = true;
             lblBatchClassName.Font = new Font("Segoe UI", 12F);
-            lblBatchClassName.Location = new Point(274, 0);
+            lblBatchClassName.Location = new Point(394, 0);
             lblBatchClassName.Name = "lblBatchClassName";
             lblBatchClassName.Size = new Size(137, 21);
             lblBatchClassName.TabIndex = 2;
@@ -205,17 +209,17 @@
             // 
             txtBatchClassName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtBatchClassName.Font = new Font("Segoe UI", 12F);
-            txtBatchClassName.Location = new Point(274, 43);
+            txtBatchClassName.Location = new Point(394, 43);
             txtBatchClassName.Name = "txtBatchClassName";
             txtBatchClassName.ReadOnly = true;
-            txtBatchClassName.Size = new Size(245, 29);
+            txtBatchClassName.Size = new Size(365, 29);
             txtBatchClassName.TabIndex = 2;
             // 
             // lblSourceSystem
             // 
             lblSourceSystem.AutoSize = true;
             lblSourceSystem.Font = new Font("Segoe UI", 12F);
-            lblSourceSystem.Location = new Point(545, 0);
+            lblSourceSystem.Location = new Point(785, 0);
             lblSourceSystem.Name = "lblSourceSystem";
             lblSourceSystem.Size = new Size(116, 21);
             lblSourceSystem.TabIndex = 4;
@@ -225,10 +229,10 @@
             // 
             txtSourceSystem.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtSourceSystem.Font = new Font("Segoe UI", 12F);
-            txtSourceSystem.Location = new Point(545, 43);
+            txtSourceSystem.Location = new Point(785, 43);
             txtSourceSystem.Name = "txtSourceSystem";
             txtSourceSystem.ReadOnly = true;
-            txtSourceSystem.Size = new Size(246, 29);
+            txtSourceSystem.Size = new Size(366, 29);
             txtSourceSystem.TabIndex = 3;
             // 
             // lblChannel
@@ -248,14 +252,14 @@
             txtChannel.Location = new Point(3, 123);
             txtChannel.Name = "txtChannel";
             txtChannel.ReadOnly = true;
-            txtChannel.Size = new Size(245, 29);
+            txtChannel.Size = new Size(365, 29);
             txtChannel.TabIndex = 4;
             // 
             // lblSessionId
             // 
             lblSessionId.AutoSize = true;
             lblSessionId.Font = new Font("Segoe UI", 12F);
-            lblSessionId.Location = new Point(274, 80);
+            lblSessionId.Location = new Point(394, 80);
             lblSessionId.Name = "lblSessionId";
             lblSessionId.Size = new Size(85, 21);
             lblSessionId.TabIndex = 8;
@@ -265,17 +269,17 @@
             // 
             txtSessionId.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtSessionId.Font = new Font("Segoe UI", 12F);
-            txtSessionId.Location = new Point(274, 123);
+            txtSessionId.Location = new Point(394, 123);
             txtSessionId.Name = "txtSessionId";
             txtSessionId.ReadOnly = true;
-            txtSessionId.Size = new Size(245, 29);
+            txtSessionId.Size = new Size(365, 29);
             txtSessionId.TabIndex = 5;
             // 
             // lblMessageId
             // 
             lblMessageId.AutoSize = true;
             lblMessageId.Font = new Font("Segoe UI", 12F);
-            lblMessageId.Location = new Point(545, 80);
+            lblMessageId.Location = new Point(785, 80);
             lblMessageId.Name = "lblMessageId";
             lblMessageId.Size = new Size(93, 21);
             lblMessageId.TabIndex = 10;
@@ -285,10 +289,10 @@
             // 
             txtMessageId.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtMessageId.Font = new Font("Segoe UI", 12F);
-            txtMessageId.Location = new Point(545, 123);
+            txtMessageId.Location = new Point(785, 123);
             txtMessageId.Name = "txtMessageId";
             txtMessageId.ReadOnly = true;
-            txtMessageId.Size = new Size(246, 29);
+            txtMessageId.Size = new Size(366, 29);
             txtMessageId.TabIndex = 6;
             // 
             // lblUserCode
@@ -297,7 +301,7 @@
             lblUserCode.Font = new Font("Segoe UI", 12F);
             lblUserCode.Location = new Point(3, 160);
             lblUserCode.Name = "lblUserCode";
-            lblUserCode.Size = new Size(64, 21);
+            lblUserCode.Size = new Size(85, 21);
             lblUserCode.TabIndex = 12;
             lblUserCode.Text = "User Code:";
             // 
@@ -308,14 +312,14 @@
             txtUserCode.Location = new Point(3, 203);
             txtUserCode.Name = "txtUserCode";
             txtUserCode.ReadOnly = true;
-            txtUserCode.Size = new Size(245, 29);
+            txtUserCode.Size = new Size(365, 29);
             txtUserCode.TabIndex = 7;
             // 
             // lblInteractionDateTime
             // 
             lblInteractionDateTime.AutoSize = true;
             lblInteractionDateTime.Font = new Font("Segoe UI", 12F);
-            lblInteractionDateTime.Location = new Point(274, 160);
+            lblInteractionDateTime.Location = new Point(394, 160);
             lblInteractionDateTime.Name = "lblInteractionDateTime";
             lblInteractionDateTime.Size = new Size(161, 21);
             lblInteractionDateTime.TabIndex = 14;
@@ -325,17 +329,17 @@
             // 
             txtInteractionDateTime.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtInteractionDateTime.Font = new Font("Segoe UI", 12F);
-            txtInteractionDateTime.Location = new Point(274, 203);
+            txtInteractionDateTime.Location = new Point(394, 203);
             txtInteractionDateTime.Name = "txtInteractionDateTime";
             txtInteractionDateTime.ReadOnly = true;
-            txtInteractionDateTime.Size = new Size(245, 29);
+            txtInteractionDateTime.Size = new Size(365, 29);
             txtInteractionDateTime.TabIndex = 8;
             // 
             // lblRequestGuid
             // 
             lblRequestGuid.AutoSize = true;
             lblRequestGuid.Font = new Font("Segoe UI", 12F);
-            lblRequestGuid.Location = new Point(545, 160);
+            lblRequestGuid.Location = new Point(785, 160);
             lblRequestGuid.Name = "lblRequestGuid";
             lblRequestGuid.Size = new Size(110, 21);
             lblRequestGuid.TabIndex = 16;
@@ -345,10 +349,10 @@
             // 
             txtRequestGuid.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtRequestGuid.Font = new Font("Segoe UI", 12F);
-            txtRequestGuid.Location = new Point(545, 203);
+            txtRequestGuid.Location = new Point(785, 203);
             txtRequestGuid.Name = "txtRequestGuid";
             txtRequestGuid.ReadOnly = true;
-            txtRequestGuid.Size = new Size(246, 29);
+            txtRequestGuid.Size = new Size(366, 29);
             txtRequestGuid.TabIndex = 9;
             // 
             // lblSubmittedAt
@@ -368,7 +372,7 @@
             txtSubmittedAt.Location = new Point(3, 285);
             txtSubmittedAt.Name = "txtSubmittedAt";
             txtSubmittedAt.ReadOnly = true;
-            txtSubmittedAt.Size = new Size(245, 29);
+            txtSubmittedAt.Size = new Size(365, 29);
             txtSubmittedAt.TabIndex = 10;
             // 
             // lblDocuments
@@ -396,7 +400,7 @@
             dataGridViewDocuments.ReadOnly = true;
             dataGridViewDocuments.RowHeadersWidth = 51;
             dataGridViewDocuments.RowTemplate.Height = 30;
-            dataGridViewDocuments.Size = new Size(794, 39);
+            dataGridViewDocuments.Size = new Size(1154, 39);
             dataGridViewDocuments.TabIndex = 3;
             // 
             // dataGridViewTextBoxColumn5
@@ -448,7 +452,7 @@
             dataGridViewFields.ReadOnly = true;
             dataGridViewFields.RowHeadersWidth = 51;
             dataGridViewFields.RowTemplate.Height = 30;
-            dataGridViewFields.Size = new Size(794, 39);
+            dataGridViewFields.Size = new Size(1154, 39);
             dataGridViewFields.TabIndex = 4;
             // 
             // dataGridViewTextBoxColumn1
@@ -482,7 +486,7 @@
             btnClose.FlatStyle = FlatStyle.Flat;
             btnClose.Font = new Font("Segoe UI", 14F);
             btnClose.ForeColor = Color.White;
-            btnClose.Location = new Point(649, 542);
+            btnClose.Location = new Point(1009, 542);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(148, 45);
             btnClose.TabIndex = 5;
@@ -490,12 +494,32 @@
             btnClose.UseVisualStyleBackColor = false;
             btnClose.Click += btnClose_Click;
             // 
+            // txtApiUrl
+            // 
+            txtApiUrl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtApiUrl.Font = new Font("Segoe UI", 12F);
+            txtApiUrl.Location = new Point(394, 285);
+            txtApiUrl.Name = "txtApiUrl";
+            txtApiUrl.ReadOnly = true;
+            txtApiUrl.Size = new Size(365, 29);
+            txtApiUrl.TabIndex = 19;
+            // 
+            // lblApiUrl
+            // 
+            lblApiUrl.AutoSize = true;
+            lblApiUrl.Font = new Font("Segoe UI", 12F);
+            lblApiUrl.Location = new Point(394, 240);
+            lblApiUrl.Name = "lblApiUrl";
+            lblApiUrl.Size = new Size(69, 21);
+            lblApiUrl.TabIndex = 20;
+            lblApiUrl.Text = "API URL:";
+            // 
             // SubmissionDetailsForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 245, 245);
-            ClientSize = new Size(800, 600);
+            ClientSize = new Size(1160, 600);
             Controls.Add(tableLayoutPanel1);
             Name = "SubmissionDetailsForm";
             StartPosition = FormStartPosition.CenterParent;
@@ -509,5 +533,7 @@
             ((System.ComponentModel.ISupportInitialize)dataGridViewFields).EndInit();
             ResumeLayout(false);
         }
+        private TextBox txtApiUrl;
+        private Label lblApiUrl;
     }
 }

@@ -62,7 +62,8 @@ namespace Konecta.Tools.CCaptureClient.UI.ViewModels
             string interactionDateTime,
             List<Core.ApiEntities.Field> fields,
             string groupName,
-            List<Document_Row> documents)
+            List<Document_Row> documents,
+            string apiUrl)
         {
             try
             {
@@ -83,7 +84,8 @@ namespace Konecta.Tools.CCaptureClient.UI.ViewModels
                     userCode,
                     interactionDateTime,
                     tempRequestGuid,
-                    _authToken);
+                    _authToken,
+                    apiUrl);
 
                 // Save fields
                 foreach (var field in fields)

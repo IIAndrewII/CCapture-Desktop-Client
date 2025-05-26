@@ -26,6 +26,7 @@ public partial class Submission
     public string RequestGuid { get; set; } = null!;
 
     public string? AuthToken { get; set; }
+    public string? ApiUrl { get; set; }
 
     public DateTime? SubmittedAt { get; set; }
 

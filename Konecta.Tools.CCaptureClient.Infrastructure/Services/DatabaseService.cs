@@ -161,7 +161,7 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
             }
         }
 
-        public async Task<int> SaveSubmissionAsync(int groupId, string batchClassName, string sourceSystem, string channel, string sessionId, string messageId, string userCode, string interactionDateTime, string requestGuid, string authToken)
+        public async Task<int> SaveSubmissionAsync(int groupId, string batchClassName, string sourceSystem, string channel, string sessionId, string messageId, string userCode, string interactionDateTime, string requestGuid, string authToken, string apiUrl)
         {
             using (var context = CreateContext())
             {
@@ -180,6 +180,7 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
                         InteractionDateTime = DateTime.Parse(interactionDateTime),
                         RequestGuid = requestGuid,
                         AuthToken = authToken,
+                        ApiUrl = apiUrl,
                         SubmittedAt = DateTime.Now
                     };
                     context.Submissions.Add(submission);

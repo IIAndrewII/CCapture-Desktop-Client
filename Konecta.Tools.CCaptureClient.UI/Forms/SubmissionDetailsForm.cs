@@ -36,6 +36,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             txtSessionId.Text = details.Submission.SessionId;
             txtMessageId.Text = details.Submission.MessageId;
             txtUserCode.Text = details.Submission.UserCode;
+            txtApiUrl.Text = details.Submission.ApiUrl;
             txtInteractionDateTime.Text = details.Submission.InteractionDateTime.ToString("yyyy-MM-dd HH:mm:ss");
             txtRequestGuid.Text = details.Submission.RequestGuid;
             txtSubmittedAt.Text = details.Submission.SubmittedAt?.ToString("yyyy-MM-dd HH:mm:ss");

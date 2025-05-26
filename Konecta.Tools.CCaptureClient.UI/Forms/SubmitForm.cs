@@ -842,7 +842,8 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                         pickerInteractionDateTime.Value.ToString("o"),
                         groupData.Fields,
                         group,
-                        groupData.Documents);
+                        groupData.Documents,
+                        apiUrl);
 
                     // Append submission confirmation and next group submission message
                     statusLabel2.Text = $"Documents for {group} submitted, Request Guid: {requestGuid}";
