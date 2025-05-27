@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Konecta.Tools.CCaptureClient.Core.ApiEntities;
 using Konecta.Tools.CCaptureClient.Core.Interfaces;
+using Microsoft.Azure.Cosmos;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
@@ -65,6 +66,7 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
                 }
             }
 
+            HttpResponseMessage? response = null;
             try
             {
                 LoggerHelper.LogInfo($"Submitting document for BatchClassName: {request.BatchClassName}, Documents: {request.Documents.Count}"); // Log submission attempt
@@ -100,7 +102,7 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
                 _httpClient.DefaultRequestHeaders.Add("userCode", request.UserCode);
 
                 // Perform the HTTP POST request
-                var response = await _httpClient.PostAsync($"{_baseUrl}/ProcessDocument/StartDocumentVerification", content);
+                response = await _httpClient.PostAsync($"{_baseUrl}/ProcessDocument/StartDocumentVerification", content);
 
                 // Ensure the request was successful
                 response.EnsureSuccessStatusCode();
@@ -114,8 +116,10 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
             }
             catch (Exception ex)
             {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var newEx = new Exception(responseContent);
                 LoggerHelper.LogError($"Failed to submit document for BatchClassName: {request.BatchClassName}", ex); // Log error
-                throw;
+                throw newEx;
             }
         }
 
@@ -141,7 +145,7 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
                 return responseContent;
             }
             catch (Exception ex)
-            {                
+            {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var newEx = new Exception(responseContent);
                 LoggerHelper.LogError($"Failed to check verification status for Request GUID: {request.RequestGuid}", newEx); // Log error
