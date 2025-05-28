@@ -65,6 +65,10 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             AttachEventHandlers();
             UpdateControlStates();
             LoggerHelper.LogInfo("SubmitForm constructor called with dependencies"); // Log constructor
+
+            // Set NumericUpDown to empty
+            numPagesToExtract.Text = string.Empty;
+            numPagesToExtract.Value = 0;
             InitializeAsync();
         }
 
@@ -1230,7 +1234,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             UpdateControlStates();
         }
 
-        public static bool ExtractFirstNPages(string inputPath, int numberOfPages, string outputPath)
+        public static bool ExtractFirstNPages(string inputPath, int? numberOfPages, string outputPath)
         {
             try
             {
@@ -1240,32 +1244,26 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 // Load the input PDF to check page count
                 using (Aspose.Pdf.Document pdfDocument = new Aspose.Pdf.Document(inputPath))
                 {
-                    // Validate numberOfPages
-                    if (numberOfPages <= 0)
+                    int totalPages = pdfDocument.Pages.Count;
+
+                    // Determine how many pages to extract
+                    int pagesToExtract = numberOfPages.HasValue && numberOfPages.Value > 0
+                        ? Math.Min(numberOfPages.Value, totalPages)
+                        : totalPages;
+
+                    // Extract pages 1 to pagesToExtract
+                    bool success = pdfEditor.Extract(inputPath, 1, pagesToExtract, outputPath);
+
+                    if (success)
                     {
-                        Console.WriteLine("Error: Number of pages must be greater than 0.");
+                        Console.WriteLine($"Successfully extracted first {pagesToExtract} pages to {outputPath}.");
+                        return true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error: Failed to extract pages.");
                         return false;
                     }
-
-                    if (numberOfPages > pdfDocument.Pages.Count)
-                    {
-                        Console.WriteLine($"Error: Requested {numberOfPages} pages, but the PDF has only {pdfDocument.Pages.Count} pages.");
-                        return false;
-                    }
-                }
-
-                // Extract pages 1 to N
-                bool success = pdfEditor.Extract(inputPath, 1, numberOfPages, outputPath);
-
-                if (success)
-                {
-                    Console.WriteLine($"Successfully extracted first {numberOfPages} pages to {outputPath}.");
-                    return true;
-                }
-                else
-                {
-                    Console.WriteLine("Error: Failed to extract pages.");
-                    return false;
                 }
             }
             catch (Exception ex)
@@ -1275,4 +1273,5 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             }
         }
     }
+
 }

@@ -56,6 +56,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             submitPanel = new Panel();
             metadataPanel = new Panel();
             tableLayout2 = new TableLayoutPanel();
+            numPagesToExtract = new NumericUpDown();
             cboBatchClassName = new ComboBox();
             lblBatchClassName = new Label();
             txtSourceSystem = new TextBox();
@@ -94,15 +95,15 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             btnAddField = new Button();
             btnRemoveField = new Button();
             btnAssignToNewGroup = new Button();
+            label2 = new Label();
             statusStrip2 = new StatusStrip();
             statusLabel2 = new ToolStripStatusLabel();
             toolStripProgressBar1 = new ToolStripProgressBar();
             errorProvider = new ErrorProvider(components);
-            numPagesToExtract = new NumericUpDown();
-            label2 = new Label();
             submitPanel.SuspendLayout();
             metadataPanel.SuspendLayout();
             tableLayout2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numPagesToExtract).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewGroups).BeginInit();
             tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewDocuments).BeginInit();
@@ -111,7 +112,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             tableLayoutPanel1.SuspendLayout();
             statusStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)errorProvider).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numPagesToExtract).BeginInit();
             SuspendLayout();
             // 
             // submitPanel
@@ -189,6 +189,14 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             tableLayout2.RowStyles.Add(new RowStyle(SizeType.Percent, 8.232119F));
             tableLayout2.Size = new Size(1375, 693);
             tableLayout2.TabIndex = 0;
+            // 
+            // numPagesToExtract
+            // 
+            numPagesToExtract.Location = new Point(458, 212);
+            numPagesToExtract.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            numPagesToExtract.Name = "numPagesToExtract";
+            numPagesToExtract.Size = new Size(150, 34);
+            numPagesToExtract.TabIndex = 2;
             // 
             // cboBatchClassName
             // 
@@ -647,6 +655,17 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             btnAssignToNewGroup.Text = "Assign Each Doc. To NewGroup";
             btnAssignToNewGroup.UseVisualStyleBackColor = false;
             // 
+            // label2
+            // 
+            label2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 12F);
+            label2.Location = new Point(458, 181);
+            label2.Name = "label2";
+            label2.Size = new Size(155, 28);
+            label2.TabIndex = 33;
+            label2.Text = "Pages To Extract:";
+            // 
             // statusStrip2
             // 
             statusStrip2.AutoSize = false;
@@ -682,24 +701,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
             errorProvider.ContainerControl = this;
             // 
-            // numPagesToExtract
-            // 
-            numPagesToExtract.Location = new Point(458, 212);
-            numPagesToExtract.Name = "numPagesToExtract";
-            numPagesToExtract.Size = new Size(150, 34);
-            numPagesToExtract.TabIndex = 2;
-            // 
-            // label2
-            // 
-            label2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 12F);
-            label2.Location = new Point(458, 181);
-            label2.Name = "label2";
-            label2.Size = new Size(155, 28);
-            label2.TabIndex = 33;
-            label2.Text = "Pages To Extract:";
-            // 
             // SubmitForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -716,6 +717,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             metadataPanel.ResumeLayout(false);
             tableLayout2.ResumeLayout(false);
             tableLayout2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numPagesToExtract).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewGroups).EndInit();
             tableLayoutPanel4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridViewDocuments).EndInit();
@@ -725,7 +727,6 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             statusStrip2.ResumeLayout(false);
             statusStrip2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)errorProvider).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numPagesToExtract).EndInit();
             ResumeLayout(false);
         }
         private TableLayoutPanel tableLayoutPanel1;
