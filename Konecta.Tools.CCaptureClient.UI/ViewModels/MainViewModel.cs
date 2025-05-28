@@ -99,13 +99,15 @@ namespace Konecta.Tools.CCaptureClient.UI.ViewModels
                 {
                     var fileName = _fileService.GetFileName(doc.FilePath);
                     await _databaseService.SaveDocumentAsync(submissionId, doc.FilePath, doc.PageType, fileName);
+
+
                 }
 
                 // Prepare and submit to API
                 var documentList = documents.Select(doc => new Core.ApiEntities.Document
                 {
                     FileName = _fileService.GetFileName(doc.FilePath),
-                    Buffer = _fileService.ReadFileAsBase64(doc.FilePath),
+                    Buffer = _fileService.ReadFileAsBase64(doc.ProcprocessedFilePath),
                     PageType = doc.PageType
                 }).ToList();
 

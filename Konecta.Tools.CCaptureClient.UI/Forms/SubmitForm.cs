@@ -1,18 +1,19 @@
-﻿using Konecta.Tools.CCaptureClient.Core.ApiEntities;
-using Konecta.Tools.CCaptureClient.Core.Interfaces;
-using Konecta.Tools.CCaptureClient.UI.ViewModels;
-using Microsoft.Extensions.Configuration;
+﻿using Aspose.Pdf.Facades;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Konecta.Tools.CCaptureClient.Core.ApiEntities;
+using Konecta.Tools.CCaptureClient.Core.Interfaces;
+using Konecta.Tools.CCaptureClient.UI.ViewModels;
+using Microsoft.Extensions.Configuration;
 using Konecta.Tools.CCaptureClient.Infrastructure.Services;
 using Konecta.Tools.CCaptureClient.Infrastructure;
 
 namespace Konecta.Tools.CCaptureClient.UI.Forms
 {
-    public partial class SubmitForm : Form
+    public partial class SubmitForm : System.Windows.Forms.Form
     {
         private readonly MainViewModel _viewModel;
         private readonly IConfiguration _configuration;
@@ -290,7 +291,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
 
         private void AddNewGroup()
         {
-            using (var form = new Form())
+            using (var form = new System.Windows.Forms.Form())
             {
                 form.Text = "Create New Group";
                 form.Size = new Size(300, 180);
@@ -726,6 +727,7 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 _errorProvider.Clear();
                 LoggerHelper.LogInfo("Starting document submission");
 
+                // Validation checks
                 if (cboBatchClassName.SelectedIndex == -1)
                     _errorProvider.SetError(cboBatchClassName, "Please select a batch category.");
                 if (string.IsNullOrWhiteSpace(txtSourceSystem.Text))
@@ -756,6 +758,8 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     LoggerHelper.LogWarning("Document submission failed: Missing required data");
                     MessageBox.Show("Please enter all needed data.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     _progressBar.Visible = false;
+                    _isSubmitting = false;
+                    UpdateControlStates();
                     return;
                 }
 
@@ -766,6 +770,8 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     LoggerHelper.LogWarning("Document submission failed: No groups selected");
                     MessageBox.Show("Please check at least one group to submit.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     _progressBar.Visible = false;
+                    _isSubmitting = false;
+                    UpdateControlStates();
                     return;
                 }
 
@@ -777,6 +783,8 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     LoggerHelper.LogWarning($"Document submission failed: Empty groups detected: {string.Join(", ", emptyGroups)}");
                     MessageBox.Show($"The following groups have no documents: {string.Join(", ", emptyGroups)}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     _progressBar.Visible = false;
+                    _isSubmitting = false;
+                    UpdateControlStates();
                     return;
                 }
 
@@ -797,74 +805,148 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                 statusLabel2.Text = "";
                 LoggerHelper.LogInfo($"Submitting {checkedGroups.Count} groups");
 
-                foreach (string group in checkedGroups.ToList())
-                {
-                    var gridFields = dataGridViewFields.Rows.Cast<DataGridViewRow>()
-                        .Where(row => !row.IsNewRow)
-                        .Select(row => new
-                        {
-                            FieldName = row.Cells["FieldName"].Value?.ToString(),
-                            FieldValue = row.Cells["FieldValue"].Value?.ToString()
-                        })
-                        .Where(f => !string.IsNullOrEmpty(f.FieldName))
-                        .ToList();
+                // Get number of pages to extract
+                int pagesToExtract = (int)numPagesToExtract.Value;
+                string tempFolder = Path.Combine(Path.GetTempPath(), "CCaptureClient_PdfExtract");
+                Directory.CreateDirectory(tempFolder);
+                LoggerHelper.LogDebug($"Created temporary folder: {tempFolder}");
 
-                    var emptyFields = gridFields
-                        .Where(f => string.IsNullOrWhiteSpace(f.FieldValue))
-                        .Select(f => f.FieldName)
-                        .ToList();
-                    if (emptyFields.Any())
+                try
+                {
+                    foreach (string group in checkedGroups.ToList())
                     {
-                        statusLabel2.Text = $"Group '{group}' has fields with empty values: {string.Join(", ", emptyFields)}";
-                        statusLabel2.ForeColor = Color.Red;
-                        LoggerHelper.LogWarning($"Document submission failed for group {group}: Empty fields: {string.Join(", ", emptyFields)}");
-                        MessageBox.Show($"Group '{group}' has fields with empty values: {string.Join(", ", emptyFields)}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        _progressBar.Visible = false;
-                        return;
+                        var gridFields = dataGridViewFields.Rows.Cast<DataGridViewRow>()
+                            .Where(row => !row.IsNewRow)
+                            .Select(row => new
+                            {
+                                FieldName = row.Cells["FieldName"].Value?.ToString(),
+                                FieldValue = row.Cells["FieldValue"].Value?.ToString()
+                            })
+                            .Where(f => !string.IsNullOrEmpty(f.FieldName))
+                            .ToList();
+
+                        var emptyFields = gridFields
+                            .Where(f => string.IsNullOrWhiteSpace(f.FieldValue))
+                            .Select(f => f.FieldName)
+                            .ToList();
+                        if (emptyFields.Any())
+                        {
+                            statusLabel2.Text = $"Group '{group}' has fields with empty values: {string.Join(", ", emptyFields)}";
+                            statusLabel2.ForeColor = Color.Red;
+                            LoggerHelper.LogWarning($"Document submission failed for group {group}: Empty fields: {string.Join(", ", emptyFields)}");
+                            MessageBox.Show($"Group '{group}' has fields with empty values: {string.Join(", ", emptyFields)}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            _progressBar.Visible = false;
+                            return;
+                        }
+
+                        var groupData = _groups[group];
+                        // Process each PDF in the group
+                        var tempFiles = new List<string>();
+
+                        foreach (var doc in groupData.Documents)
+                        {
+                            if (Path.GetExtension(doc.FilePath).ToLower() == ".pdf")
+                            {
+                                string tempFilePath = Path.Combine(tempFolder, $"{Guid.NewGuid()}.pdf");
+                                bool success = ExtractFirstNPages(doc.FilePath, pagesToExtract, tempFilePath);
+                                if (success)
+                                {
+                                    doc.ProcprocessedFilePath = tempFilePath;
+                                    LoggerHelper.LogInfo($"Extracted {pagesToExtract} pages from {doc.FilePath} to {tempFilePath}");
+                                }
+                                else
+                                {
+                                    statusLabel2.Text = $"Failed to extract pages from {doc.FilePath}";
+                                    statusLabel2.ForeColor = Color.Red;
+                                    LoggerHelper.LogWarning($"Failed to extract pages from {doc.FilePath}");
+                                    MessageBox.Show($"Failed to extract pages from {doc.FilePath}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    // Clean up any created temp files
+                                    foreach (var tempFile in tempFiles)
+                                    {
+                                        try { File.Delete(tempFile); } catch { }
+                                    }
+                                    _progressBar.Visible = false;
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                // Non-PDF files are added as-is
+                                doc.ProcprocessedFilePath = doc.FilePath;
+                            }
+                        }
+
+                        // Submit processed documents
+                        statusLabel2.Text = statusLabel2.Text.Length > 0
+                            ? $"{statusLabel2.Text}  ......  Submitting {group}"
+                            : $"Submitting {group} documents";
+                        statusLabel2.ForeColor = Color.Blue;
+                        Application.DoEvents();
+                        LoggerHelper.LogInfo($"Submitting documents for group: {group}");
+
+                        var requestGuid = await _viewModel.SubmitDocumentAsync(
+                            cboBatchClassName.SelectedItem.ToString(),
+                            txtSourceSystem.Text,
+                            txtChannel.Text,
+                            txtSessionID.Text,
+                            txtMessageID.Text,
+                            txtUserCode.Text,
+                            pickerInteractionDateTime.Value.ToString("o"),
+                            groupData.Fields,
+                            group,
+                            groupData.Documents,
+                            apiUrl);
+
+                        // Append submission confirmation
+                        statusLabel2.Text = $"Documents for {group} submitted, Request Guid: {requestGuid}";
+                        Application.DoEvents();
+                        LoggerHelper.LogInfo($"Documents submitted for group {group}, Request Guid: {requestGuid}");
+
+                        // Clean up temporary files for this group
+                        foreach (var tempFile in tempFiles)
+                        {
+                            try
+                            {
+                                File.Delete(tempFile);
+                                LoggerHelper.LogDebug($"Deleted temporary file: {tempFile}");
+                            }
+                            catch (Exception ex)
+                            {
+                                LoggerHelper.LogWarning($"Failed to delete temporary file {tempFile}: {ex.Message}");
+                            }
+                        }
+
+                        // Remove group after successful submission
+                        _groups.Remove(group);
+                        var rowToRemove = dataGridViewGroups.Rows.Cast<DataGridViewRow>()
+                            .FirstOrDefault(r => r.Cells["GroupName"].Value?.ToString() == group);
+                        if (rowToRemove != null)
+                            dataGridViewGroups.Rows.Remove(rowToRemove);
+
+                        _progressBar.Value++;
+                        Application.DoEvents();
                     }
 
-                    var groupData = _groups[group];
-                    // Append "Submitting {group} documents" to the status label
-                    statusLabel2.Text = statusLabel2.Text.Length > 0
-                        ? $"{statusLabel2.Text}  ......  Submitting {group}"
-                        : $"Submitting {group} documents";
-                    statusLabel2.ForeColor = Color.Blue;
-                    Application.DoEvents();
-                    LoggerHelper.LogInfo($"Submitting documents for group: {group}");
-
-                    var requestGuid = await _viewModel.SubmitDocumentAsync(
-                        cboBatchClassName.SelectedItem.ToString(),
-                        txtSourceSystem.Text,
-                        txtChannel.Text,
-                        txtSessionID.Text,
-                        txtMessageID.Text,
-                        txtUserCode.Text,
-                        pickerInteractionDateTime.Value.ToString("o"),
-                        groupData.Fields,
-                        group,
-                        groupData.Documents,
-                        apiUrl);
-
-                    // Append submission confirmation and next group submission message
-                    statusLabel2.Text = $"Documents for {group} submitted, Request Guid: {requestGuid}";
-                    Application.DoEvents();
-                    LoggerHelper.LogInfo($"Documents submitted for group {group}, Request Guid: {requestGuid}");
-
-                    _groups.Remove(group);
-                    var rowToRemove = dataGridViewGroups.Rows.Cast<DataGridViewRow>()
-                        .FirstOrDefault(r => r.Cells["GroupName"].Value?.ToString() == group);
-                    if (rowToRemove != null)
-                        dataGridViewGroups.Rows.Remove(rowToRemove);
-
-                    _progressBar.Value++;
-                    Application.DoEvents();
+                    UpdateDocumentAndFieldGrid();
+                    _progressBar.Visible = false;
+                    statusLabel2.Text = $"{statusLabel2.Text}  ......  Submitting completed.";
+                    statusLabel2.ForeColor = Color.Green;
+                    LoggerHelper.LogInfo("Document submission completed successfully");
                 }
-
-                UpdateDocumentAndFieldGrid();
-                _progressBar.Visible = false;
-                statusLabel2.Text = $"{statusLabel2.Text}  ......  Submitting completed.";
-                statusLabel2.ForeColor = Color.Green;
-                LoggerHelper.LogInfo("Document submission completed successfully");
+                finally
+                {
+                    // Clean up temporary folder
+                    try
+                    {
+                        if (Directory.Exists(tempFolder))
+                            Directory.Delete(tempFolder, true);
+                        LoggerHelper.LogDebug($"Deleted temporary folder: {tempFolder}");
+                    }
+                    catch (Exception ex)
+                    {
+                        LoggerHelper.LogWarning($"Failed to delete temporary folder {tempFolder}: {ex.Message}");
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1146,6 +1228,51 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
             }
 
             UpdateControlStates();
+        }
+
+        public static bool ExtractFirstNPages(string inputPath, int numberOfPages, string outputPath)
+        {
+            try
+            {
+                // Initialize PdfFileEditor
+                PdfFileEditor pdfEditor = new PdfFileEditor();
+
+                // Load the input PDF to check page count
+                using (Aspose.Pdf.Document pdfDocument = new Aspose.Pdf.Document(inputPath))
+                {
+                    // Validate numberOfPages
+                    if (numberOfPages <= 0)
+                    {
+                        Console.WriteLine("Error: Number of pages must be greater than 0.");
+                        return false;
+                    }
+
+                    if (numberOfPages > pdfDocument.Pages.Count)
+                    {
+                        Console.WriteLine($"Error: Requested {numberOfPages} pages, but the PDF has only {pdfDocument.Pages.Count} pages.");
+                        return false;
+                    }
+                }
+
+                // Extract pages 1 to N
+                bool success = pdfEditor.Extract(inputPath, 1, numberOfPages, outputPath);
+
+                if (success)
+                {
+                    Console.WriteLine($"Successfully extracted first {numberOfPages} pages to {outputPath}.");
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("Error: Failed to extract pages.");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return false;
+            }
         }
     }
 }

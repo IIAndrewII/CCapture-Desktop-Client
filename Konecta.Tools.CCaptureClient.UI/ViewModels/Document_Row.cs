@@ -9,6 +9,7 @@ namespace Konecta.Tools.CCaptureClient.UI.ViewModels
     public class Document_Row
     {
         public string FilePath { get; set; }
+        public string ProcprocessedFilePath { get; set; }
         public string PageType { get; set; }
     }
 }
