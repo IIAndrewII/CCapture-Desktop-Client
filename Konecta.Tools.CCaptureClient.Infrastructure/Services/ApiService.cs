@@ -77,29 +77,30 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
                     request.Documents
                 };
 
-                // Serialize the body to JSON
+                // Serialize the body to JSON and log it
                 var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
-
-                // Log headers and body
-                Debug.WriteLine("Request Headers:");
-                foreach (var header in _httpClient.DefaultRequestHeaders)
-                {
-                    Debug.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
-                }
 
                 Debug.WriteLine("Request Body:");
                 Debug.WriteLine(JsonConvert.SerializeObject(requestBody, Formatting.Indented));
                 LoggerHelper.LogDebug($"Request Body: {JsonConvert.SerializeObject(requestBody, Formatting.Indented)}"); // Log request body
 
-                // Add headers
+                //Clear any previous headers
+                _httpClient.DefaultRequestHeaders.Clear();
+                // Add headers for current request
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
-
                 _httpClient.DefaultRequestHeaders.Add("sourceSystem", request.SourceSystem);
                 _httpClient.DefaultRequestHeaders.Add("channel", request.Channel);
                 _httpClient.DefaultRequestHeaders.Add("interactionDateTime", request.InteractionDateTime);
                 _httpClient.DefaultRequestHeaders.Add("sessionID", request.SessionID);
                 _httpClient.DefaultRequestHeaders.Add("messageID", request.MessageID);
                 _httpClient.DefaultRequestHeaders.Add("userCode", request.UserCode);
+
+                // Log headers
+                Debug.WriteLine("Request Headers:");
+                foreach (var header in _httpClient.DefaultRequestHeaders)
+                {
+                    Debug.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
+                }
 
                 // Perform the HTTP POST request
                 response = await _httpClient.PostAsync($"{_baseUrl}/ProcessDocument/StartDocumentVerification", content);
