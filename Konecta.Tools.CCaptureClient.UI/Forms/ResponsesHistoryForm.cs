@@ -105,18 +105,33 @@ namespace Konecta.Tools.CCaptureClient.UI.Forms
                     startDate, endDate, status, sourceSystem, channel,
                     requestGuid, batchClassName, sessionId, messageId, userCode);
 
-                dataGridViewResponses.DataSource = _verificationResponses.Select(r => new
+                // Create a DataTable
+                var dataTable = new System.Data.DataTable();
+                dataTable.Columns.Add("InteractionDateTime", typeof(DateTime));
+                dataTable.Columns.Add("RequestGuid", typeof(string));
+                dataTable.Columns.Add("Status", typeof(string));
+                dataTable.Columns.Add("BatchClassName", typeof(string));
+                dataTable.Columns.Add("SourceSystem", typeof(string));
+                dataTable.Columns.Add("Channel", typeof(string));
+                dataTable.Columns.Add("SessionId", typeof(string));
+                dataTable.Columns.Add("MessageId", typeof(string));
+                dataTable.Columns.Add("UserCode", typeof(string));
+
+                foreach (var response in _verificationResponses)
                 {
-                    r.InteractionDateTime,
-                    r.RequestGuid,
-                    r.Status,
-                    r.BatchClassName,
-                    r.SourceSystem,
-                    r.Channel,
-                    r.SessionId,
-                    r.MessageId,
-                    r.UserCode
-                }).ToList();
+                    dataTable.Rows.Add(
+                        response.InteractionDateTime,
+                        response.RequestGuid,
+                        response.Status,
+                        response.BatchClassName,
+                        response.SourceSystem,
+                        response.Channel,
+                        response.SessionId,
+                        response.MessageId,
+                        response.UserCode);
+                }
+
+                dataGridViewResponses.DataSource = dataTable;
 
                 statusLabel.Text = $"Loaded {_verificationResponses.Count} responses.";
                 statusLabel.ForeColor = Color.Green;
