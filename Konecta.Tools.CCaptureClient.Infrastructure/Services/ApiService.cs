@@ -23,7 +23,7 @@ namespace Konecta.Tools.CCaptureClient.Infrastructure.Services
             _baseUrl = baseUrl;
             LoggerHelper.LogInfo($"ApiService initialized with base URL: {baseUrl}"); // Log service initialization
         }
-
+         
         public async Task<string> GetAuthTokenAsync(AuthCredentials credentials)
         {
             try
